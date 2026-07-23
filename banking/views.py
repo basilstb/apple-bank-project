@@ -10,6 +10,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password, check_password
+from django_ratelimit.decorators import ratelimit
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
@@ -29,6 +31,12 @@ def register_view(request):
             profile.phone_number = form.cleaned_data.get('phone_number', '')
             if 'profile_picture' in request.FILES:
                 profile.profile_picture = request.FILES['profile_picture']
+            
+            # Hash and save the transaction PIN
+            raw_pin = form.cleaned_data.get('transaction_pin')
+            if raw_pin:
+                profile.transaction_pin = make_password(raw_pin)
+                
             profile.save()
 
             login(request, user)
@@ -38,6 +46,7 @@ def register_view(request):
         form = UserRegistrationForm()
     return render(request, 'banking/register.html', {'form': form})
 
+@ratelimit(key='ip', rate='5/m', block=True)
 def login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
@@ -76,6 +85,7 @@ def dashboard_view(request):
     })
 
 @login_required
+@ratelimit(key='user', rate='3/m', block=True)
 def transfer_view(request):
     if request.method == 'POST':
         form = TransferForm(request.POST)
@@ -99,16 +109,30 @@ def transfer_view(request):
                 messages.error(request, "You cannot transfer money to yourself.")
                 return redirect('transfer')
                 
-            if sender_profile.balance < amount:
-                messages.error(request, "Insufficient funds.")
-                return redirect('transfer')
-                
             pin = form.cleaned_data.get('pin')
-            if pin != sender_profile.transaction_pin:
+            is_valid_pin = False
+            
+            # Handle legacy plaintext PINs
+            if sender_profile.transaction_pin == pin:
+                is_valid_pin = True
+                # Upgrade to hashed PIN
+                sender_profile.transaction_pin = make_password(pin)
+                sender_profile.save(update_fields=['transaction_pin'])
+            elif check_password(pin, sender_profile.transaction_pin):
+                is_valid_pin = True
+                
+            if not is_valid_pin:
                 messages.error(request, "Incorrect Transaction PIN.")
                 return redirect('transfer')
                 
             with transaction.atomic():
+                # Lock the sender profile to prevent race conditions
+                sender_profile = UserProfile.objects.select_for_update().get(id=sender_profile.id)
+                
+                if sender_profile.balance < amount:
+                    messages.error(request, "Insufficient funds.")
+                    return redirect('transfer')
+                    
                 sender_profile.balance -= amount
                 sender_profile.save()
                 
@@ -116,7 +140,8 @@ def transfer_view(request):
                 receiver_profile = None
                 if bank_name.lower() in ['apple bank', 'applebank']:
                     try:
-                        receiver_profile = UserProfile.objects.get(account_number=recipient_account)
+                        # Lock the receiver profile
+                        receiver_profile = UserProfile.objects.select_for_update().get(account_number=recipient_account)
                         receiver_profile.balance += amount
                         receiver_profile.save()
                     except UserProfile.DoesNotExist:
