@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}Transaction Receipt - Apple Bank{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto">
+    <div
+        class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden print:shadow-none print:border-none">
+        <!-- Receipt Header -->
+        <div class="bg-gray-50 px-4 sm:px-8 py-6 border-b border-gray-100 text-center">
+            <div class="mx-auto flex justify-center mb-4">
+                <svg class="h-10 w-10 text-apple-red" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.64-2.25 1.64-1.74 0-2.1-.96-2.17-1.92H8.01c.08 1.81 1.23 3.1 2.89 3.49V20h2.34v-1.73c1.7-.36 2.86-1.43 2.86-2.98 0-1.98-1.55-2.71-3.79-3.15z" />
+                </svg>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900">Transaction Receipt</h2>
+            <p class="text-gray-500 text-sm mt-1">{{ tx.timestamp|date:"F j, Y, g:i a" }}</p>
+        </div>
+
+        <!-- Receipt Body -->
+        <div class="px-4 sm:px-8 py-6 space-y-6">
+            <div class="text-center">
+                <p class="text-sm text-gray-500 uppercase tracking-wider font-medium mb-1">Amount</p>
+                <p class="text-4xl font-bold text-gray-900">${{ tx.amount }}</p>
+                <span
+                    class="inline-block mt-2 px-3 py-1 rounded-full text-xs font-medium {% if tx.status == 'Successful' %}bg-green-100 text-green-800{% elif tx.status == 'Pending' %}bg-yellow-100 text-yellow-800{% else %}bg-red-100 text-red-800{% endif %}">
+                    {{ tx.status }}
+                </span>
+            </div>
+
+            <div class="border-t border-gray-100 pt-6 space-y-4">
+                <div class="flex justify-between">
+                    <span class="text-gray-500">Transaction ID</span>
+                    <span class="font-medium text-gray-900 font-mono">#TXN-{{ tx.id|stringformat:"06d" }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-500">Type</span>
+                    <span class="font-medium text-gray-900">{{ tx.transaction_type }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-500">Description</span>
+                    <span class="font-medium text-gray-900">{{ tx.description }}</span>
+                </div>
+
+                {% if tx.sender %}
+                <div class="flex justify-between">
+                    <span class="text-gray-500">From Account</span>
+                    <span class="font-medium text-gray-900 font-mono">{{ tx.sender.account_number }}</span>
+                </div>
+                {% endif %}
+
+                {% if tx.receiver %}
+                <div class="flex justify-between">
+                    <span class="text-gray-500">To Account</span>
+                    <span class="font-medium text-gray-900 font-mono">{{ tx.receiver.account_number }}</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Receipt Footer -->
+        <div class="bg-gray-50 px-4 sm:px-8 py-6 border-t border-gray-100 text-center print:hidden">
+            <button onclick="window.print()"
+                class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-apple-dark transition-colors">
+                <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
+                    </path>
+                </svg>
+                Print Receipt
+            </button>
+            <a href="{% url 'dashboard' %}"
+                class="ml-3 inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-apple-dark hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-apple-dark transition-colors">
+                Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
