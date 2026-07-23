@@ -103,6 +103,11 @@ def transfer_view(request):
                 messages.error(request, "Insufficient funds.")
                 return redirect('transfer')
                 
+            pin = form.cleaned_data.get('pin')
+            if pin != sender_profile.transaction_pin:
+                messages.error(request, "Incorrect Transaction PIN.")
+                return redirect('transfer')
+                
             with transaction.atomic():
                 sender_profile.balance -= amount
                 sender_profile.save()

@@ -73,6 +73,15 @@
             </div>
 
             <div>
+                <label for="id_transaction_pin" class="block text-sm font-medium text-gray-700">Create 4-Digit
+                    Transaction PIN</label>
+                {{ form.transaction_pin }}
+                {% if form.transaction_pin.errors %}
+                <p class="text-red-500 text-xs mt-1">{{ form.transaction_pin.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <div>
                 <label for="id_password" class="block text-sm font-medium text-gray-700">Password</label>
                 {{ form.password }}
                 {% if form.password.errors %}

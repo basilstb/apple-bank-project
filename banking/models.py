@@ -17,6 +17,7 @@ class UserProfile(models.Model):
     phone_number = models.CharField(max_length=20, blank=True)
     account_status = models.CharField(max_length=20, choices=ACCOUNT_STATUS_CHOICES, default='Active')
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+    transaction_pin = models.CharField(max_length=4, default='0000')
 
     def __str__(self):
         return f"{self.user.username} - {self.account_number}"

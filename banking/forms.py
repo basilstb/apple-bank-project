@@ -7,6 +7,7 @@ class UserRegistrationForm(forms.ModelForm):
     password_confirm = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-apple-dark focus:ring-apple-dark sm:text-sm'}), label="Confirm Password")
     phone_number = forms.CharField(max_length=20, required=False, widget=forms.TextInput(attrs={'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-apple-dark focus:ring-apple-dark sm:text-sm'}))
     profile_picture = forms.ImageField(required=False, widget=forms.FileInput(attrs={'class': 'mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-apple-dark file:text-white hover:file:bg-gray-800'}))
+    transaction_pin = forms.CharField(max_length=4, min_length=4, widget=forms.PasswordInput(attrs={'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-apple-dark focus:ring-apple-dark sm:text-sm'}), label="Create 4-Digit Transaction PIN")
 
     class Meta:
         model = User
@@ -27,6 +28,12 @@ class UserRegistrationForm(forms.ModelForm):
             raise forms.ValidationError("Passwords do not match.")
         return cleaned_data
 
+    def clean_transaction_pin(self):
+        pin = self.cleaned_data.get('transaction_pin')
+        if not pin.isdigit() or len(pin) != 4:
+            raise forms.ValidationError("PIN must be exactly 4 digits.")
+        return pin
+
 class TransferForm(forms.Form):
     amount = forms.DecimalField(max_digits=12, decimal_places=2, min_value=0.01, label="Enter Amount", widget=forms.NumberInput(attrs={'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-apple-dark focus:ring-apple-dark sm:text-sm'}))
     recipient_account = forms.CharField(max_length=20, label="Enter Account Number", widget=forms.TextInput(attrs={'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-apple-dark focus:ring-apple-dark sm:text-sm'}))
@@ -35,6 +42,7 @@ class TransferForm(forms.Form):
     swift_code = forms.CharField(max_length=20, required=False, label="SWIFT Code (Optional)", widget=forms.TextInput(attrs={'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-apple-dark focus:ring-apple-dark sm:text-sm'}))
     ifsc_code = forms.CharField(max_length=20, required=False, label="IFSC Code (Optional)", widget=forms.TextInput(attrs={'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-apple-dark focus:ring-apple-dark sm:text-sm'}))
     description = forms.CharField(max_length=255, required=False, label="Description (Optional)", widget=forms.TextInput(attrs={'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-apple-dark focus:ring-apple-dark sm:text-sm'}))
+    pin = forms.CharField(max_length=4, widget=forms.PasswordInput(attrs={'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-apple-dark focus:ring-apple-dark sm:text-sm'}), label="Enter 4-Digit PIN to Confirm")
 
 class LoanApplicationForm(forms.ModelForm):
     class Meta:
