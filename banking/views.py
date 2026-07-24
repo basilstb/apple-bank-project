@@ -1,17 +1,5 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib import messages
-from .forms import UserRegistrationForm, TransferForm, LoanApplicationForm, ATMCardRequestForm
-from .models import UserProfile, Transaction, LoanApplication, ATMCardRequest
-from django.db.models import Q
-from django.db import transaction
-from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.hashers import make_password, check_password
-from django_ratelimit.decorators import ratelimit
-from django.http import HttpResponse
-from PIL import Image, ImageDraw, ImageFont
 import io
 
 
@@ -36,6 +24,9 @@ def register_view(request):
                 profile.transaction_pin = make_password(raw_pin)
                 
             profile.save()
+            
+            # Send welcome email
+            send_welcome_email(user)
 
             login(request, user)
             messages.success(request, f"Welcome to Apple Bank, {user.first_name}! Your account has been created with a {profile.currency}5.00 welcome bonus.")
@@ -157,6 +148,13 @@ def transfer_view(request):
                     status='Pending',
                     progress_percentage=50
                 )
+                
+                # Send debit alert to sender
+                send_transaction_alert(sender_profile, tx, 'debit')
+                
+                # Send credit alert to receiver if internal
+                if receiver_profile:
+                    send_transaction_alert(receiver_profile, tx, 'credit')
                 
             messages.success(request, f"Successfully transferred ${amount} to {account_name} at {bank_name}.")
             return redirect('receipt', tx_id=tx.id)
