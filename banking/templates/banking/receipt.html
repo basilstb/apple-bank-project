@@ -23,7 +23,7 @@
         <div class="px-4 sm:px-8 py-6 space-y-6">
             <div class="text-center">
                 <p class="text-sm text-gray-500 uppercase tracking-wider font-medium mb-1">Amount</p>
-                <p class="text-4xl font-bold text-gray-900">${{ tx.amount }}</p>
+                <p class="text-4xl font-bold text-gray-900">{{ user.userprofile.currency }}{{ tx.amount }}</p>
                 <span
                     class="inline-block mt-2 px-3 py-1 rounded-full text-xs font-medium {% if tx.status == 'Successful' %}bg-green-100 text-green-800{% elif tx.status == 'Pending' %}bg-yellow-100 text-yellow-800{% else %}bg-red-100 text-red-800{% endif %}">
                     {{ tx.status }}

@@ -9,6 +9,7 @@ class UserRegistrationForm(forms.ModelForm):
     phone_number = forms.CharField(max_length=20, required=False, widget=forms.TextInput(attrs={'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-apple-dark focus:ring-apple-dark sm:text-sm'}))
     profile_picture = forms.ImageField(required=False, widget=forms.FileInput(attrs={'class': 'mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-apple-dark file:text-white hover:file:bg-gray-800'}))
     transaction_pin = forms.CharField(max_length=4, min_length=4, widget=forms.PasswordInput(attrs={'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-apple-dark focus:ring-apple-dark sm:text-sm'}), label="Create 4-Digit Transaction PIN")
+    currency = forms.ChoiceField(choices=UserProfile.CURRENCY_CHOICES, widget=forms.Select(attrs={'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-apple-dark focus:ring-apple-dark sm:text-sm'}))
 
     class Meta:
         model = User
@@ -36,7 +37,7 @@ class UserRegistrationForm(forms.ModelForm):
         return pin
 
 class TransferForm(forms.Form):
-    amount = forms.DecimalField(max_digits=12, decimal_places=2, min_value=0.01, label="Enter Amount", widget=forms.NumberInput(attrs={'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-apple-dark focus:ring-apple-dark sm:text-sm'}))
+    amount = forms.DecimalField(max_digits=12, decimal_places=2, min_value=0.01, label="Enter Amount", widget=forms.NumberInput(attrs={'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-apple-dark focus:ring-apple-dark sm:text-sm pl-7'}))
     recipient_account = forms.CharField(max_length=20, label="Enter Account Number", widget=forms.TextInput(attrs={'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-apple-dark focus:ring-apple-dark sm:text-sm'}))
     account_name = forms.CharField(max_length=100, label="Enter Account Name", widget=forms.TextInput(attrs={'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-apple-dark focus:ring-apple-dark sm:text-sm'}))
     bank_name = forms.CharField(max_length=100, label="Enter Bank Name", widget=forms.TextInput(attrs={'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-apple-dark focus:ring-apple-dark sm:text-sm'}))

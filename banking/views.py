@@ -26,6 +26,7 @@ def register_view(request):
             # Update phone number and profile picture in profile
             profile, _ = UserProfile.objects.get_or_create(user=user)
             profile.phone_number = form.cleaned_data.get('phone_number', '')
+            profile.currency = form.cleaned_data.get('currency', '$')
             if 'profile_picture' in request.FILES:
                 profile.profile_picture = request.FILES['profile_picture']
             
@@ -272,8 +273,9 @@ def download_receipt_view(request, tx_id):
     draw.text((width/2, 140), tx.timestamp.strftime("%B %d, %Y, %I:%M %p"), fill="gray", font=font_body, anchor="mt")
     
     # Draw Amount
+    currency = profile.currency
     draw.text((width/2, 200), "Amount", fill="gray", font=font_body, anchor="mt")
-    draw.text((width/2, 230), f"${tx.amount}", fill="black", font=font_title, anchor="mt")
+    draw.text((width/2, 230), f"{currency}{tx.amount}", fill="black", font=font_title, anchor="mt")
     
     # Draw Status
     status_color = "green" if tx.status == 'Successful' else "orange" if tx.status == 'Pending' else "red"

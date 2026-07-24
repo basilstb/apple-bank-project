@@ -20,7 +20,7 @@
 
         <div class="bg-gray-50 rounded-xl p-4 mb-8 flex justify-between items-center border border-gray-100">
             <span class="text-gray-600 font-medium">Available Balance</span>
-            <span class="text-xl font-bold text-gray-900">${{ user.userprofile.balance }}</span>
+            <span class="text-xl font-bold text-gray-900">{{ user.userprofile.currency }}{{ user.userprofile.balance }}</span>
         </div>
 
         <form method="POST" class="space-y-6">
@@ -30,7 +30,7 @@
                 <label for="id_amount" class="block text-sm font-medium text-gray-700 mb-1">Enter Amount</label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <span class="text-gray-500 sm:text-sm">$</span>
+                        <span class="text-gray-500 sm:text-sm">{{ user.userprofile.currency }}</span>
                     </div>
                     {{ form.amount }}
                 </div>

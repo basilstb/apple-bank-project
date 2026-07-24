@@ -11,9 +11,20 @@ class UserProfile(models.Model):
         ('Active', 'Active'),
         ('Suspended', 'Suspended'),
     )
+    CURRENCY_CHOICES = (
+        ('$', 'USD ($)'),
+        ('€', 'EUR (€)'),
+        ('£', 'GBP (£)'),
+        ('₦', 'NGN (₦)'),
+        ('¥', 'JPY (¥)'),
+        ('₹', 'INR (₹)'),
+        ('C$', 'CAD (C$)'),
+        ('A$', 'AUD (A$)'),
+    )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     account_number = models.CharField(max_length=10, unique=True, default=generate_account_number)
     balance = models.DecimalField(max_digits=12, decimal_places=2, default=5000.00)
+    currency = models.CharField(max_length=5, choices=CURRENCY_CHOICES, default='$')
     phone_number = models.CharField(max_length=20, blank=True)
     account_status = models.CharField(max_length=20, choices=ACCOUNT_STATUS_CHOICES, default='Active')
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
