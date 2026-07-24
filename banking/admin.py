@@ -3,6 +3,9 @@ from django import forms
 from django.contrib.auth.models import User
 from .models import UserProfile, Transaction, LoanApplication, ATMCardRequest
 
+# Remove username validators to allow spaces and any characters
+User._meta.get_field('username').validators = []
+
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False
