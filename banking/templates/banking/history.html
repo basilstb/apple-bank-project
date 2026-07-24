@@ -51,8 +51,7 @@
                     </td>
                     <td
                         class="px-6 py-4 whitespace-nowrap text-sm text-right font-bold {% if tx.transaction_type == 'Deposit' or tx.receiver == user.userprofile %}text-green-600{% else %}text-gray-900{% endif %}">
-                        {% if tx.transaction_type == 'Deposit' or tx.receiver == user.userprofile %}+{% else %}-{% endif
-                        %}${{ tx.amount }}
+                        {% if tx.transaction_type == 'Deposit' or tx.receiver == user.userprofile %}+{% else %}-{% endif %}${{ tx.amount }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-center">
                         <span
