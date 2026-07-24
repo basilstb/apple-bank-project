@@ -38,7 +38,7 @@ def register_view(request):
             profile.save()
 
             login(request, user)
-            messages.success(request, f"Welcome to Apple Bank, {user.first_name}! Your account has been created with a $5,000.00 welcome bonus.")
+            messages.success(request, f"Welcome to Apple Bank, {user.first_name}! Your account has been created with a {profile.currency}5.00 welcome bonus.")
             return redirect('dashboard')
     else:
         form = UserRegistrationForm()
