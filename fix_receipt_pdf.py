@@ -1,0 +1,62 @@
+import os
+
+file_path = 'banking/templates/banking/receipt.html'
+with open(file_path, 'r') as f:
+    content = f.read()
+
+# 1. Add id="receipt-content" to wrap the header and body
+content = content.replace(
+    '<!-- Receipt Header -->',
+    '<div id="receipt-content" class="bg-white">\n        <!-- Receipt Header -->'
+)
+
+content = content.replace(
+    '<!-- Receipt Footer -->',
+    '</div>\n\n        <!-- Receipt Footer -->'
+)
+
+# 2. Change the button to Download PDF
+old_button = '''<button onclick="setTimeout(function(){ window.print(); }, 500);"
+                class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-apple-dark transition-colors">
+                <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
+                    </path>
+                </svg>
+                Print Receipt
+            </button>'''
+
+new_button = '''<button onclick="downloadPDF()"
+                class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-apple-dark transition-colors">
+                <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4">
+                    </path>
+                </svg>
+                Download PDF
+            </button>'''
+
+content = content.replace(old_button, new_button)
+
+# 3. Add html2pdf script
+script = '''
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+    function downloadPDF() {
+        const element = document.getElementById('receipt-content');
+        const opt = {
+            margin:       0.5,
+            filename:     'receipt_TXN-{{ tx.id|stringformat:"06d" }}.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true },
+            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
+    }
+</script>
+{% endblock %}'''
+
+content = content.replace('{% endblock %}', script)
+
+with open(file_path, 'w') as f:
+    f.write(content)
