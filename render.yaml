@@ -9,7 +9,7 @@ services:
     name: apple-bank-web
     env: python
     plan: free
-    buildCommand: "./build.sh"
+    buildCommand: "bash build.sh"
     startCommand: "gunicorn apple_bank.wsgi:application"
     envVars:
       - key: DATABASE_URL
