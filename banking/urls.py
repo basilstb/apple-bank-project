@@ -9,6 +9,7 @@ urlpatterns = [
     path('transfer/', views.transfer_view, name='transfer'),
     path('history/', views.history_view, name='history'),
     path('receipt/<int:tx_id>/', views.receipt_view, name='receipt'),
+    path('receipt/<int:tx_id>/download/', views.download_receipt_view, name='download_receipt'),
     path('loan/', views.loan_application_view, name='loan_application'),
     path('atm-request/', views.atm_request_view, name='atm_request'),
     path('', views.dashboard_view, name='home'),

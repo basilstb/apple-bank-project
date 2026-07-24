@@ -10,6 +10,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password, check_password
 from django_ratelimit.decorators import ratelimit
+from django.http import HttpResponse
+from PIL import Image, ImageDraw, ImageFont
+import io
 
 
 def register_view(request):
@@ -206,3 +209,82 @@ def atm_request_view(request):
     else:
         form = ATMCardRequestForm()
     return render(request, 'banking/atm_request.html', {'form': form})
+
+@login_required
+def download_receipt_view(request, tx_id):
+    try:
+        tx = Transaction.objects.get(id=tx_id)
+        profile, _ = UserProfile.objects.get_or_create(user=request.user)
+        if tx.sender != profile and tx.receiver != profile:
+            messages.error(request, "You do not have permission to download this receipt.")
+            return redirect('dashboard')
+    except Transaction.DoesNotExist:
+        messages.error(request, "Transaction not found.")
+        return redirect('dashboard')
+        
+    # Generate image using Pillow
+    width = 600
+    height = 800
+    image = Image.new('RGB', (width, height), 'white')
+    draw = ImageDraw.Draw(image)
+    
+    try:
+        # Try to use a standard font if available, otherwise default
+        font_title = ImageFont.truetype("arial.ttf", 36)
+        font_header = ImageFont.truetype("arial.ttf", 24)
+        font_body = ImageFont.truetype("arial.ttf", 20)
+        font_bold = ImageFont.truetype("arialbd.ttf", 20)
+    except IOError:
+        font_title = ImageFont.load_default()
+        font_header = ImageFont.load_default()
+        font_body = ImageFont.load_default()
+        font_bold = ImageFont.load_default()
+
+    # Draw Header
+    draw.text((width/2, 50), "Apple Bank", fill="black", font=font_title, anchor="mt")
+    draw.text((width/2, 100), "Transaction Receipt", fill="gray", font=font_header, anchor="mt")
+    draw.text((width/2, 140), tx.timestamp.strftime("%B %d, %Y, %I:%M %p"), fill="gray", font=font_body, anchor="mt")
+    
+    # Draw Amount
+    draw.text((width/2, 200), "Amount", fill="gray", font=font_body, anchor="mt")
+    draw.text((width/2, 230), f"${tx.amount}", fill="black", font=font_title, anchor="mt")
+    
+    # Draw Status
+    status_color = "green" if tx.status == 'Successful' else "orange" if tx.status == 'Pending' else "red"
+    draw.text((width/2, 280), tx.status, fill=status_color, font=font_bold, anchor="mt")
+    
+    # Draw Line
+    draw.line([(50, 330), (550, 330)], fill="lightgray", width=2)
+    
+    # Draw Details
+    y = 360
+    line_height = 40
+    
+    details = [
+        ("Transaction ID", f"#TXN-{tx.id:06d}"),
+        ("Type", tx.transaction_type),
+        ("Description", tx.description),
+    ]
+    
+    if tx.sender:
+        details.append(("From Account", tx.sender.account_number))
+    if tx.receiver:
+        details.append(("To Account", tx.receiver.account_number))
+        
+    for label, value in details:
+        draw.text((50, y), label, fill="gray", font=font_body)
+        draw.text((550, y), value, fill="black", font=font_bold, anchor="rt")
+        y += line_height
+        
+    # Footer
+    draw.line([(50, y+20), (550, y+20)], fill="lightgray", width=2)
+    draw.text((width/2, y+50), "Thank you for banking with Apple Bank", fill="gray", font=font_body, anchor="mt")
+    
+    # Save to BytesIO
+    buffer = io.BytesIO()
+    image.save(buffer, format='PNG')
+    buffer.seek(0)
+    
+    response = HttpResponse(buffer, content_type='image/png')
+    response['Content-Disposition'] = f'attachment; filename="receipt_TXN-{tx.id:06d}.png"'
+    return response
