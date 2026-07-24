@@ -6,17 +6,11 @@ from .forms import UserRegistrationForm, TransferForm, LoanApplicationForm, ATMC
 from .models import UserProfile, Transaction, LoanApplication, ATMCardRequest
 from django.db.models import Q
 from django.db import transaction
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password, check_password
 from django_ratelimit.decorators import ratelimit
 
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        UserProfile.objects.create(user=instance)
 
 def register_view(request):
     if request.method == 'POST':
