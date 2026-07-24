@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load humanize %}
 
 {% block title %}Transfer Funds - Apple Bank{% endblock %}
 
@@ -20,7 +21,7 @@
 
         <div class="bg-gray-50 rounded-xl p-4 mb-8 flex justify-between items-center border border-gray-100">
             <span class="text-gray-600 font-medium">Available Balance</span>
-            <span class="text-xl font-bold text-gray-900">{{ user.userprofile.currency }}{{ user.userprofile.balance }}</span>
+            <span class="text-xl font-bold text-gray-900">{{ user.userprofile.currency }}{{ user.userprofile.balance|intcomma }}</span>
         </div>
 
         <form method="POST" class="space-y-6">

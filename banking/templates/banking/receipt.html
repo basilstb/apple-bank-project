@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load humanize %}
 
 {% block title %}Transaction Receipt - Apple Bank{% endblock %}
 
@@ -16,14 +17,14 @@
                 </svg>
             </div>
             <h2 class="text-2xl font-bold text-gray-900">Transaction Receipt</h2>
-            <p class="text-gray-500 text-sm mt-1">{{ tx.timestamp|date:"F j, Y, g:i a" }}</p>
+            <p class="text-gray-700 text-sm mt-1">{{ tx.timestamp|date:"F j, Y, g:i a" }}</p>
         </div>
 
         <!-- Receipt Body -->
         <div class="px-4 sm:px-8 py-6 space-y-6">
             <div class="text-center">
-                <p class="text-sm text-gray-500 uppercase tracking-wider font-medium mb-1">Amount</p>
-                <p class="text-4xl font-bold text-gray-900">{{ user.userprofile.currency }}{{ tx.amount }}</p>
+                <p class="text-sm text-gray-700 uppercase tracking-wider font-medium mb-1">Amount</p>
+                <p class="text-4xl font-bold text-gray-900">{{ user.userprofile.currency }}{{ tx.amount|intcomma }}</p>
                 <span
                     class="inline-block mt-2 px-3 py-1 rounded-full text-xs font-medium {% if tx.status == 'Successful' %}bg-green-100 text-green-800{% elif tx.status == 'Pending' %}bg-yellow-100 text-yellow-800{% else %}bg-red-100 text-red-800{% endif %}">
                     {{ tx.status }}
@@ -32,52 +33,52 @@
 
             <div class="border-t border-gray-100 pt-6 space-y-4">
                 <div class="flex justify-between">
-                    <span class="text-gray-500">Transaction ID</span>
-                    <span class="font-medium text-gray-900 font-mono">#TXN-{{ tx.id|stringformat:"06d" }}</span>
+                    <span class="text-gray-700">Transaction ID</span>
+                    <span class="font-bold text-gray-900 font-mono">#TXN-{{ tx.id|stringformat:"06d" }}</span>
                 </div>
                 <div class="flex justify-between">
-                    <span class="text-gray-500">Type</span>
-                    <span class="font-medium text-gray-900">{{ tx.transaction_type }}</span>
+                    <span class="text-gray-700">Type</span>
+                    <span class="font-bold text-gray-900">{{ tx.transaction_type }}</span>
                 </div>
                 <div class="flex justify-between">
-                    <span class="text-gray-500">Description</span>
-                    <span class="font-medium text-gray-900">{{ tx.description }}</span>
+                    <span class="text-gray-700">Description</span>
+                    <span class="font-bold text-gray-900">{{ tx.description }}</span>
                 </div>
 
                 {% if tx.sender %}
                 <div class="flex justify-between">
-                    <span class="text-gray-500">Sender Name</span>
-                    <span class="font-medium text-gray-900">{{ tx.sender.user.first_name }} {{ tx.sender.user.last_name }}</span>
+                    <span class="text-gray-700">Sender Name</span>
+                    <span class="font-bold text-gray-900">{{ tx.sender.user.first_name }} {{ tx.sender.user.last_name }}</span>
                 </div>
                 <div class="flex justify-between">
-                    <span class="text-gray-500">Sender Account</span>
-                    <span class="font-medium text-gray-900 font-mono">{{ tx.sender.account_number }}</span>
+                    <span class="text-gray-700">Sender Account</span>
+                    <span class="font-bold text-gray-900 font-mono">{{ tx.sender.account_number }}</span>
                 </div>
                 {% endif %}
 
                 {% if tx.receiver %}
                 <div class="flex justify-between">
-                    <span class="text-gray-500">Receiver Name</span>
-                    <span class="font-medium text-gray-900">{{ tx.receiver.user.first_name }} {{ tx.receiver.user.last_name }}</span>
+                    <span class="text-gray-700">Receiver Name</span>
+                    <span class="font-bold text-gray-900">{{ tx.receiver.user.first_name }} {{ tx.receiver.user.last_name }}</span>
                 </div>
                 <div class="flex justify-between">
-                    <span class="text-gray-500">Receiver Account</span>
-                    <span class="font-medium text-gray-900 font-mono">{{ tx.receiver.account_number }}</span>
+                    <span class="text-gray-700">Receiver Account</span>
+                    <span class="font-bold text-gray-900 font-mono">{{ tx.receiver.account_number }}</span>
                 </div>
                 {% elif external_receiver_name %}
                 <div class="flex justify-between">
-                    <span class="text-gray-500">Receiver Name</span>
-                    <span class="font-medium text-gray-900">{{ external_receiver_name }}</span>
+                    <span class="text-gray-700">Receiver Name</span>
+                    <span class="font-bold text-gray-900">{{ external_receiver_name }}</span>
                 </div>
                 {% if external_account %}
                 <div class="flex justify-between">
-                    <span class="text-gray-500">Receiver Account</span>
-                    <span class="font-medium text-gray-900 font-mono">{{ external_account }}</span>
+                    <span class="text-gray-700">Receiver Account</span>
+                    <span class="font-bold text-gray-900 font-mono">{{ external_account }}</span>
                 </div>
                 {% endif %}
                 <div class="flex justify-between">
-                    <span class="text-gray-500">Bank Name</span>
-                    <span class="font-medium text-gray-900">{{ external_bank_name }}</span>
+                    <span class="text-gray-700">Bank Name</span>
+                    <span class="font-bold text-gray-900">{{ external_bank_name }}</span>
                 </div>
                 {% endif %}
             </div>
@@ -89,7 +90,7 @@
         <div class="bg-gray-50 px-4 sm:px-8 py-6 border-t border-gray-100 flex flex-col sm:flex-row justify-center items-center gap-4 print:hidden">
             <a href="{% url 'download_receipt' tx.id %}"
                 class="w-full sm:w-auto inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-apple-dark transition-colors">
-                <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="-ml-1 mr-2 h-5 w-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4">
                     </path>

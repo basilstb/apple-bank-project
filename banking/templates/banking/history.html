@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load humanize %}
 
 {% block title %}Transaction History - Apple Bank{% endblock %}
 
@@ -52,7 +53,7 @@
                     <td
                         class="px-6 py-4 whitespace-nowrap text-sm text-right font-bold {% if tx.transaction_type == 'Deposit' or tx.receiver == user.userprofile %}text-green-600{% else %}text-gray-900{% endif %}">
                         {% if tx.transaction_type == 'Deposit' or tx.receiver == user.userprofile %}+{% else %}-{% endif
-                        %}{{ user.userprofile.currency }}{{ tx.amount }}
+                        %}{{ user.userprofile.currency }}{{ tx.amount|intcomma }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-center">
                         <span

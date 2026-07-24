@@ -272,8 +272,8 @@ def download_receipt_view(request, tx_id):
     
     # Draw Amount
     currency = profile.currency
-    draw.text((width/2, 200), "Amount", fill="gray", font=font_body, anchor="mt")
-    draw.text((width/2, 230), f"{currency}{tx.amount}", fill="black", font=font_title, anchor="mt")
+    draw.text((width/2, 200), "Amount", fill="#374151", font=font_body, anchor="mt")
+    draw.text((width/2, 230), f"{currency}{tx.amount:,.2f}", fill="black", font=font_title, anchor="mt")
     
     # Draw Status
     status_color = "green" if tx.status == 'Successful' else "orange" if tx.status == 'Pending' else "red"
@@ -313,7 +313,7 @@ def download_receipt_view(request, tx_id):
                 details.append(("Bank Name", match.group(2)))
         
     for label, value in details:
-        draw.text((50, y), label, fill="gray", font=font_body)
+        draw.text((50, y), label, fill="#374151", font=font_body)
         draw.text((550, y), value, fill="black", font=font_bold, anchor="rt")
         y += line_height
         
