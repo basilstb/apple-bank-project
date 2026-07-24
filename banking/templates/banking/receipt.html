@@ -46,14 +46,22 @@
 
                 {% if tx.sender %}
                 <div class="flex justify-between">
-                    <span class="text-gray-500">From Account</span>
+                    <span class="text-gray-500">Sender Name</span>
+                    <span class="font-medium text-gray-900">{{ tx.sender.user.first_name }} {{ tx.sender.user.last_name }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-500">Sender Account</span>
                     <span class="font-medium text-gray-900 font-mono">{{ tx.sender.account_number }}</span>
                 </div>
                 {% endif %}
 
                 {% if tx.receiver %}
                 <div class="flex justify-between">
-                    <span class="text-gray-500">To Account</span>
+                    <span class="text-gray-500">Receiver Name</span>
+                    <span class="font-medium text-gray-900">{{ tx.receiver.user.first_name }} {{ tx.receiver.user.last_name }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-500">Receiver Account</span>
                     <span class="font-medium text-gray-900 font-mono">{{ tx.receiver.account_number }}</span>
                 </div>
                 {% endif %}

@@ -262,14 +262,24 @@ def download_receipt_view(request, tx_id):
     
     details = [
         ("Transaction ID", f"#TXN-{tx.id:06d}"),
+        ("Date & Time", tx.timestamp.strftime("%B %d, %Y, %I:%M %p")),
         ("Type", tx.transaction_type),
         ("Description", tx.description),
     ]
     
     if tx.sender:
-        details.append(("From Account", tx.sender.account_number))
+        details.append(("Sender Name", f"{tx.sender.user.first_name} {tx.sender.user.last_name}"))
+        details.append(("Sender Account", tx.sender.account_number))
     if tx.receiver:
-        details.append(("To Account", tx.receiver.account_number))
+        details.append(("Receiver Name", f"{tx.receiver.user.first_name} {tx.receiver.user.last_name}"))
+        details.append(("Receiver Account", tx.receiver.account_number))
+    elif "Transfer to" in tx.description:
+        # Try to extract receiver name from description for external transfers
+        # Format: Transfer to [Name] at [Bank]
+        import re
+        match = re.search(r'Transfer to (.*?) at', tx.description)
+        if match:
+            details.append(("Receiver Name", match.group(1)))
         
     for label, value in details:
         draw.text((50, y), label, fill="gray", font=font_body)
