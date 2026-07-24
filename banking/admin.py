@@ -1,12 +1,46 @@
 from django.contrib import admin
+from django import forms
+from django.contrib.auth.models import User
 from .models import UserProfile, Transaction, LoanApplication, ATMCardRequest
 
-@admin.register(UserProfile)
-class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'account_number', 'balance', 'account_status')
-    search_fields = ('user__username', 'account_number', 'user__email')
-    list_filter = ('account_status',)
-    list_editable = ('balance', 'account_status')
+class UserProfileInline(admin.StackedInline):
+    model = UserProfile
+    can_delete = False
+    verbose_name_plural = 'Bank Account Profile'
+
+class CustomUserForm(forms.ModelForm):
+    new_password = forms.CharField(widget=forms.PasswordInput, required=False, help_text="Leave blank to keep the current password. Required for new users.")
+    
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff', 'is_superuser')
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if not self.instance.pk and not cleaned_data.get('new_password'):
+            self.add_error('new_password', 'Password is required for new users.')
+        return cleaned_data
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        new_password = self.cleaned_data.get('new_password')
+        if new_password:
+            user.set_password(new_password)
+        if commit:
+            user.save()
+        return user
+
+class SinglePageUserAdmin(admin.ModelAdmin):
+    form = CustomUserForm
+    inlines = (UserProfileInline,)
+    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
+    search_fields = ('username', 'email', 'first_name', 'last_name')
+
+# Re-register UserAdmin
+admin.site.unregister(User)
+admin.site.register(User, SinglePageUserAdmin)
+
+
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
