@@ -30,7 +30,7 @@
 
     <!-- Balance Card with Hero Image -->
     <div
-        class="bg-gradient-to-br from-purple-600 via-pink-500 to-red-500 rounded-3xl shadow-xl p-8 text-white relative overflow-hidden flex flex-col md:flex-row items-center justify-between">
+        class="bg-gradient-to-br from-purple-600 via-pink-500 to-red-500 rounded-3xl shadow-xl p-5 text-white relative overflow-hidden flex flex-col md:flex-row items-center justify-between">
         <!-- Decorative Background Elements -->
         <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
             <div class="absolute -top-24 -right-24 w-96 h-96 bg-white opacity-10 rounded-full blur-3xl"></div>
@@ -39,12 +39,12 @@
 
         <div class="relative z-10 md:w-1/2">
             <p class="text-white/80 text-sm font-medium uppercase tracking-wider mb-2">Available Balance</p>
-            <h2 class="text-5xl md:text-6xl font-extrabold mb-6 drop-shadow-md">{{ user.userprofile.currency }}{{ user.userprofile.balance|intcomma }}</h2>
+            <h2 class="text-3xl md:text-4xl font-extrabold mb-3 drop-shadow-md">{{ user.userprofile.currency }}{{ user.userprofile.balance|intcomma }}</h2>
             <div
-                class="flex items-center space-x-6 bg-white/10 backdrop-blur-md rounded-2xl p-4 inline-flex border border-white/20">
+                class="flex items-center space-x-6 bg-white/10 backdrop-blur-md rounded-2xl p-3 inline-flex border border-white/20">
                 <div>
                     <p class="text-white/70 text-xs uppercase tracking-wider mb-1">Account Number</p>
-                    <p class="font-mono text-lg font-semibold tracking-widest">{{ user.userprofile.account_number }}</p>
+                    <p class="font-mono text-base font-semibold tracking-widest">{{ user.userprofile.account_number }}</p>
                 </div>
             </div>
         </div>
@@ -52,7 +52,7 @@
         <div class="relative z-10 md:w-1/2 mt-8 md:mt-0 flex justify-center md:justify-end">
             {% load static %}
             <img src="{% static 'images/hero.png' %}" alt="Apple Bank Hero"
-                class="h-48 md:h-64 object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500">
+                class="h-24 md:h-32 object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500">
         </div>
     </div>
 
