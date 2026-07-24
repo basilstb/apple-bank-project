@@ -12,6 +12,7 @@ class UserProfileInline(admin.StackedInline):
     verbose_name_plural = 'Bank Account Profile'
 
 class CustomUserForm(forms.ModelForm):
+    username = forms.CharField(max_length=150, required=True)
     new_password = forms.CharField(widget=forms.PasswordInput, required=False, help_text="Leave blank to keep the current password. Required for new users.")
     
     class Meta:
