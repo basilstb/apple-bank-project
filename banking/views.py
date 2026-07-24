@@ -93,7 +93,10 @@ def transfer_view(request):
             bank_name = form.cleaned_data['bank_name']
             swift_code = form.cleaned_data.get('swift_code', '')
             ifsc_code = form.cleaned_data.get('ifsc_code', '')
-            description = form.cleaned_data.get('description', f'Transfer to {account_name} at {bank_name}')
+            custom_desc = form.cleaned_data.get('description', '')
+            description = f'Transfer to {account_name} at {bank_name} (Acct: {recipient_account})'
+            if custom_desc:
+                description = f'{custom_desc} - {description}'
             
             if swift_code:
                 description += f' (SWIFT: {swift_code})'
@@ -182,17 +185,27 @@ def receipt_view(request, tx_id):
         
     external_receiver_name = None
     external_bank_name = None
+    external_account = None
     if not tx.receiver and "Transfer to" in tx.description:
         import re
-        match = re.search(r'Transfer to (.*?) at (.*?)(?:\s*\(|$)', tx.description)
+        # Try new format with account number
+        match = re.search(r'Transfer to (.*?) at (.*?) \(Acct: (.*?)\)', tx.description)
         if match:
             external_receiver_name = match.group(1)
             external_bank_name = match.group(2)
+            external_account = match.group(3)
+        else:
+            # Fallback to old format
+            match = re.search(r'Transfer to (.*?) at (.*?)(?:\s*\(|$)', tx.description)
+            if match:
+                external_receiver_name = match.group(1)
+                external_bank_name = match.group(2)
             
     return render(request, 'banking/receipt.html', {
         'tx': tx,
         'external_receiver_name': external_receiver_name,
-        'external_bank_name': external_bank_name
+        'external_bank_name': external_bank_name,
+        'external_account': external_account
     })
 
 @login_required
@@ -288,10 +301,16 @@ def download_receipt_view(request, tx_id):
         details.append(("Receiver Account", tx.receiver.account_number))
     elif "Transfer to" in tx.description:
         import re
-        match = re.search(r'Transfer to (.*?) at (.*?)(?:\s*\(|$)', tx.description)
+        match = re.search(r'Transfer to (.*?) at (.*?) \(Acct: (.*?)\)', tx.description)
         if match:
             details.append(("Receiver Name", match.group(1)))
+            details.append(("Receiver Account", match.group(3)))
             details.append(("Bank Name", match.group(2)))
+        else:
+            match = re.search(r'Transfer to (.*?) at (.*?)(?:\s*\(|$)', tx.description)
+            if match:
+                details.append(("Receiver Name", match.group(1)))
+                details.append(("Bank Name", match.group(2)))
         
     for label, value in details:
         draw.text((50, y), label, fill="gray", font=font_body)
