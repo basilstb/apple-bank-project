@@ -180,7 +180,20 @@ def receipt_view(request, tx_id):
         messages.error(request, "Transaction not found.")
         return redirect('dashboard')
         
-    return render(request, 'banking/receipt.html', {'tx': tx})
+    external_receiver_name = None
+    external_bank_name = None
+    if not tx.receiver and "Transfer to" in tx.description:
+        import re
+        match = re.search(r'Transfer to (.*?) at (.*?)(?:\s*\(|$)', tx.description)
+        if match:
+            external_receiver_name = match.group(1)
+            external_bank_name = match.group(2)
+            
+    return render(request, 'banking/receipt.html', {
+        'tx': tx,
+        'external_receiver_name': external_receiver_name,
+        'external_bank_name': external_bank_name
+    })
 
 @login_required
 def loan_application_view(request):
@@ -274,12 +287,11 @@ def download_receipt_view(request, tx_id):
         details.append(("Receiver Name", f"{tx.receiver.user.first_name} {tx.receiver.user.last_name}"))
         details.append(("Receiver Account", tx.receiver.account_number))
     elif "Transfer to" in tx.description:
-        # Try to extract receiver name from description for external transfers
-        # Format: Transfer to [Name] at [Bank]
         import re
-        match = re.search(r'Transfer to (.*?) at', tx.description)
+        match = re.search(r'Transfer to (.*?) at (.*?)(?:\s*\(|$)', tx.description)
         if match:
             details.append(("Receiver Name", match.group(1)))
+            details.append(("Bank Name", match.group(2)))
         
     for label, value in details:
         draw.text((50, y), label, fill="gray", font=font_body)

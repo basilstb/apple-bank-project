@@ -64,6 +64,15 @@
                     <span class="text-gray-500">Receiver Account</span>
                     <span class="font-medium text-gray-900 font-mono">{{ tx.receiver.account_number }}</span>
                 </div>
+                {% elif external_receiver_name %}
+                <div class="flex justify-between">
+                    <span class="text-gray-500">Receiver Name</span>
+                    <span class="font-medium text-gray-900">{{ external_receiver_name }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-500">Bank Name</span>
+                    <span class="font-medium text-gray-900">{{ external_bank_name }}</span>
+                </div>
                 {% endif %}
             </div>
         </div>
