@@ -1,7 +1,19 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib import messages
+from .forms import UserRegistrationForm, TransferForm, LoanApplicationForm, ATMCardRequestForm
+from .models import UserProfile, Transaction, LoanApplication, ATMCardRequest
+from django.db.models import Q
+from django.db import transaction
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password, check_password
+from django_ratelimit.decorators import ratelimit
+from django.http import HttpResponse
+from PIL import Image, ImageDraw, ImageFont
+from .utils import send_welcome_email, send_transaction_alert
 import io
-
 
 def register_view(request):
     if request.method == 'POST':
