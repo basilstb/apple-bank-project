@@ -207,16 +207,46 @@
                     Bank</span>
             </div>
             <div class="hidden md:flex flex-1 mx-gutter items-center gap-6"></div>
-            <div class="flex items-center gap-4">
-                <button id="lang-btn" class="text-on-surface-variant hover:text-primary transition-colors p-2 rounded-full hover:bg-surface-container-high">
-                    <span class="material-symbols-outlined">language</span>
-                </button>
-                <button id="notif-btn" class="text-on-surface-variant hover:text-primary transition-colors p-2 rounded-full hover:bg-surface-container-high">
-                    <span class="material-symbols-outlined">notifications</span>
-                </button>
-                <button id="account-btn" class="text-on-surface-variant hover:text-primary transition-colors p-2 rounded-full hover:bg-surface-container-high">
-                    <span class="material-symbols-outlined">account_circle</span>
-                </button>
+            <div class="flex items-center gap-4 relative">
+                <div class="relative">
+                    <button id="lang-btn" class="text-on-surface-variant hover:text-primary transition-colors p-2 rounded-full hover:bg-surface-container-high">
+                        <span class="material-symbols-outlined">language</span>
+                    </button>
+                    <div id="lang-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary">English</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary">Spanish</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary">French</a>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <button id="notif-btn" class="text-on-surface-variant hover:text-primary transition-colors p-2 rounded-full hover:bg-surface-container-high">
+                        <span class="material-symbols-outlined">notifications</span>
+                    </button>
+                    <div id="notif-dropdown" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
+                        <div class="px-4 py-2 border-b border-gray-100">
+                            <h3 class="text-sm font-bold text-gray-900">Notifications</h3>
+                        </div>
+                        <div class="p-4 text-center text-sm text-gray-500">
+                            No new notifications
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <button id="account-btn" class="text-on-surface-variant hover:text-primary transition-colors p-2 rounded-full hover:bg-surface-container-high">
+                        <span class="material-symbols-outlined">account_circle</span>
+                    </button>
+                    <div id="account-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
+                        <a href="{% url 'dashboard' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary">Dashboard</a>
+                        <a href="{% url 'transfer' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary">Transfers</a>
+                        <div class="border-t border-gray-100 my-1"></div>
+                        <form method="post" action="{% url 'logout' %}" class="block w-full">
+                            {% csrf_token %}
+                            <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">Logout</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </header>
         {% else %}
@@ -307,16 +337,48 @@
                 const langBtn = document.getElementById('lang-btn');
                 const notifBtn = document.getElementById('notif-btn');
                 const accountBtn = document.getElementById('account-btn');
+                
+                const langDropdown = document.getElementById('lang-dropdown');
+                const notifDropdown = document.getElementById('notif-dropdown');
+                const accountDropdown = document.getElementById('account-dropdown');
 
-                if (langBtn) {
-                    langBtn.addEventListener('click', () => alert('Language selection coming soon!'));
+                function closeAllDropdowns() {
+                    if (langDropdown) langDropdown.classList.add('hidden');
+                    if (notifDropdown) notifDropdown.classList.add('hidden');
+                    if (accountDropdown) accountDropdown.classList.add('hidden');
                 }
-                if (notifBtn) {
-                    notifBtn.addEventListener('click', () => alert('You have no new notifications.'));
+
+                if (langBtn && langDropdown) {
+                    langBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const isHidden = langDropdown.classList.contains('hidden');
+                        closeAllDropdowns();
+                        if (isHidden) langDropdown.classList.remove('hidden');
+                    });
                 }
-                if (accountBtn) {
-                    accountBtn.addEventListener('click', () => alert('Account settings coming soon!'));
+                
+                if (notifBtn && notifDropdown) {
+                    notifBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const isHidden = notifDropdown.classList.contains('hidden');
+                        closeAllDropdowns();
+                        if (isHidden) notifDropdown.classList.remove('hidden');
+                    });
                 }
+                
+                if (accountBtn && accountDropdown) {
+                    accountBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const isHidden = accountDropdown.classList.contains('hidden');
+                        closeAllDropdowns();
+                        if (isHidden) accountDropdown.classList.remove('hidden');
+                    });
+                }
+
+                // Close dropdowns when clicking outside
+                document.addEventListener('click', () => {
+                    closeAllDropdowns();
+                });
             });
         </script>
 </body>
