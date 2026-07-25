@@ -262,44 +262,60 @@ def download_receipt_view(request, tx_id):
         messages.error(request, "Transaction not found.")
         return redirect('dashboard')
         
-    # Generate image using Pillow
-    width = 600
-    height = 800
-    image = Image.new('RGB', (width, height), 'white')
+    # Generate high-resolution image using Pillow
+    width = 1200
+    height = 1600
+    image = Image.new('RGB', (width, height), '#F7F9FB')
     draw = ImageDraw.Draw(image)
     
     try:
-        # Try to use a standard font if available, otherwise default
-        font_title = ImageFont.truetype("arial.ttf", 36)
-        font_header = ImageFont.truetype("arial.ttf", 24)
-        font_body = ImageFont.truetype("arial.ttf", 20)
-        font_bold = ImageFont.truetype("arialbd.ttf", 20)
+        # Try to use standard fonts, fallback to default
+        font_title = ImageFont.truetype("arialbd.ttf", 64)
+        font_header = ImageFont.truetype("arial.ttf", 40)
+        font_body = ImageFont.truetype("arial.ttf", 32)
+        font_bold = ImageFont.truetype("arialbd.ttf", 32)
+        font_amount = ImageFont.truetype("arialbd.ttf", 80)
+        font_small = ImageFont.truetype("arial.ttf", 24)
     except IOError:
         font_title = ImageFont.load_default()
         font_header = ImageFont.load_default()
         font_body = ImageFont.load_default()
         font_bold = ImageFont.load_default()
+        font_amount = ImageFont.load_default()
+        font_small = ImageFont.load_default()
+
+    # Draw Top Red Bar
+    draw.rectangle([(0, 0), (width, 20)], fill="#ad0012")
+
+    # Draw Receipt Card Background
+    card_margin = 80
+    card_top = 100
+    card_bottom = height - 100
+    draw.rounded_rectangle([(card_margin, card_top), (width - card_margin, card_bottom)], radius=30, fill="white", outline="#E5E7EB", width=2)
 
     # Draw Header
-    draw.text((width/2, 50), "Apple Bank", fill="black", font=font_title, anchor="mt")
-    draw.text((width/2, 100), "Transaction Receipt", fill="gray", font=font_header, anchor="mt")
-    draw.text((width/2, 140), tx.timestamp.strftime("%B %d, %Y, %I:%M %p"), fill="gray", font=font_body, anchor="mt")
+    draw.text((width/2, card_top + 80), "Apple Bank", fill="#111827", font=font_title, anchor="mt")
+    draw.text((width/2, card_top + 160), "OFFICIAL RECEIPT", fill="#6B7280", font=font_header, anchor="mt")
     
-    # Draw Amount
+    # Draw Amount Section
+    amount_y = card_top + 260
+    draw.rounded_rectangle([(card_margin + 60, amount_y), (width - card_margin - 60, amount_y + 240)], radius=20, fill="#F9FAFB", outline="#F3F4F6", width=2)
+    
     currency = profile.currency
-    draw.text((width/2, 200), "Amount", fill="#374151", font=font_body, anchor="mt")
-    draw.text((width/2, 230), f"{currency}{tx.amount:,.2f}", fill="black", font=font_title, anchor="mt")
+    draw.text((width/2, amount_y + 40), "TRANSACTION AMOUNT", fill="#6B7280", font=font_body, anchor="mt")
+    draw.text((width/2, amount_y + 90), f"{currency}{tx.amount:,.2f}", fill="#111827", font=font_amount, anchor="mt")
     
     # Draw Status
-    status_color = "green" if tx.status == 'Successful' else "orange" if tx.status == 'Pending' else "red"
-    draw.text((width/2, 280), tx.status, fill=status_color, font=font_bold, anchor="mt")
+    status_color = "#059669" if tx.status == 'Successful' else "#D97706" if tx.status == 'Pending' else "#DC2626"
+    status_bg = "#D1FAE5" if tx.status == 'Successful' else "#FEF3C7" if tx.status == 'Pending' else "#FEE2E2"
     
-    # Draw Line
-    draw.line([(50, 330), (550, 330)], fill="lightgray", width=2)
+    # Simple status pill
+    draw.rounded_rectangle([(width/2 - 100, amount_y + 180), (width/2 + 100, amount_y + 220)], radius=20, fill=status_bg)
+    draw.text((width/2, amount_y + 185), tx.status.upper(), fill=status_color, font=font_bold, anchor="mt")
     
     # Draw Details
-    y = 360
-    line_height = 40
+    y = amount_y + 300
+    line_height = 60
     
     details = [
         ("Transaction ID", f"#TXN-{tx.id:06d}"),
@@ -328,17 +344,22 @@ def download_receipt_view(request, tx_id):
                 details.append(("Bank Name", match.group(2)))
         
     for label, value in details:
-        draw.text((50, y), label, fill="#374151", font=font_body)
-        draw.text((550, y), value, fill="black", font=font_bold, anchor="rt")
+        draw.text((card_margin + 80, y), label, fill="#6B7280", font=font_body)
+        draw.text((width - card_margin - 80, y), value, fill="#111827", font=font_bold, anchor="rt")
         y += line_height
         
-    # Footer
-    draw.line([(50, y+20), (550, y+20)], fill="lightgray", width=2)
-    draw.text((width/2, y+50), "Thank you for banking with Apple Bank", fill="gray", font=font_body, anchor="mt")
+    # Footer Dashed Line
+    y += 40
+    for x in range(card_margin + 60, width - card_margin - 60, 20):
+        draw.line([(x, y), (x + 10, y)], fill="#E5E7EB", width=3)
+        
+    # Footer Text
+    draw.text((width/2, y + 60), "Thank you for banking with Apple Bank", fill="#6B7280", font=font_bold, anchor="mt")
+    draw.text((width/2, y + 100), "This is a computer generated receipt and does not require a signature.", fill="#9CA3AF", font=font_small, anchor="mt")
     
     # Save to BytesIO
     buffer = io.BytesIO()
-    image.save(buffer, format='PNG')
+    image.save(buffer, format='PNG', quality=100)
     buffer.seek(0)
     
     response = HttpResponse(buffer, content_type='image/png')
