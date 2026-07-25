@@ -1,5 +1,9 @@
+# Secrets & Environment
+.env
+.env.*
+!.env.example
+
 # Django
-*.log
 *.pot
 *.pyc
 __pycache__/
@@ -7,6 +11,12 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 media/
+
+# Dev utility & test scripts (not for production)
+fix_*.py
+test_*.py
+create_*.py
+reset_*.py
 
 # Virtual Environment
 venv/

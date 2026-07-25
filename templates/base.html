@@ -1,245 +1,265 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="h-full" lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>{% block title %}Apple Bank{% endblock %}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&amp;family=Inter:wght@400&amp;family=JetBrains+Mono:wght@500&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
         tailwind.config = {
+            darkMode: "class",
             theme: {
                 extend: {
-                    colors: {
-                        apple: {
-                            red: '#e3000f',
-                            dark: '#1d1d1f',
-                            gray: '#f5f5f7',
-                        }
+                    "colors": {
+                        "tertiary-fixed-dim": "#6bd8cb",
+                        "error-container": "#ffdad6",
+                        "surface": "#f7f9fb",
+                        "on-secondary-fixed": "#111c2d",
+                        "on-surface": "#191c1e",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#410002",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#d5e0f8",
+                        "surface-tint": "#c00015",
+                        "inverse-on-surface": "#eff1f3",
+                        "surface-container": "#eceef0",
+                        "inverse-surface": "#2d3133",
+                        "surface-container-low": "#f2f4f6",
+                        "tertiary-container": "#007a70",
+                        "on-tertiary-fixed": "#00201d",
+                        "surface-container-high": "#e6e8ea",
+                        "tertiary-fixed": "#89f5e7",
+                        "secondary-fixed-dim": "#bcc7de",
+                        "on-secondary-container": "#586377",
+                        "surface-dim": "#d8dadc",
+                        "on-tertiary-container": "#a9fff2",
+                        "primary-container": "#d61a21",
+                        "on-tertiary-fixed-variant": "#005049",
+                        "on-secondary": "#ffffff",
+                        "inverse-primary": "#ffb4ac",
+                        "primary-fixed-dim": "#ffb4ac",
+                        "primary": "#ad0012",
+                        "secondary": "#545f73",
+                        "surface-container-highest": "#e0e3e5",
+                        "tertiary": "#005f57",
+                        "on-error-container": "#93000a",
+                        "outline-variant": "#e6bdb8",
+                        "on-secondary-fixed-variant": "#3c475a",
+                        "primary-fixed": "#ffdad6",
+                        "surface-bright": "#f7f9fb",
+                        "on-error": "#ffffff",
+                        "on-primary-container": "#ffebe9",
+                        "on-background": "#191c1e",
+                        "surface-variant": "#e0e3e5",
+                        "background": "#f7f9fb",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#5d3f3c",
+                        "outline": "#916f6b",
+                        "on-primary-fixed-variant": "#93000d",
+                        "secondary-fixed": "#d8e3fb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "1.5rem",
+                        "margin-desktop": "2.5rem",
+                        "container-max": "1280px",
+                        "margin-mobile": "1rem",
+                        "stack-sm": "0.5rem",
+                        "stack-md": "1rem",
+                        "stack-lg": "2rem"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "body-sm": ["Inter"],
+                        "label-md": ["JetBrains Mono"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
                     }
                 }
             }
         }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f5f5f7;
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
         }
 
-        /* Hide Google Translate Default UI */
-        .goog-te-banner-frame.skiptranslate {
-            display: none !important;
-        }
-
-        body {
-            top: 0px !important;
-        }
-
-        #google_translate_element {
-            display: none !important;
+        .ambient-shadow {
+            box-shadow: 0 4px 20px rgba(100, 116, 139, 0.04);
         }
     </style>
-    <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({ pageLanguage: 'en', autoDisplay: false }, 'google_translate_element');
-        }
-
-        function changeLanguage(langCode) {
-            // Set the googtrans cookie for the entire domain
-            document.cookie = "googtrans=/en/" + langCode + "; path=/; domain=" + window.location.hostname;
-            document.cookie = "googtrans=/en/" + langCode + "; path=/";
-            window.location.reload();
-        }
-
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
-        }
-    </script>
-    <script type="text/javascript"
-        src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     {% block extra_head %}{% endblock %}
 </head>
+{% load humanize %}
 
-<body class="flex flex-col min-h-screen text-apple-dark">
-    <!-- Navigation -->
-        <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <a href="/" class="flex-shrink-0 flex items-center gap-2">
-                        {% load static %}
-                        <img src="{% static 'images/logo.png' %}" alt="Apple Bank Logo"
-                            class="h-10 w-10 object-contain rounded-full shadow-sm">
-                        <span
-                            class="font-bold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-500">Apple
-                            Bank</span>
-                    </a>
-                </div>
+<body class="bg-background text-on-background font-body-md h-full flex flex-col md:flex-row">
 
-                <div class="flex items-center space-x-2 sm:space-x-4">
-                    <div class="relative group">
-        <button type="button"
-            class="flex items-center justify-center h-9 w-9 rounded-full text-gray-500 hover:bg-gray-100 hover:text-apple-dark transition-colors focus:outline-none">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
-                </path>
-            </svg>
-        </button>
-        <!-- Dropdown menu -->
-        <div
-            class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 max-h-96 overflow-y-auto">
-            <div class="py-2">
-                <button onclick="changeLanguage('en')"
-                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-apple-dark">English</button>
-                <button onclick="changeLanguage('es')"
-                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-apple-dark">Español
-                    (Spanish)</button>
-                <button onclick="changeLanguage('fr')"
-                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-apple-dark">Français
-                    (French)</button>
-                <button onclick="changeLanguage('de')"
-                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-apple-dark">Deutsch
-                    (German)</button>
-                <button onclick="changeLanguage('it')"
-                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-apple-dark">Italiano
-                    (Italian)</button>
-                <button onclick="changeLanguage('pt')"
-                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-apple-dark">Português
-                    (Portuguese)</button>
-                <button onclick="changeLanguage('ru')"
-                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-apple-dark">Русский
-                    (Russian)</button>
-                <button onclick="changeLanguage('hi')"
-                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-apple-dark">हिन्दी
-                    (Hindi)</button>
-                <button onclick="changeLanguage('zh-CN')"
-                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-apple-dark">中文
-                    (Chinese)</button>
-                <button onclick="changeLanguage('ja')"
-                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-apple-dark">日本語
-                    (Japanese)</button>
-                <button onclick="changeLanguage('ko')"
-                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-apple-dark">한국어
-                    (Korean)</button>
-                <button onclick="changeLanguage('ar')"
-                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-apple-dark">العربية
-                    (Arabic)</button>
+    {% if user.is_authenticated %}
+    <!-- SideNavBar (Desktop) -->
+    <nav
+        class="hidden md:flex bg-surface-container-low text-primary border-r border-outline-variant fixed left-0 top-0 h-screen w-64 flex-col p-4 space-y-stack-md z-50">
+        <div class="mb-stack-lg px-2">
+            <h1 class="font-headline-lg text-headline-lg text-primary">Apple Bank</h1>
+        </div>
+        <div class="flex items-center space-x-3 mb-stack-lg px-2">
+            {% if user.userprofile.profile_picture %}
+            <img class="w-10 h-10 rounded-full object-cover shadow-sm"
+                src="{{ user.userprofile.profile_picture.url }}" />
+            {% else %}
+            <div
+                class="w-10 h-10 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-bold">
+                {{ user.first_name|first }}{{ user.last_name|first }}
+            </div>
+            {% endif %}
+            <div>
+                <p class="font-label-md text-label-md text-on-surface">Welcome back</p>
+                <p class="font-body-sm text-body-sm text-on-surface-variant">{{ user.first_name }}</p>
             </div>
         </div>
-    </div>
-    <!-- Hidden Google Translate Element -->
-    <div id="google_translate_element"></div>
-
-    <!-- Desktop Menu -->
-    <div class="hidden md:flex items-center space-x-4">
-        {% if user.is_authenticated %}
         <a href="{% url 'dashboard' %}"
-            class="text-gray-600 hover:text-apple-dark px-3 py-2 rounded-md text-sm font-medium transition-colors">Dashboard</a>
-        {% if user.is_staff %}
-        <a href="/admin/"
-            class="text-gray-600 hover:text-apple-dark px-3 py-2 rounded-md text-sm font-medium transition-colors">Admin</a>
-        {% endif %}
-        <div class="h-6 w-px bg-gray-200 mx-2"></div>
-        <span class="text-sm font-medium text-gray-900">{{ user.first_name }}</span>
-        <form method="post" action="{% url 'logout' %}" class="inline">
-            {% csrf_token %}
-            <button type="submit"
-                class="text-gray-600 hover:text-apple-dark px-3 py-2 rounded-md text-sm font-medium transition-colors">Logout</button>
-        </form>
-        {% else %}
-        <a href="{% url 'login' %}"
-            class="text-gray-600 hover:text-apple-dark px-3 py-2 rounded-md text-sm font-medium transition-colors">Login</a>
-        <a href="{% url 'register' %}"
-            class="bg-apple-dark text-white hover:bg-gray-800 px-4 py-2 rounded-full text-sm font-medium transition-colors shadow-sm">Open
-            Account</a>
-        {% endif %}
-    </div>
-
-    <!-- Mobile Menu Button -->
-    <div class="flex items-center md:hidden">
-        <button type="button" onclick="toggleMobileMenu()"
-            class="text-gray-500 hover:text-apple-dark focus:outline-none p-2">
-            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
-                </path>
-            </svg>
-        </button>
-    </div>
-    </div>
-    </div>
-    </div>
-
-    <!-- Mobile Menu -->
-    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
-        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            {% if user.is_authenticated %}
-            <div class="px-3 py-2 text-sm font-medium text-gray-900 border-b border-gray-100 mb-2">
-                Welcome, {{ user.first_name }}
-            </div>
-            <a href="{% url 'dashboard' %}"
-                class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-apple-dark hover:bg-gray-50">Dashboard</a>
-            {% if user.is_staff %}
-            <a href="/admin/"
-                class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-apple-dark hover:bg-gray-50">Admin</a>
-            {% endif %}
-            <form method="post" action="{% url 'logout' %}" class="block w-full text-left">
+            class="w-full bg-primary-container text-on-primary font-label-md text-label-md py-2 rounded-lg hover:bg-primary transition-colors flex items-center justify-center gap-2 mb-stack-md">
+            <span class="material-symbols-outlined text-[18px]">dashboard</span> Dashboard
+        </a>
+        <div class="flex-grow flex flex-col space-y-1">
+            <a class="flex items-center space-x-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 ease-in-out font-label-md text-label-md"
+                href="{% url 'dashboard' %}">
+                <span class="material-symbols-outlined">account_balance</span> <span>Accounts</span>
+            </a>
+            <a class="flex items-center space-x-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 ease-in-out font-label-md text-label-md"
+                href="{% url 'transfer' %}">
+                <span class="material-symbols-outlined">swap_horiz</span> <span>Transfers</span>
+            </a>
+            <a class="flex items-center space-x-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 ease-in-out font-label-md text-label-md"
+                href="{% url 'loan_application' %}">
+                <span class="material-symbols-outlined">trending_up</span> <span>Loans</span>
+            </a>
+            <a class="flex items-center space-x-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 ease-in-out font-label-md text-label-md"
+                href="{% url 'atm_request' %}">
+                <span class="material-symbols-outlined">payments</span> <span>ATM Card</span>
+            </a>
+            <a class="flex items-center space-x-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 ease-in-out font-label-md text-label-md"
+                href="{% url 'history' %}">
+                <span class="material-symbols-outlined">history</span> <span>History</span>
+            </a>
+        </div>
+        <div class="mt-auto border-t border-outline-variant pt-stack-md flex flex-col space-y-1">
+            <form method="post" action="{% url 'logout' %}" class="block w-full">
                 {% csrf_token %}
                 <button type="submit"
-                    class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-apple-dark hover:bg-gray-50">Logout</button>
+                    class="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 ease-in-out font-label-md text-label-md">
+                    <span class="material-symbols-outlined">logout</span> <span>Logout</span>
+                </button>
             </form>
-            {% else %}
-            <a href="{% url 'login' %}"
-                class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-apple-dark hover:bg-gray-50">Login</a>
-            <a href="{% url 'register' %}"
-                class="block px-3 py-2 rounded-md text-base font-medium text-apple-dark hover:bg-gray-50">Open
-                Account</a>
-            {% endif %}
         </div>
-    </div>
     </nav>
 
-    <!-- Main Content -->
-    <main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {% if messages %}
-        <div class="mb-6">
-            {% for message in messages %}
-            <div
-                class="p-4 rounded-lg mb-2 {% if message.tags == 'error' %}bg-red-100 text-red-700{% elif message.tags == 'success' %}bg-green-100 text-green-700{% else %}bg-blue-100 text-blue-700{% endif %}">
-                {{ message }}
+    <!-- Main Content Area -->
+    <main class="flex-1 md:ml-64 flex flex-col min-h-screen">
+        <!-- TopNavBar (Mobile/Responsive Header) -->
+        <header
+            class="bg-surface-container-lowest text-primary font-headline-lg text-headline-lg font-body-md text-body-md border-b border-outline-variant shadow-sm flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 sticky top-0 z-40">
+            <div class="flex items-center gap-4">
+                <button class="md:hidden text-on-surface">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+                <span
+                    class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg font-bold text-on-surface">Apple
+                    Bank</span>
             </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-
-        {% block content %}
-        {% endblock %}
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-white border-t border-gray-200 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="md:flex md:items-center md:justify-between">
-                <div class="flex justify-center md:justify-start mb-6 md:mb-0">
-                    <span class="text-gray-500 text-sm">© 2026 Apple Bank. All rights reserved.</span>
-                </div>
-                <div class="flex justify-center space-x-6">
-                    <a href="#" class="text-gray-400 hover:text-gray-500">
-                        <span class="sr-only">Privacy Policy</span>
-                        Privacy
-                    </a>
-                    <a href="#" class="text-gray-400 hover:text-gray-500">
-                        <span class="sr-only">Terms of Service</span>
-                        Terms
-                    </a>
-                </div>
+            <div class="hidden md:flex flex-1 mx-gutter items-center gap-6"></div>
+            <div class="flex items-center gap-4">
+                <button class="text-on-surface-variant hover:text-primary transition-colors">
+                    <span class="material-symbols-outlined">language</span>
+                </button>
+                <button class="text-on-surface-variant hover:text-primary transition-colors">
+                    <span class="material-symbols-outlined">notifications</span>
+                </button>
+                <button class="text-on-surface-variant hover:text-primary transition-colors">
+                    <span class="material-symbols-outlined">account_circle</span>
+                </button>
             </div>
-        </div>
-    </footer>
+        </header>
+        {% else %}
+        <main class="flex-1 flex flex-col min-h-screen">
+            <header
+                class="bg-surface-container-lowest text-primary font-headline-lg text-headline-lg font-body-md text-body-md border-b border-outline-variant shadow-sm flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 sticky top-0 z-40">
+                <div class="flex items-center gap-4">
+                    <span
+                        class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg font-bold text-on-surface">Apple
+                        Bank</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="{% url 'login' %}"
+                        class="text-on-surface-variant hover:text-primary transition-colors">Login</a>
+                    <a href="{% url 'register' %}"
+                        class="bg-primary-container text-on-primary px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-primary transition-colors shadow-sm">Open
+                        Account</a>
+                </div>
+            </header>
+            {% endif %}
 
+            <!-- Page Content -->
+            <div class="flex-1 p-margin-mobile md:p-margin-desktop max-w-container-max mx-auto w-full">
+                {% if messages %}
+                <div class="mb-6">
+                    {% for message in messages %}
+                    <div
+                        class="p-4 rounded-lg mb-2 {% if message.tags == 'error' %}bg-red-100 text-red-700{% elif message.tags == 'success' %}bg-green-100 text-green-700{% else %}bg-blue-100 text-blue-700{% endif %}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% block content %}
+                {% endblock %}
+            </div>
+
+            <!-- Footer -->
+            <footer
+                class="bg-surface-container-highest text-primary font-body-sm text-body-sm font-label-md text-label-md border-t border-outline-variant w-full mt-auto flex flex-col md:flex-row justify-between items-center px-margin-mobile md:px-margin-desktop py-stack-lg max-w-container-max mx-auto z-10 relative">
+                <div
+                    class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background mb-4 md:mb-0">
+                    Apple Bank
+                </div>
+                <div class="flex flex-wrap justify-center gap-4 mb-4 md:mb-0">
+                    <a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+                    <a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of
+                        Service</a>
+                    <a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Regulatory
+                        Disclosures</a>
+                    <a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Security Center</a>
+                </div>
+                <div class="text-on-surface-variant text-center md:text-right">
+                    © 2026 Apple Bank. Member FDIC. Equal Housing Lender.
+                </div>
+            </footer>
+        </main>
 </body>
 
 </html>

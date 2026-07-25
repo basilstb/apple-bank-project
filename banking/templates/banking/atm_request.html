@@ -1,42 +1,111 @@
 {% extends 'base.html' %}
-
 {% block title %}Request ATM Card - Apple Bank{% endblock %}
-
 {% block content %}
-<div class="max-w-2xl mx-auto">
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
-        <div class="flex items-center space-x-4 mb-8">
-            <div class="bg-orange-50 p-3 rounded-full text-orange-600">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z">
-                    </path>
-                </svg>
-            </div>
-            <div>
-                <h2 class="text-2xl font-bold text-gray-900">Request ATM Card</h2>
-                <p class="text-gray-500">Order a new physical or virtual debit card.</p>
-            </div>
-        </div>
-
-        <form method="POST" class="space-y-6">
-            {% csrf_token %}
-
-            <div>
-                <label for="id_card_type" class="block text-sm font-medium text-gray-700 mb-1">Card Type</label>
-                {{ form.card_type }}
-                {% if form.card_type.errors %}
-                <p class="text-red-500 text-xs mt-1">{{ form.card_type.errors.0 }}</p>
-                {% endif %}
-            </div>
-
-            <div class="pt-4">
-                <button type="submit"
-                    class="w-full flex justify-center py-3 px-4 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-apple-dark hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-apple-dark transition-colors">
-                    Submit Request
-                </button>
-            </div>
-        </form>
-    </div>
+<div class="mb-stack-lg">
+  <h1 class="font-headline-lg text-headline-lg text-on-surface mb-2">Request New ATM Card</h1>
+  <p class="font-body-md text-body-md text-on-surface-variant">Select a card type and confirm your delivery details.</p>
 </div>
+<form method="POST">
+  {% csrf_token %}
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+    <div class="lg:col-span-7 space-y-stack-lg">
+      <section class="glass-card rounded-xl p-6">
+        <h2 class="font-label-md text-label-md text-on-surface mb-4 uppercase tracking-wider">Card Type</h2>
+        <div class="grid grid-cols-2 gap-4">
+          <label class="relative cursor-pointer">
+            <input checked class="peer sr-only" name="card_type" type="radio" value="Physical">
+            <div class="p-4 border border-outline-variant rounded-lg bg-surface-container-lowest hover:bg-surface-container-low transition-colors peer-checked:border-primary peer-checked:bg-on-primary-container">
+              <span class="material-symbols-outlined text-primary mb-2 block">add_card</span>
+              <span class="font-body-md text-body-md text-on-surface block font-medium">Physical Card</span>
+              <span class="font-body-sm text-body-sm text-on-surface-variant">Delivered to your address</span>
+            </div>
+          </label>
+          <label class="relative cursor-pointer">
+            <input class="peer sr-only" name="card_type" type="radio" value="Virtual">
+            <div class="p-4 border border-outline-variant rounded-lg bg-surface-container-lowest hover:bg-surface-container-low transition-colors peer-checked:border-primary peer-checked:bg-on-primary-container">
+              <span class="material-symbols-outlined text-primary mb-2 block">credit_card</span>
+              <span class="font-body-md text-body-md text-on-surface block font-medium">Virtual Card</span>
+              <span class="font-body-sm text-body-sm text-on-surface-variant">Instant access online</span>
+            </div>
+          </label>
+        </div>
+        {% if form.card_type.errors %}<p class="text-red-500 text-xs mt-2">{{ form.card_type.errors.0 }}</p>{% endif %}
+      </section>
+      <section class="glass-card rounded-xl p-6">
+        <h2 class="font-label-md text-label-md text-on-surface mb-4 uppercase tracking-wider">Select Design</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <label class="relative cursor-pointer group">
+            <input checked class="peer sr-only" name="cardDesign" type="radio" value="classic">
+            <div class="border border-outline-variant rounded-lg p-2 bg-surface-container-lowest transition-all group-hover:shadow-sm">
+              <div class="h-32 rounded-md bg-gradient-to-br from-surface-dim to-secondary-container mb-3 relative overflow-hidden flex flex-col justify-between p-4">
+                <div class="w-full flex justify-between items-start">
+                  <div class="w-8 h-6 bg-surface-container-highest rounded-sm opacity-80"></div>
+                  <span class="font-headline-lg text-[10px] text-on-surface opacity-70">Apple Bank</span>
+                </div>
+                <div class="font-label-md text-label-md text-on-surface tracking-widest opacity-80 mt-auto">•••• 1234</div>
+              </div>
+              <div class="px-2 pb-2">
+                <span class="font-body-md text-body-md text-on-surface block">Classic Silver</span>
+                <span class="font-body-sm text-body-sm text-on-surface-variant">Standard Issue</span>
+              </div>
+            </div>
+          </label>
+          <label class="relative cursor-pointer group">
+            <input class="peer sr-only" name="cardDesign" type="radio" value="premium">
+            <div class="border border-outline-variant rounded-lg p-2 bg-surface-container-lowest transition-all group-hover:shadow-sm">
+              <div class="h-32 rounded-md bg-gradient-to-br from-inverse-surface to-on-surface mb-3 relative overflow-hidden flex flex-col justify-between p-4">
+                <div class="w-full flex justify-between items-start">
+                  <div class="w-8 h-6 bg-surface-container-highest rounded-sm opacity-60"></div>
+                  <span class="font-headline-lg text-[10px] text-on-primary opacity-90">Apple Bank</span>
+                </div>
+                <div class="font-label-md text-label-md text-on-primary tracking-widest opacity-90 mt-auto">•••• 1234</div>
+              </div>
+              <div class="px-2 pb-2">
+                <span class="font-body-md text-body-md text-on-surface block">Onyx Black</span>
+                <span class="font-body-sm text-body-sm text-on-surface-variant">Premium Accounts</span>
+              </div>
+            </div>
+          </label>
+        </div>
+      </section>
+    </div>
+    <div class="lg:col-span-5 space-y-stack-lg">
+      <section class="glass-card rounded-xl p-6">
+        <h2 class="font-label-md text-label-md text-on-surface mb-4 uppercase tracking-wider">Shipping Details</h2>
+        <div class="space-y-4">
+          <div class="border border-outline-variant rounded-lg bg-surface-container-lowest p-3">
+            <label class="block font-label-md text-label-md text-on-surface-variant mb-1">Full Name</label>
+            <input class="w-full bg-transparent border-none p-0 focus:ring-0 font-body-md text-body-md text-on-surface" type="text" value="{{ user.first_name }} {{ user.last_name }}">
+          </div>
+          <div class="border border-outline-variant rounded-lg bg-surface-container-lowest p-3">
+            <label class="block font-label-md text-label-md text-on-surface-variant mb-1">Street Address</label>
+            <input class="w-full bg-transparent border-none p-0 focus:ring-0 font-body-md text-body-md text-on-surface" type="text" value="123 Financial District Way">
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="border border-outline-variant rounded-lg bg-surface-container-lowest p-3">
+              <label class="block font-label-md text-label-md text-on-surface-variant mb-1">City</label>
+              <input class="w-full bg-transparent border-none p-0 focus:ring-0 font-body-md text-body-md text-on-surface" type="text" value="New York">
+            </div>
+            <div class="border border-outline-variant rounded-lg bg-surface-container-lowest p-3">
+              <label class="block font-label-md text-label-md text-on-surface-variant mb-1">ZIP Code</label>
+              <input class="w-full bg-transparent border-none p-0 focus:ring-0 font-body-md text-body-md text-on-surface" type="text" value="10004">
+            </div>
+          </div>
+        </div>
+        <div class="mt-stack-lg border-t border-outline-variant pt-6">
+          <div class="flex justify-between items-center mb-4">
+            <span class="font-body-md text-body-md text-on-surface-variant">Card Issuance Fee</span>
+            <span class="font-body-md text-body-md text-on-surface font-medium">{{ user.userprofile.currency }}0.00</span>
+          </div>
+          <div class="flex justify-between items-center mb-6">
+            <span class="font-body-md text-body-md text-on-surface-variant">Standard Shipping (3-5 days)</span>
+            <span class="font-body-md text-body-md text-on-surface font-medium">{{ user.userprofile.currency }}0.00</span>
+          </div>
+          <button type="submit" class="w-full bg-primary-container text-on-primary py-3 rounded-lg font-headline-lg !text-[16px] hover:bg-primary transition-colors shadow-sm">Submit Request</button>
+          <p class="font-body-sm text-body-sm text-on-surface-variant text-center mt-4">By submitting, you agree to the <a class="text-primary hover:underline" href="#">Terms &amp; Conditions</a>.</p>
+        </div>
+      </section>
+    </div>
+  </div>
+</form>
 {% endblock %}

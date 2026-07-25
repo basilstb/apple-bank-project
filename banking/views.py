@@ -79,9 +79,11 @@ def dashboard_view(request):
         Q(sender=profile) | Q(receiver=profile)
     ).order_by('-timestamp')[:5]
     loan_applications = LoanApplication.objects.filter(user=profile).order_by('-created_at')
+    atm_requests = ATMCardRequest.objects.filter(user=profile).order_by('-created_at')
     return render(request, 'banking/dashboard.html', {
         'recent_transactions': recent_transactions, 
         'loan_applications': loan_applications,
+        'atm_requests': atm_requests,
         'user': request.user
     })
 
@@ -180,7 +182,7 @@ def history_view(request):
     transactions = Transaction.objects.filter(
         Q(sender=profile) | Q(receiver=profile)
     ).order_by('-timestamp')
-    return render(request, 'banking/history.html', {'transactions': transactions})
+    return render(request, 'banking/history.html', {'transactions': transactions, 'profile': profile})
 
 @login_required
 def receipt_view(request, tx_id):
@@ -216,7 +218,8 @@ def receipt_view(request, tx_id):
         'tx': tx,
         'external_receiver_name': external_receiver_name,
         'external_bank_name': external_bank_name,
-        'external_account': external_account
+        'external_account': external_account,
+        'profile': profile
     })
 
 @login_required

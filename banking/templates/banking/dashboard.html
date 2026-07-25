@@ -4,226 +4,125 @@
 {% block title %}Dashboard - Apple Bank{% endblock %}
 
 {% block content %}
-<div class="space-y-6">
-    <!-- Header -->
-    <div class="flex items-center justify-between">
-        <div class="flex items-center space-x-4">
-            {% if user.userprofile.profile_picture %}
-            <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture"
-                class="h-16 w-16 rounded-full object-cover border-2 border-white shadow-sm">
-            {% else %}
-            <div
-                class="h-16 w-16 rounded-full bg-apple-dark text-white flex items-center justify-center text-2xl font-bold shadow-sm border-2 border-white">
-                {{ user.first_name|first }}{{ user.last_name|first }}
-            </div>
-            {% endif %}
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900">Welcome back, {{ user.first_name }}</h1>
-                <p class="text-sm text-gray-500">Here is your account overview</p>
-            </div>
-        </div>
-        <span
-            class="px-3 py-1 rounded-full text-sm font-medium {% if user.userprofile.account_status == 'Active' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
-            {{ user.userprofile.account_status }}
-        </span>
+<div class="space-y-stack-lg pb-24">
+  <section class="relative rounded-xl overflow-hidden shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] border border-slate-200 bg-surface-container-lowest h-64 md:h-80 flex items-center">
+    <div class="absolute inset-0 z-0">
+      <img alt="Online Banking Feature" class="w-full h-full object-cover opacity-90" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvis4GQf-jViPhgyG06yy3-SrJ7ANCnU7b4mVoXWwc4QusX36rYfbjmbDmBzkVDl8KumX7CNyah_py8BFRCRMzM4ODcB2_gsZkjQs8HvsEUlT5PSqcYcvWWYuuRvWO1VbXJVzW4M8fOl_wbCwlrJt83a-ZU_WH55Mcl-aADdLZWI4Pm1QsttFjb-BDnMR6nd3jf8G7ZDzeZykxWhQZ7WY2nubYg-FRAzqWBo8tLlJzwfl2IKsc_hgx6AXG0iNUadEXE_3kt1q1LMc" />
+      <div class="absolute inset-0 bg-gradient-to-r from-surface-container-lowest via-surface-container-lowest/80 to-transparent"></div>
     </div>
-
-    <!-- Balance Card with Hero Image -->
-    <div
-        class="bg-gradient-to-br from-purple-600 via-pink-500 to-red-500 rounded-3xl shadow-xl p-5 text-white relative overflow-hidden flex flex-col md:flex-row items-center justify-between">
-        <!-- Decorative Background Elements -->
-        <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
-            <div class="absolute -top-24 -right-24 w-96 h-96 bg-white opacity-10 rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-white opacity-10 rounded-full blur-3xl"></div>
-        </div>
-
-        <div class="relative z-10 md:w-1/2">
-            <p class="text-white/80 text-sm font-medium uppercase tracking-wider mb-2">Available Balance</p>
-            <h2 class="text-3xl md:text-4xl font-extrabold mb-3 drop-shadow-md">{{ user.userprofile.currency }}{{ user.userprofile.balance|intcomma }}</h2>
-            <div
-                class="flex items-center space-x-6 bg-white/10 backdrop-blur-md rounded-2xl p-3 inline-flex border border-white/20">
-                <div>
-                    <p class="text-white/70 text-xs uppercase tracking-wider mb-1">Account Number</p>
-                    <p class="font-mono text-base font-semibold tracking-widest">{{ user.userprofile.account_number }}</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="relative z-10 md:w-1/2 mt-8 md:mt-0 flex justify-center md:justify-end">
-            {% load static %}
-            <img src="{% static 'images/hero.png' %}" alt="Apple Bank Hero"
-                class="h-24 md:h-32 object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500">
-        </div>
+    <div class="relative z-10 p-8 md:p-12 max-w-2xl">
+      <h1 class="font-display-lg text-display-lg text-on-surface mb-4">Master Your Finances.</h1>
+      <p class="font-body-md text-body-md text-on-surface-variant mb-6 max-w-md">Experience seamless online banking with Apple Bank.</p>
+      <a href="{% url 'transfer' %}" class="inline-block bg-primary-container text-on-primary px-6 py-3 rounded-lg font-label-md text-label-md hover:bg-primary transition-colors shadow-sm">Explore Features</a>
     </div>
-
-    <!-- Quick Actions -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <a href="{% url 'transfer' %}"
-            class="bg-blue-50 p-6 rounded-xl shadow-sm border border-blue-100 hover:shadow-md transition-shadow flex flex-col items-center justify-center text-center group">
-            <div class="bg-white p-3 rounded-full text-blue-600 shadow-sm mb-3">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
-                </svg>
+  </section>
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+    <div class="md:col-span-8 bg-surface-container-lowest rounded-xl p-6 border border-slate-200 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] flex flex-col justify-between">
+      <div>
+        <div class="flex justify-between items-start mb-6">
+          <div>
+            <h2 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-1">Total Available Balance</h2>
+            <div class="flex items-baseline gap-2">
+              <span class="font-headline-lg text-headline-lg text-on-surface">{{ user.userprofile.currency }}{{ user.userprofile.balance|intcomma }}</span>
             </div>
-            <span class="font-medium text-gray-900">Transfer Funds</span>
-        </a>
-        <a href="{% url 'history' %}"
-            class="bg-purple-50 p-6 rounded-xl shadow-sm border border-purple-100 hover:shadow-md transition-shadow flex flex-col items-center justify-center text-center group">
-            <div class="bg-white p-3 rounded-full text-purple-600 shadow-sm mb-3">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
-                    </path>
-                </svg>
-            </div>
-            <span class="font-medium text-gray-900">History</span>
-        </a>
-        <a href="{% url 'loan_application' %}"
-            class="bg-green-50 p-6 rounded-xl shadow-sm border border-green-100 hover:shadow-md transition-shadow flex flex-col items-center justify-center text-center group">
-            <div class="bg-white p-3 rounded-full text-green-600 shadow-sm mb-3">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
-                    </path>
-                </svg>
-            </div>
-            <span class="font-medium text-gray-900">Apply for Loan</span>
-        </a>
-        <a href="{% url 'atm_request' %}"
-            class="bg-orange-50 p-6 rounded-xl shadow-sm border border-orange-100 hover:shadow-md transition-shadow flex flex-col items-center justify-center text-center group">
-            <div class="bg-white p-3 rounded-full text-orange-600 shadow-sm mb-3">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z">
-                    </path>
-                </svg>
-            </div>
-            <span class="font-medium text-gray-900">Request Card</span>
-        </a>
+          </div>
+          <div class="bg-tertiary-container/10 text-tertiary px-3 py-1 rounded-full flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm">trending_up</span>
+            <span class="font-label-md text-label-md">{{ user.userprofile.account_status }}</span>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mt-8">
+          <div class="p-4 bg-surface rounded-lg border border-outline-variant/50">
+            <p class="font-label-md text-label-md text-on-surface-variant mb-1">Main Account (...{{ user.userprofile.account_number|slice:"-4:" }})</p>
+            <p class="font-body-md text-body-md font-semibold">{{ user.userprofile.currency }}{{ user.userprofile.balance|intcomma }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="mt-6 pt-6 border-t border-outline-variant/50 flex gap-4">
+        <a href="{% url 'history' %}" class="flex-1 text-center bg-surface-container text-on-surface py-2 rounded-lg font-label-md text-label-md hover:bg-surface-container-highest transition-colors border border-outline-variant">View Statements</a>
+        <a href="#" class="flex-1 text-center bg-surface-container text-on-surface py-2 rounded-lg font-label-md text-label-md hover:bg-surface-container-highest transition-colors border border-outline-variant">Account Details</a>
+      </div>
     </div>
-
-    <!-- Recent Transactions Preview -->
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <div class="px-6 py-5 border-b border-gray-100 flex justify-between items-center">
-            <h3 class="text-lg font-medium text-gray-900">Recent Transactions</h3>
-            <a href="{% url 'history' %}" class="text-sm font-medium text-apple-dark hover:text-gray-700">View all</a>
+    <div class="md:col-span-4 bg-surface-container-lowest rounded-xl p-6 border border-slate-200 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] flex flex-col">
+      <h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-6">Quick Transfer</h3>
+      <div class="space-y-4 flex-1">
+        <div>
+          <label class="block font-label-md text-label-md text-on-surface-variant mb-1">From Account</label>
+          <select class="w-full border border-outline-variant rounded-lg bg-surface px-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-sm">
+            <option>Main Account (...{{ user.userprofile.account_number|slice:"-4:" }})</option>
+          </select>
         </div>
-        <div class="divide-y divide-gray-100">
-            {% for tx in recent_transactions %}
-            <div class="px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
-                <div class="flex items-center space-x-4">
-                    <div class="flex-shrink-0">
-                        {% if tx.transaction_type == 'Deposit' or tx.receiver == user.userprofile %}
-                        <div class="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
-                            <svg class="h-5 w-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                            </svg>
-                        </div>
-                        {% else %}
-                        <div class="h-10 w-10 rounded-full bg-red-100 flex items-center justify-center">
-                            <svg class="h-5 w-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
-                            </svg>
-                        </div>
-                        {% endif %}
-                    </div>
-                    <div>
-                        <p class="text-sm font-medium text-gray-900">{{ tx.description }}</p>
-                        <p class="text-xs text-gray-500">{{ tx.timestamp|date:"M d, Y H:i" }}</p>
-                        {% if tx.transaction_type == 'Transfer' %}
-                        <div class="mt-2 w-full max-w-xs">
-                            <div class="flex justify-between text-xs mb-1">
-                                <span class="text-gray-500 font-medium">Transfer Progress
-                                    {% if tx.progress_percentage < 100 %} <span
-                                        class="blinking-dots text-apple-dark font-bold tracking-widest">.</span>
-                                {% else %}
-                                <span class="text-apple-dark font-bold tracking-widest">......</span>
-                                {% endif %}
-                                </span>
-                                <span class="text-apple-dark font-bold">{{ tx.progress_percentage }}%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-1.5">
-                                <div class="bg-blue-600 h-1.5 rounded-full transition-all duration-500"
-                                    style="width: {{ tx.progress_percentage }}%"></div>
-                            </div>
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="text-right">
-                    <p
-                        class="text-sm font-bold {% if tx.transaction_type == 'Deposit' or tx.receiver == user.userprofile %}text-green-600{% else %}text-gray-900{% endif %}">
-                        {% if tx.transaction_type == 'Deposit' or tx.receiver == user.userprofile %}+{{ user.userprofile.currency }}{{ tx.amount|intcomma }}{%
-                        else %}-{{ user.userprofile.currency }}{{ tx.amount|intcomma }}{% endif %}
-                    </p>
-                    <p class="text-xs text-gray-500">{{ tx.status }}</p>
-                </div>
-            </div>
-            {% empty %}
-            <div class="px-6 py-8 text-center text-gray-500">
-                No recent transactions found.
-            </div>
-            {% endfor %}
+        <div>
+          <label class="block font-label-md text-label-md text-on-surface-variant mb-1">To Account or Contact</label>
+          <input class="w-full border border-outline-variant rounded-lg bg-surface px-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-sm" placeholder="Name, account, or email" type="text" />
         </div>
+        <div>
+          <label class="block font-label-md text-label-md text-on-surface-variant mb-1">Amount</label>
+          <div class="relative">
+            <span class="absolute left-3 top-2 text-on-surface-variant font-body-sm">{{ user.userprofile.currency }}</span>
+            <input class="w-full border border-outline-variant rounded-lg bg-surface pl-8 pr-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none font-label-md tabular-nums" placeholder="0.00" type="number" />
+          </div>
+        </div>
+      </div>
+      <a href="{% url 'transfer' %}" class="w-full mt-6 bg-primary-container text-on-primary py-3 rounded-lg font-label-md text-label-md hover:bg-primary transition-colors shadow-sm flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined text-sm">send</span> Confirm Transfer
+      </a>
     </div>
-
-    <!-- Loan Applications Preview -->
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <div class="px-6 py-5 border-b border-gray-100 flex justify-between items-center">
-            <h3 class="text-lg font-medium text-gray-900">Loan Applications</h3>
-            <a href="{% url 'loan_application' %}" class="text-sm font-medium text-apple-dark hover:text-gray-700">Apply
-                New</a>
+    <div class="md:col-span-6 bg-surface-container-lowest rounded-xl p-6 border border-slate-200 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)]">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">ATM Cards</h3>
+        <a href="{% url 'atm_request' %}" class="text-primary text-sm font-label-md hover:underline">Manage All</a>
+      </div>
+      {% for card in atm_requests %}
+      <div class="flex items-center gap-4 p-4 rounded-lg border border-outline-variant/50 bg-surface mb-4">
+        <div class="w-12 h-8 bg-on-surface rounded flex items-center justify-end px-2 relative overflow-hidden">
+          <div class="absolute -right-2 -top-2 w-8 h-8 bg-primary rounded-full opacity-50"></div>
+          <span class="text-white text-xs font-bold relative z-10">VISA</span>
         </div>
-        <div class="divide-y divide-gray-100">
-            {% for loan in loan_applications %}
-            <div class="px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
-                <div class="flex items-center space-x-4">
-                    <div class="flex-shrink-0">
-                        <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                            <svg class="h-5 w-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
-                                </path>
-                            </svg>
-                        </div>
-                    </div>
-                    <div>
-                        <p class="text-sm font-medium text-gray-900">Loan: {{ user.userprofile.currency }}{{ loan.amount|intcomma }}</p>
-                        <p class="text-xs text-gray-500">{{ loan.reason|truncatechars:30 }}</p>
-                        <p class="text-xs text-gray-400 mt-1">{{ loan.created_at|date:"M d, Y H:i" }}</p>
-                    </div>
-                </div>
-                <div class="text-right">
-                    <span class="px-3 py-1 rounded-full text-xs font-medium 
-                        {% if loan.status == 'Pending' %}bg-yellow-100 text-yellow-800
-                        {% elif loan.status == 'Approved' %}bg-green-100 text-green-800
-                        {% else %}bg-red-100 text-red-800{% endif %}">
-                        {{ loan.status }}
-                    </span>
-                </div>
-            </div>
-            {% empty %}
-            <div class="px-6 py-8 text-center text-gray-500">
-                No loan applications found.
-            </div>
-            {% endfor %}
+        <div class="flex-1">
+          <p class="font-body-sm text-body-sm font-semibold">{{ card.card_type }} Debit</p>
+          <p class="font-label-md text-label-md text-on-surface-variant">**** **** **** {{ user.userprofile.account_number|slice:"-4:" }}</p>
         </div>
+        <div class="bg-tertiary-container/20 text-tertiary px-2 py-1 rounded text-xs font-label-md">{{ card.status }}</div>
+      </div>
+      {% empty %}
+      <div class="text-center py-4 text-on-surface-variant font-body-sm">No ATM cards requested yet.</div>
+      {% endfor %}
+      <div class="flex gap-2 mt-4">
+        <button class="flex-1 flex items-center justify-center gap-2 py-2 border border-outline-variant rounded-lg text-on-surface-variant hover:text-primary hover:border-primary transition-colors font-label-md text-xs"><span class="material-symbols-outlined text-[16px]">lock</span> Freeze Card</button>
+        <button class="flex-1 flex items-center justify-center gap-2 py-2 border border-outline-variant rounded-lg text-on-surface-variant hover:text-primary hover:border-primary transition-colors font-label-md text-xs"><span class="material-symbols-outlined text-[16px]">visibility</span> Show PIN</button>
+      </div>
     </div>
+    <div class="md:col-span-6 bg-surface-container-lowest rounded-xl p-6 border border-slate-200 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)]">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Loan Application</h3>
+        <a href="{% url 'loan_application' %}" class="text-primary text-sm font-label-md hover:underline">View Details</a>
+      </div>
+      {% for loan in loan_applications %}
+      <div class="p-4 rounded-lg bg-surface border border-outline-variant/50 relative overflow-hidden mb-4">
+        <div class="absolute top-0 left-0 w-1 h-full bg-primary-container"></div>
+        <div class="flex justify-between items-start mb-2 pl-2">
+          <div>
+            <p class="font-body-sm text-body-sm font-semibold">Personal Loan</p>
+            <p class="font-label-md text-label-md text-on-surface-variant">App ID: #AL-{{ loan.id }}</p>
+          </div>
+          <span class="bg-primary-container/10 text-primary-container px-2 py-1 rounded text-xs font-label-md">{{ loan.status }}</span>
+        </div>
+        <div class="mt-4 pl-2">
+          <div class="flex justify-between text-xs font-label-md text-on-surface-variant mb-1">
+            <span>Amount</span>
+            <span>{{ user.userprofile.currency }}{{ loan.amount|intcomma }}</span>
+          </div>
+          <div class="w-full bg-surface-container-highest rounded-full h-1.5">
+            <div class="bg-primary-container h-1.5 rounded-full" style="width:{% if loan.status == 'Approved' %}100{% elif loan.status == 'Pending' %}50{% else %}30{% endif %}%"></div>
+          </div>
+          <p class="text-xs text-on-surface-variant mt-2 font-body-sm">{% if loan.status == 'Pending' %}Awaiting verification.{% elif loan.status == 'Approved' %}Application approved.{% else %}Application rejected.{% endif %}</p>
+        </div>
+      </div>
+      {% empty %}
+      <div class="text-center py-4 text-on-surface-variant font-body-sm">No loan applications found.</div>
+      {% endfor %}
+    </div>
+  </div>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const dotsElements = document.querySelectorAll('.blinking-dots');
-        setInterval(() => {
-            dotsElements.forEach(el => {
-                let count = el.textContent.length;
-                count = count >= 6 ? 1 : count + 1;
-                el.textContent = '.'.repeat(count);
-            });
-        }, 500);
-    });
-</script>
 {% endblock %}

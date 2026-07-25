@@ -40,9 +40,9 @@
                     <td class="px-6 py-4 whitespace-nowrap">
                         <div class="text-sm font-medium text-gray-900">{{ tx.description }}</div>
                         <div class="text-xs text-gray-500">
-                            {% if tx.sender == user.userprofile %}
+                            {% if tx.sender == profile %}
                             To: {{ tx.receiver.account_number }}
-                            {% elif tx.receiver == user.userprofile %}
+                            {% elif tx.receiver == profile %}
                             From: {{ tx.sender.account_number }}
                             {% endif %}
                         </div>
@@ -51,9 +51,9 @@
                         {{ tx.transaction_type }}
                     </td>
                     <td
-                        class="px-6 py-4 whitespace-nowrap text-sm text-right font-bold {% if tx.transaction_type == 'Deposit' or tx.receiver == user.userprofile %}text-green-600{% else %}text-gray-900{% endif %}">
-                        {% if tx.transaction_type == 'Deposit' or tx.receiver == user.userprofile %}+{% else %}-{% endif
-                        %}{{ user.userprofile.currency }}{{ tx.amount|intcomma }}
+                        class="px-6 py-4 whitespace-nowrap text-sm text-right font-bold {% if tx.transaction_type == 'Deposit' or tx.receiver == profile %}text-green-600{% else %}text-gray-900{% endif %}">
+                        {% if tx.transaction_type == 'Deposit' or tx.receiver == profile %}+{% else %}-{% endif %}{{
+                        profile.currency }}{{ tx.amount|intcomma }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-center">
                         <span

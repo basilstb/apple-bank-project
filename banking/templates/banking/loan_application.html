@@ -1,100 +1,76 @@
 {% extends 'base.html' %}
-
-{% block title %}Apply for Loan - Apple Bank{% endblock %}
-
+{% load humanize %}
+{% block title %}Apple Bank - Loans{% endblock %}
 {% block content %}
-<div class="max-w-2xl mx-auto">
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
-        <div class="flex items-center space-x-4 mb-8">
-            <div class="bg-green-50 p-3 rounded-full text-green-600">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
-                    </path>
-                </svg>
-            </div>
-            <div>
-                <h2 class="text-2xl font-bold text-gray-900">Apply for a Loan</h2>
-                <p class="text-gray-500">Get the funds you need with competitive rates.</p>
-            </div>
+<div class="mb-stack-lg">
+  <h1 class="font-display-lg text-display-lg text-on-surface mb-2">Loan Solutions</h1>
+  <p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">Discover flexible financing options tailored to your needs.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter mb-stack-lg">
+  <div class="md:col-span-8 bg-surface-container-lowest rounded-xl ambient-shadow p-6 flex flex-col justify-between border border-outline-variant/30">
+    <div>
+      <div class="flex justify-between items-start mb-4">
+        <div class="bg-secondary-container text-on-secondary-container p-3 rounded-lg inline-block">
+          <span class="material-symbols-outlined">person</span>
         </div>
-
-        <form method="POST" class="space-y-6">
-            {% csrf_token %}
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label for="id_full_name" class="block text-sm font-medium text-gray-700 mb-1">Your Full
-                        Name</label>
-                    {{ form.full_name }}
-                    {% if form.full_name.errors %}
-                    <p class="text-red-500 text-xs mt-1">{{ form.full_name.errors.0 }}</p>
-                    {% endif %}
-                </div>
-
-                <div>
-                    <label for="id_country" class="block text-sm font-medium text-gray-700 mb-1">Country</label>
-                    {{ form.country }}
-                    {% if form.country.errors %}
-                    <p class="text-red-500 text-xs mt-1">{{ form.country.errors.0 }}</p>
-                    {% endif %}
-                </div>
-
-                <div>
-                    <label for="id_job" class="block text-sm font-medium text-gray-700 mb-1">Job</label>
-                    {{ form.job }}
-                    {% if form.job.errors %}
-                    <p class="text-red-500 text-xs mt-1">{{ form.job.errors.0 }}</p>
-                    {% endif %}
-                </div>
-
-                <div>
-                    <label for="id_email_address" class="block text-sm font-medium text-gray-700 mb-1">Email
-                        Address</label>
-                    {{ form.email_address }}
-                    {% if form.email_address.errors %}
-                    <p class="text-red-500 text-xs mt-1">{{ form.email_address.errors.0 }}</p>
-                    {% endif %}
-                </div>
-
-                <div>
-                    <label for="id_whatsapp_number" class="block text-sm font-medium text-gray-700 mb-1">WhatsApp
-                        Number</label>
-                    {{ form.whatsapp_number }}
-                    {% if form.whatsapp_number.errors %}
-                    <p class="text-red-500 text-xs mt-1">{{ form.whatsapp_number.errors.0 }}</p>
-                    {% endif %}
-                </div>
-
-                <div>
-                    <label for="id_amount" class="block text-sm font-medium text-gray-700 mb-1">Loan Amount ($)</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <span class="text-gray-500 sm:text-sm">{{ user.userprofile.currency }}</span>
-                        </div>
-                        {{ form.amount }}
-                    </div>
-                    {% if form.amount.errors %}
-                    <p class="text-red-500 text-xs mt-1">{{ form.amount.errors.0 }}</p>
-                    {% endif %}
-                </div>
-            </div>
-
-            <div>
-                <label for="id_reason" class="block text-sm font-medium text-gray-700 mb-1">Purpose of Loan</label>
-                {{ form.reason }}
-                {% if form.reason.errors %}
-                <p class="text-red-500 text-xs mt-1">{{ form.reason.errors.0 }}</p>
-                {% endif %}
-            </div>
-
-            <div class="pt-4">
-                <button type="submit"
-                    class="w-full flex justify-center py-3 px-4 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-apple-dark hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-apple-dark transition-colors">
-                    Submit Application
-                </button>
-            </div>
-        </form>
+        <span class="bg-tertiary-container/10 text-tertiary-container font-label-md text-label-md px-3 py-1 rounded-full">Rates from 5.99% APR</span>
+      </div>
+      <h2 class="font-headline-lg text-headline-lg text-on-surface mb-2">Apply for a Loan</h2>
+      <p class="font-body-sm text-body-sm text-on-surface-variant mb-6 max-w-md">Consolidate debt, fund a major purchase, or cover unexpected expenses with a fixed-rate personal loan.</p>
+      <form method="POST" class="space-y-4">
+        {% csrf_token %}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="id_full_name" class="block font-label-md text-label-md text-on-surface-variant mb-1">Your Full Name</label>
+            <input type="text" name="full_name" class="w-full bg-surface border border-slate-200 rounded-lg py-2 px-3 text-on-surface font-body-md focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container" required id="id_full_name" value="{{ user.first_name }} {{ user.last_name }}">
+            {% if form.full_name.errors %}<p class="text-red-500 text-xs mt-1">{{ form.full_name.errors.0 }}</p>{% endif %}
+          </div>
+          <div>
+            <label for="id_country" class="block font-label-md text-label-md text-on-surface-variant mb-1">Country</label>
+            <input type="text" name="country" class="w-full bg-surface border border-slate-200 rounded-lg py-2 px-3 text-on-surface font-body-md focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container" required id="id_country">
+            {% if form.country.errors %}<p class="text-red-500 text-xs mt-1">{{ form.country.errors.0 }}</p>{% endif %}
+          </div>
+          <div>
+            <label for="id_job" class="block font-label-md text-label-md text-on-surface-variant mb-1">Job</label>
+            <input type="text" name="job" class="w-full bg-surface border border-slate-200 rounded-lg py-2 px-3 text-on-surface font-body-md focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container" required id="id_job">
+            {% if form.job.errors %}<p class="text-red-500 text-xs mt-1">{{ form.job.errors.0 }}</p>{% endif %}
+          </div>
+          <div>
+            <label for="id_email_address" class="block font-label-md text-label-md text-on-surface-variant mb-1">Email Address</label>
+            <input type="email" name="email_address" class="w-full bg-surface border border-slate-200 rounded-lg py-2 px-3 text-on-surface font-body-md focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container" required id="id_email_address" value="{{ user.email }}">
+            {% if form.email_address.errors %}<p class="text-red-500 text-xs mt-1">{{ form.email_address.errors.0 }}</p>{% endif %}
+          </div>
+          <div>
+            <label for="id_whatsapp_number" class="block font-label-md text-label-md text-on-surface-variant mb-1">WhatsApp Number</label>
+            <input type="text" name="whatsapp_number" class="w-full bg-surface border border-slate-200 rounded-lg py-2 px-3 text-on-surface font-body-md focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container" required id="id_whatsapp_number">
+            {% if form.whatsapp_number.errors %}<p class="text-red-500 text-xs mt-1">{{ form.whatsapp_number.errors.0 }}</p>{% endif %}
+          </div>
+          <div>
+            <label for="id_amount" class="block font-label-md text-label-md text-on-surface-variant mb-1">Loan Amount ({{ user.userprofile.currency }})</label>
+            <input type="number" name="amount" step="0.01" class="w-full bg-surface border border-slate-200 rounded-lg py-2 px-3 text-on-surface font-body-md focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container" required id="id_amount">
+            {% if form.amount.errors %}<p class="text-red-500 text-xs mt-1">{{ form.amount.errors.0 }}</p>{% endif %}
+          </div>
+        </div>
+        <div>
+          <label for="id_reason" class="block font-label-md text-label-md text-on-surface-variant mb-1">Purpose of Loan</label>
+          <textarea name="reason" class="w-full bg-surface border border-slate-200 rounded-lg py-2 px-3 text-on-surface font-body-md focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container" rows="3" required id="id_reason"></textarea>
+          {% if form.reason.errors %}<p class="text-red-500 text-xs mt-1">{{ form.reason.errors.0 }}</p>{% endif %}
+        </div>
+        <button type="submit" class="mt-4 bg-primary-container text-on-primary px-6 py-3 rounded-lg font-label-md text-label-md hover:bg-primary transition-colors w-full md:w-auto">Submit Application</button>
+      </form>
     </div>
+  </div>
+  <div class="md:col-span-4 bg-surface-container-lowest rounded-xl ambient-shadow p-6 flex flex-col justify-between border border-outline-variant/30 relative overflow-hidden">
+    <div class="absolute -right-4 -top-4 opacity-10"><span class="material-symbols-outlined text-[120px]">directions_car</span></div>
+    <div class="relative z-10">
+      <h2 class="font-headline-lg text-headline-lg text-on-surface mb-2">Auto Loans</h2>
+      <p class="font-body-sm text-body-sm text-on-surface-variant mb-6">Get pre-approved before you shop for your next vehicle.</p>
+      <div class="mb-6 border-l-2 border-primary-container pl-3">
+        <p class="font-label-md text-label-md text-on-surface-variant">New Car Rates</p>
+        <p class="font-body-md text-body-md font-semibold text-on-surface">From 4.25% APR</p>
+      </div>
+    </div>
+    <button class="bg-surface-container-lowest border border-outline-variant text-on-surface px-6 py-3 rounded-lg font-label-md text-label-md hover:bg-surface-container-high transition-colors w-full relative z-10">Check Rates</button>
+  </div>
 </div>
 {% endblock %}
