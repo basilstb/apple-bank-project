@@ -325,9 +325,17 @@ def download_receipt_view(request, tx_id):
     status_color = "#059669" if tx.status == 'Successful' else "#D97706" if tx.status == 'Pending' else "#DC2626"
     status_bg = "#D1FAE5" if tx.status == 'Successful' else "#FEF3C7" if tx.status == 'Pending' else "#FEE2E2"
     
+    status_text = tx.status.upper()
+    if tx.status == 'Pending':
+        status_text = f"PENDING ({tx.progress_percentage}%)"
+    
     # Simple status pill
-    draw.rounded_rectangle([(width/2 - 100, amount_y + 180), (width/2 + 100, amount_y + 220)], radius=20, fill=status_bg)
-    draw.text((width/2, amount_y + 185), tx.status.upper(), fill=status_color, font=font_bold, anchor="mt")
+    bbox = draw.textbbox((0, 0), status_text, font=font_bold)
+    text_width = bbox[2] - bbox[0]
+    pill_width = text_width + 80
+    
+    draw.rounded_rectangle([(width/2 - pill_width/2, amount_y + 180), (width/2 + pill_width/2, amount_y + 230)], radius=25, fill=status_bg)
+    draw.text((width/2, amount_y + 185), status_text, fill=status_color, font=font_bold, anchor="mt")
     
     # Draw Details
     y = amount_y + 300
