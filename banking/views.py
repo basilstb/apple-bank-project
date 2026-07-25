@@ -268,21 +268,37 @@ def download_receipt_view(request, tx_id):
     image = Image.new('RGB', (width, height), '#F7F9FB')
     draw = ImageDraw.Draw(image)
     
+    import os
+    from django.conf import settings
+    
+    font_dir = os.path.join(settings.BASE_DIR, 'banking', 'static', 'fonts')
+    regular_font_path = os.path.join(font_dir, 'Roboto-Regular.ttf')
+    bold_font_path = os.path.join(font_dir, 'Roboto-Bold.ttf')
+    
     try:
-        # Try to use standard fonts, fallback to default
-        font_title = ImageFont.truetype("arialbd.ttf", 64)
-        font_header = ImageFont.truetype("arial.ttf", 40)
-        font_body = ImageFont.truetype("arial.ttf", 32)
-        font_bold = ImageFont.truetype("arialbd.ttf", 32)
-        font_amount = ImageFont.truetype("arialbd.ttf", 80)
-        font_small = ImageFont.truetype("arial.ttf", 24)
+        # Try to use bundled fonts
+        font_title = ImageFont.truetype(bold_font_path, 64)
+        font_header = ImageFont.truetype(regular_font_path, 40)
+        font_body = ImageFont.truetype(regular_font_path, 32)
+        font_bold = ImageFont.truetype(bold_font_path, 32)
+        font_amount = ImageFont.truetype(bold_font_path, 80)
+        font_small = ImageFont.truetype(regular_font_path, 24)
     except IOError:
-        font_title = ImageFont.load_default()
-        font_header = ImageFont.load_default()
-        font_body = ImageFont.load_default()
-        font_bold = ImageFont.load_default()
-        font_amount = ImageFont.load_default()
-        font_small = ImageFont.load_default()
+        try:
+            # Fallback to system fonts
+            font_title = ImageFont.truetype("arialbd.ttf", 64)
+            font_header = ImageFont.truetype("arial.ttf", 40)
+            font_body = ImageFont.truetype("arial.ttf", 32)
+            font_bold = ImageFont.truetype("arialbd.ttf", 32)
+            font_amount = ImageFont.truetype("arialbd.ttf", 80)
+            font_small = ImageFont.truetype("arial.ttf", 24)
+        except IOError:
+            font_title = ImageFont.load_default()
+            font_header = ImageFont.load_default()
+            font_body = ImageFont.load_default()
+            font_bold = ImageFont.load_default()
+            font_amount = ImageFont.load_default()
+            font_small = ImageFont.load_default()
 
     # Draw Top Red Bar
     draw.rectangle([(0, 0), (width, 20)], fill="#ad0012")
