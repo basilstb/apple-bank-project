@@ -52,8 +52,7 @@
                     </td>
                     <td
                         class="px-6 py-4 whitespace-nowrap text-sm text-right font-bold {% if tx.transaction_type == 'Deposit' or tx.receiver == profile %}text-green-600{% else %}text-gray-900{% endif %}">
-                        {% if tx.transaction_type == 'Deposit' or tx.receiver == profile %}+{% else %}-{% endif %}{{
-                        profile.currency }}{{ tx.amount|intcomma }}
+                        {% if tx.transaction_type == 'Deposit' or tx.receiver == profile %}+{% else %}-{% endif %}{{ profile.currency }}{{ tx.amount|intcomma }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-center">
                         {% if tx.status == 'Pending' %}
