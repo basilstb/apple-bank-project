@@ -48,11 +48,12 @@ admin.site.register(User, SinglePageUserAdmin)
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'sender', 'receiver', 'amount', 'transaction_type', 'status', 'progress_percentage', 'timestamp')
-    search_fields = ('sender__account_number', 'receiver__account_number', 'description')
+    list_display = ('id', 'sender', 'receiver', 'amount', 'transaction_type', 'status', 'progress_percentage', 'pending_reason', 'timestamp')
+    search_fields = ('sender__account_number', 'receiver__account_number', 'description', 'pending_reason')
     list_filter = ('transaction_type', 'status', 'timestamp')
-    list_editable = ('status', 'progress_percentage')
+    list_editable = ('status', 'progress_percentage', 'pending_reason')
     readonly_fields = ('timestamp',)
+    fields = ('sender', 'receiver', 'amount', 'description', 'transaction_type', 'status', 'progress_percentage', 'pending_reason', 'timestamp')
 
 @admin.register(LoanApplication)
 class LoanApplicationAdmin(admin.ModelAdmin):

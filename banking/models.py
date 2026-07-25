@@ -52,6 +52,7 @@ class Transaction(models.Model):
     transaction_type = models.CharField(max_length=20, choices=TRANSACTION_TYPE_CHOICES)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Successful')
     progress_percentage = models.IntegerField(default=100)
+    pending_reason = models.CharField(max_length=255, blank=True, null=True, help_text="Reason for pending status, visible to user")
 
     def save(self, *args, **kwargs):
         if self.progress_percentage >= 100:

@@ -78,10 +78,17 @@ def dashboard_view(request):
     recent_transactions = Transaction.objects.filter(
         Q(sender=profile) | Q(receiver=profile)
     ).order_by('-timestamp')[:5]
+    
+    pending_transactions = Transaction.objects.filter(
+        Q(sender=profile) | Q(receiver=profile),
+        status='Pending'
+    ).order_by('-timestamp')
+    
     loan_applications = LoanApplication.objects.filter(user=profile).order_by('-created_at')
     atm_requests = ATMCardRequest.objects.filter(user=profile).order_by('-created_at')
     return render(request, 'banking/dashboard.html', {
         'recent_transactions': recent_transactions, 
+        'pending_transactions': pending_transactions,
         'loan_applications': loan_applications,
         'atm_requests': atm_requests,
         'user': request.user

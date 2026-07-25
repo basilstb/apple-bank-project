@@ -27,6 +27,32 @@ Apple Bank Team
     except Exception as e:
         print(f"Failed to send welcome email: {e}")
 
+def send_login_alert(user):
+    if not user.email:
+        return
+        
+    subject = 'New Login Alert'
+    message = f'''Dear {user.first_name},
+
+This is a notification that a new login was detected on your Apple Bank account.
+If this was you, no further action is required.
+
+If you did not authorize this login, please contact support immediately and change your password.
+
+Best regards,
+Apple Bank Team
+'''
+    try:
+        send_mail(
+            subject,
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            [user.email],
+            fail_silently=True,
+        )
+    except Exception as e:
+        print(f"Failed to send login alert: {e}")
+
 def send_transaction_alert(user_profile, transaction, alert_type):
     if not user_profile.user.email:
         return
