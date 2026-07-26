@@ -406,24 +406,21 @@
                     });
                 }
 
-                // Custom Language Selector Logic
+                // Custom Language Selector Logic (Cookie Method)
                 document.querySelectorAll('.lang-select').forEach(item => {
                     item.addEventListener('click', function(e) {
                         e.preventDefault();
                         const lang = this.getAttribute('data-lang');
-                        const select = document.querySelector('.goog-te-combo');
-                        if (select) {
-                            select.value = lang;
-                            // Trigger change event in a way that Google Translate recognizes
-                            if (typeof Event === 'function') {
-                                select.dispatchEvent(new Event('change', { bubbles: true }));
-                            } else {
-                                const event = document.createEvent('HTMLEvents');
-                                event.initEvent('change', true, true);
-                                select.dispatchEvent(event);
-                            }
+                        
+                        if (lang === 'en') {
+                            document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                            document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${window.location.hostname};`;
+                        } else {
+                            document.cookie = `googtrans=/en/${lang}; path=/`;
+                            document.cookie = `googtrans=/en/${lang}; path=/; domain=${window.location.hostname}`;
                         }
-                        closeAllDropdowns();
+                        
+                        window.location.reload();
                     });
                 });
                 
