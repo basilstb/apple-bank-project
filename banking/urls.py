@@ -7,6 +7,7 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('dashboard/', views.dashboard_view, name='dashboard'),
     path('transfer/', views.transfer_view, name='transfer'),
+    path('transfer/verify-pin/', views.transfer_pin_verify_view, name='transfer_pin_verify'),
     path('history/', views.history_view, name='history'),
     path('receipt/<int:tx_id>/', views.receipt_view, name='receipt'),
     path('receipt/<int:tx_id>/download/', views.download_receipt_view, name='download_receipt'),

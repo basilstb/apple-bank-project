@@ -44,6 +44,8 @@ class TransferForm(forms.Form):
     swift_code = forms.CharField(max_length=20, required=False, label="SWIFT Code (Optional)", widget=forms.TextInput(attrs={'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-apple-dark focus:ring-apple-dark sm:text-sm'}))
     ifsc_code = forms.CharField(max_length=20, required=False, label="IFSC Code (Optional)", widget=forms.TextInput(attrs={'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-apple-dark focus:ring-apple-dark sm:text-sm'}))
     description = forms.CharField(max_length=255, required=False, label="Description (Optional)", widget=forms.TextInput(attrs={'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-apple-dark focus:ring-apple-dark sm:text-sm'}))
+
+class TransferPINForm(forms.Form):
     pin = forms.CharField(max_length=4, widget=forms.PasswordInput(attrs={'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-apple-dark focus:ring-apple-dark sm:text-sm'}), label="Enter 4-Digit PIN to Confirm")
 
 class LoanApplicationForm(forms.ModelForm):

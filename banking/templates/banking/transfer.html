@@ -12,80 +12,115 @@
       <form method="POST" class="space-y-stack-lg flex-1">
         {% csrf_token %}
         <div class="relative">
-          <div class="absolute left-0 top-4 w-6 h-6 bg-surface-container rounded-full flex items-center justify-center z-10 border border-slate-200"><span class="font-label-md text-label-md text-on-surface-variant">1</span></div>
+          <div
+            class="absolute left-0 top-4 w-6 h-6 bg-surface-container rounded-full flex items-center justify-center z-10 border border-slate-200">
+            <span class="font-label-md text-label-md text-on-surface-variant">1</span></div>
           <div class="pl-10 pb-6 border-l-2 border-surface-container-highest ml-3">
             <label class="block font-label-md text-label-md text-on-surface-variant mb-2">From Account</label>
             <div class="relative">
-              <select class="w-full bg-surface appearance-none border border-slate-200 rounded-lg py-3 px-4 text-on-surface font-body-md focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container cursor-pointer">
+              <select
+                class="w-full bg-surface appearance-none border border-slate-200 rounded-lg py-3 px-4 text-on-surface font-body-md focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container cursor-pointer">
                 <option>Main Account - {{ user.userprofile.currency }}{{ user.userprofile.balance|intcomma }}</option>
               </select>
-              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-on-surface-variant"><span class="material-symbols-outlined">expand_more</span></div>
+              <div
+                class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-on-surface-variant">
+                <span class="material-symbols-outlined">expand_more</span></div>
             </div>
           </div>
         </div>
         <div class="relative">
-          <div class="absolute left-0 top-4 w-6 h-6 bg-surface-container rounded-full flex items-center justify-center z-10 border border-slate-200"><span class="font-label-md text-label-md text-on-surface-variant">2</span></div>
+          <div
+            class="absolute left-0 top-4 w-6 h-6 bg-surface-container rounded-full flex items-center justify-center z-10 border border-slate-200">
+            <span class="font-label-md text-label-md text-on-surface-variant">2</span></div>
           <div class="pl-10 pb-6 border-l-2 border-surface-container-highest ml-3">
             <label class="block font-label-md text-label-md text-on-surface-variant mb-2">Recipient Details</label>
             <div class="space-y-4">
               <div>
-                <label for="id_recipient_account" class="block font-label-md text-label-md text-on-surface-variant mb-1">Account Number</label>
-                <input type="text" name="recipient_account" class="w-full bg-surface border border-slate-200 rounded-lg py-3 px-4 text-on-surface font-body-md focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container" required id="id_recipient_account">
-                {% if form.recipient_account.errors %}<p class="text-red-500 text-xs mt-1">{{ form.recipient_account.errors.0 }}</p>{% endif %}
+                <label for="id_recipient_account"
+                  class="block font-label-md text-label-md text-on-surface-variant mb-1">Account Number</label>
+                <input type="text" name="recipient_account"
+                  class="w-full bg-surface border border-slate-200 rounded-lg py-3 px-4 text-on-surface font-body-md focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container"
+                  required id="id_recipient_account">
+                {% if form.recipient_account.errors %}<p class="text-red-500 text-xs mt-1">{{
+                  form.recipient_account.errors.0 }}</p>{% endif %}
               </div>
               <div>
-                <label for="id_account_name" class="block font-label-md text-label-md text-on-surface-variant mb-1">Account Name</label>
-                <input type="text" name="account_name" class="w-full bg-surface border border-slate-200 rounded-lg py-3 px-4 text-on-surface font-body-md focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container" required id="id_account_name">
-                {% if form.account_name.errors %}<p class="text-red-500 text-xs mt-1">{{ form.account_name.errors.0 }}</p>{% endif %}
+                <label for="id_account_name"
+                  class="block font-label-md text-label-md text-on-surface-variant mb-1">Account Name</label>
+                <input type="text" name="account_name"
+                  class="w-full bg-surface border border-slate-200 rounded-lg py-3 px-4 text-on-surface font-body-md focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container"
+                  required id="id_account_name">
+                {% if form.account_name.errors %}<p class="text-red-500 text-xs mt-1">{{ form.account_name.errors.0 }}
+                </p>{% endif %}
               </div>
               <div>
-                <label for="id_bank_name" class="block font-label-md text-label-md text-on-surface-variant mb-1">Bank Name</label>
-                <input type="text" name="bank_name" class="w-full bg-surface border border-slate-200 rounded-lg py-3 px-4 text-on-surface font-body-md focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container" required id="id_bank_name">
-                {% if form.bank_name.errors %}<p class="text-red-500 text-xs mt-1">{{ form.bank_name.errors.0 }}</p>{% endif %}
+                <label for="id_bank_name" class="block font-label-md text-label-md text-on-surface-variant mb-1">Bank
+                  Name</label>
+                <input type="text" name="bank_name"
+                  class="w-full bg-surface border border-slate-200 rounded-lg py-3 px-4 text-on-surface font-body-md focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container"
+                  required id="id_bank_name">
+                {% if form.bank_name.errors %}<p class="text-red-500 text-xs mt-1">{{ form.bank_name.errors.0 }}</p>{%
+                endif %}
               </div>
               <div class="grid grid-cols-2 gap-4">
                 <div>
-                  <label for="id_swift_code" class="block font-label-md text-label-md text-on-surface-variant mb-1">SWIFT Code (Optional)</label>
-                  <input type="text" name="swift_code" class="w-full bg-surface border border-slate-200 rounded-lg py-3 px-4 text-on-surface font-body-md focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container" id="id_swift_code">
-                  {% if form.swift_code.errors %}<p class="text-red-500 text-xs mt-1">{{ form.swift_code.errors.0 }}</p>{% endif %}
+                  <label for="id_swift_code"
+                    class="block font-label-md text-label-md text-on-surface-variant mb-1">SWIFT Code (Optional)</label>
+                  <input type="text" name="swift_code"
+                    class="w-full bg-surface border border-slate-200 rounded-lg py-3 px-4 text-on-surface font-body-md focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container"
+                    id="id_swift_code">
+                  {% if form.swift_code.errors %}<p class="text-red-500 text-xs mt-1">{{ form.swift_code.errors.0 }}</p>
+                  {% endif %}
                 </div>
                 <div>
-                  <label for="id_ifsc_code" class="block font-label-md text-label-md text-on-surface-variant mb-1">IFSC Code (Optional)</label>
-                  <input type="text" name="ifsc_code" class="w-full bg-surface border border-slate-200 rounded-lg py-3 px-4 text-on-surface font-body-md focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container" id="id_ifsc_code">
-                  {% if form.ifsc_code.errors %}<p class="text-red-500 text-xs mt-1">{{ form.ifsc_code.errors.0 }}</p>{% endif %}
+                  <label for="id_ifsc_code" class="block font-label-md text-label-md text-on-surface-variant mb-1">IFSC
+                    Code (Optional)</label>
+                  <input type="text" name="ifsc_code"
+                    class="w-full bg-surface border border-slate-200 rounded-lg py-3 px-4 text-on-surface font-body-md focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container"
+                    id="id_ifsc_code">
+                  {% if form.ifsc_code.errors %}<p class="text-red-500 text-xs mt-1">{{ form.ifsc_code.errors.0 }}</p>{%
+                  endif %}
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div class="relative">
-          <div class="absolute left-0 top-4 w-6 h-6 bg-primary-container text-on-primary rounded-full flex items-center justify-center z-10 shadow-sm"><span class="font-label-md text-label-md">3</span></div>
+          <div
+            class="absolute left-0 top-4 w-6 h-6 bg-primary-container text-on-primary rounded-full flex items-center justify-center z-10 shadow-sm">
+            <span class="font-label-md text-label-md">3</span></div>
           <div class="pl-10 ml-3">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label for="id_amount" class="block font-label-md text-label-md text-on-surface-variant mb-2">Amount</label>
+                <label for="id_amount"
+                  class="block font-label-md text-label-md text-on-surface-variant mb-2">Amount</label>
                 <div class="relative">
-                  <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none"><span class="text-on-surface font-body-md">{{ user.userprofile.currency }}</span></div>
-                  <input type="number" name="amount" step="0.01" class="w-full bg-surface border border-slate-200 rounded-lg py-3 pl-8 pr-4 text-on-surface font-headline-lg-mobile text-headline-lg-mobile focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container text-right tabular-nums" placeholder="0.00" required id="id_amount">
+                  <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none"><span
+                      class="text-on-surface font-body-md">{{ user.userprofile.currency }}</span></div>
+                  <input type="number" name="amount" step="0.01"
+                    class="w-full bg-surface border border-slate-200 rounded-lg py-3 pl-8 pr-4 text-on-surface font-headline-lg-mobile text-headline-lg-mobile focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container text-right tabular-nums"
+                    placeholder="0.00" required id="id_amount">
                 </div>
-                {% if form.amount.errors %}<p class="text-red-500 text-xs mt-1">{{ form.amount.errors.0 }}</p>{% endif %}
-              </div>
-              <div>
-                <label for="id_pin" class="block font-label-md text-label-md text-on-surface-variant mb-2">4-Digit PIN</label>
-                <input type="password" name="pin" class="w-full bg-surface border border-slate-200 rounded-lg py-3 px-4 text-on-surface font-body-md focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container" required id="id_pin">
-                {% if form.pin.errors %}<p class="text-red-500 text-xs mt-1">{{ form.pin.errors.0 }}</p>{% endif %}
+                {% if form.amount.errors %}<p class="text-red-500 text-xs mt-1">{{ form.amount.errors.0 }}</p>{% endif
+                %}
               </div>
             </div>
             <div class="mt-4">
-              <label for="id_description" class="block font-label-md text-label-md text-on-surface-variant mb-2">Memo (Optional)</label>
-              <input type="text" name="description" class="w-full bg-surface border border-slate-200 rounded-lg py-3 px-4 text-on-surface font-body-sm focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container" placeholder="What is this for?" id="id_description">
-              {% if form.description.errors %}<p class="text-red-500 text-xs mt-1">{{ form.description.errors.0 }}</p>{% endif %}
+              <label for="id_description" class="block font-label-md text-label-md text-on-surface-variant mb-2">Memo
+                (Optional)</label>
+              <input type="text" name="description"
+                class="w-full bg-surface border border-slate-200 rounded-lg py-3 px-4 text-on-surface font-body-sm focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container"
+                placeholder="What is this for?" id="id_description">
+              {% if form.description.errors %}<p class="text-red-500 text-xs mt-1">{{ form.description.errors.0 }}</p>{%
+              endif %}
             </div>
           </div>
         </div>
         <div class="mt-stack-lg pt-6 border-t border-slate-100 flex justify-end gap-4">
-          <a href="{% url 'dashboard' %}" class="px-6 py-3 rounded-lg text-secondary border border-slate-200 font-label-md text-label-md hover:bg-surface transition-colors flex items-center">Cancel</a>
-          <button type="submit" class="px-6 py-3 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md hover:bg-primary transition-colors shadow-sm">Review Transfer</button>
+          <a href="{% url 'dashboard' %}"
+            class="px-6 py-3 rounded-lg text-secondary border border-slate-200 font-label-md text-label-md hover:bg-surface transition-colors flex items-center">Cancel</a>
+          <button type="submit"
+            class="px-6 py-3 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md hover:bg-primary transition-colors shadow-sm">Transfer</button>
         </div>
       </form>
     </div>
@@ -98,7 +133,8 @@
       </div>
       <div class="flex gap-4 overflow-x-auto pb-2">
         <button class="flex flex-col items-center gap-2 min-w-[72px] group">
-          <div class="w-12 h-12 rounded-full bg-surface-container-high border-2 border-transparent group-hover:border-primary-container flex items-center justify-center transition-all overflow-hidden">
+          <div
+            class="w-12 h-12 rounded-full bg-surface-container-high border-2 border-transparent group-hover:border-primary-container flex items-center justify-center transition-all overflow-hidden">
             <span class="material-symbols-outlined text-secondary">add</span>
           </div>
           <span class="font-label-md text-label-md text-[10px] text-on-surface-variant">New</span>
@@ -119,7 +155,8 @@
           <div class="w-full bg-surface-container-highest rounded-full h-1.5">
             <div class="bg-primary-container h-1.5 rounded-full" style="width: 25%"></div>
           </div>
-          <p class="text-[10px] font-label-md text-on-surface-variant mt-1 text-right">{{ user.userprofile.currency }}3,750.00 remaining</p>
+          <p class="text-[10px] font-label-md text-on-surface-variant mt-1 text-right">{{ user.userprofile.currency
+            }}3,750.00 remaining</p>
         </div>
       </div>
     </div>

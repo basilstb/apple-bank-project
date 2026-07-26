@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block title %}Verify Transfer - Apple Bank{% endblock %}
+{% block content %}
+<div class="mb-stack-lg">
+    <h2 class="font-display-lg text-display-lg text-on-background mb-stack-sm">Verify Transfer</h2>
+    <p class="font-body-md text-body-md text-on-surface-variant">Please enter your 4-digit PIN to confirm the transfer.
+    </p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+    <div class="lg:col-span-8">
+        <div
+            class="bg-surface-container-lowest rounded-xl p-6 border border-slate-200 ambient-shadow h-full flex flex-col">
+            <div class="mb-6 p-4 bg-surface-container-low rounded-lg border border-slate-200">
+                <h3 class="font-label-md text-label-md text-on-surface-variant mb-4">Transfer Summary</h3>
+                <div class="space-y-2">
+                    <div class="flex justify-between">
+                        <span class="text-on-surface-variant text-sm">Amount:</span>
+                        <span class="font-bold text-on-surface">{{ user.userprofile.currency }}{{
+                            transfer_data.amount|intcomma }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-on-surface-variant text-sm">Recipient:</span>
+                        <span class="font-bold text-on-surface">{{ transfer_data.account_name }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-on-surface-variant text-sm">Bank:</span>
+                        <span class="font-bold text-on-surface">{{ transfer_data.bank_name }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-on-surface-variant text-sm">Account Number:</span>
+                        <span class="font-bold text-on-surface">{{ transfer_data.recipient_account }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <form method="POST" class="space-y-stack-lg flex-1">
+                {% csrf_token %}
+                <div>
+                    <label for="id_pin" class="block font-label-md text-label-md text-on-surface-variant mb-2">4-Digit
+                        PIN</label>
+                    <input type="password" name="pin"
+                        class="w-full bg-surface border border-slate-200 rounded-lg py-3 px-4 text-on-surface font-body-md focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container text-center tracking-widest text-2xl"
+                        required id="id_pin" maxlength="4" pattern="\d{4}">
+                    {% if form.pin.errors %}<p class="text-red-500 text-xs mt-1">{{ form.pin.errors.0 }}</p>{% endif %}
+                </div>
+
+                <div class="mt-stack-lg pt-6 border-t border-slate-100 flex justify-end gap-4">
+                    <a href="{% url 'transfer' %}"
+                        class="px-6 py-3 rounded-lg text-secondary border border-slate-200 font-label-md text-label-md hover:bg-surface transition-colors flex items-center">Cancel</a>
+                    <button type="submit"
+                        class="px-6 py-3 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md hover:bg-primary transition-colors shadow-sm">Confirm
+                        Transfer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
