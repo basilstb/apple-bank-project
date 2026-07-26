@@ -5,61 +5,76 @@
 
 {% block content %}
 <div class="space-y-stack-lg pb-24">
-  <section class="relative rounded-xl overflow-hidden shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] border border-slate-200 bg-surface-container-lowest h-64 md:h-80 flex items-center">
+  <section
+    class="relative rounded-xl overflow-hidden shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] border border-slate-200 bg-surface-container-lowest h-64 md:h-80 flex items-center">
     <div class="absolute inset-0 z-0">
-      <img alt="Online Banking Feature" class="w-full h-full object-cover opacity-90" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvis4GQf-jViPhgyG06yy3-SrJ7ANCnU7b4mVoXWwc4QusX36rYfbjmbDmBzkVDl8KumX7CNyah_py8BFRCRMzM4ODcB2_gsZkjQs8HvsEUlT5PSqcYcvWWYuuRvWO1VbXJVzW4M8fOl_wbCwlrJt83a-ZU_WH55Mcl-aADdLZWI4Pm1QsttFjb-BDnMR6nd3jf8G7ZDzeZykxWhQZ7WY2nubYg-FRAzqWBo8tLlJzwfl2IKsc_hgx6AXG0iNUadEXE_3kt1q1LMc" />
-      <div class="absolute inset-0 bg-gradient-to-r from-surface-container-lowest via-surface-container-lowest/80 to-transparent"></div>
+      <img alt="Online Banking Feature" class="w-full h-full object-cover opacity-90"
+        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvis4GQf-jViPhgyG06yy3-SrJ7ANCnU7b4mVoXWwc4QusX36rYfbjmbDmBzkVDl8KumX7CNyah_py8BFRCRMzM4ODcB2_gsZkjQs8HvsEUlT5PSqcYcvWWYuuRvWO1VbXJVzW4M8fOl_wbCwlrJt83a-ZU_WH55Mcl-aADdLZWI4Pm1QsttFjb-BDnMR6nd3jf8G7ZDzeZykxWhQZ7WY2nubYg-FRAzqWBo8tLlJzwfl2IKsc_hgx6AXG0iNUadEXE_3kt1q1LMc" />
+      <div
+        class="absolute inset-0 bg-gradient-to-r from-surface-container-lowest via-surface-container-lowest/80 to-transparent">
+      </div>
     </div>
     <div class="relative z-10 p-8 md:p-12 max-w-2xl">
       <h1 class="font-display-lg text-display-lg text-on-surface mb-4">Master Your Finances.</h1>
-      <p class="font-body-md text-body-md text-on-surface-variant mb-6 max-w-md">Experience seamless online banking with Apple Bank.</p>
-      <a href="{% url 'transfer' %}" class="inline-block bg-primary-container text-on-primary px-6 py-3 rounded-lg font-label-md text-label-md hover:bg-primary transition-colors shadow-sm">Explore Features</a>
+      <p class="font-body-md text-body-md text-on-surface-variant mb-6 max-w-md">Experience seamless online banking with
+        Apple Bank.</p>
+      <a href="{% url 'transfer' %}"
+        class="inline-block bg-primary-container text-on-primary px-6 py-3 rounded-lg font-label-md text-label-md hover:bg-primary transition-colors shadow-sm">Explore
+        Features</a>
     </div>
   </section>
   <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
-    <div class="md:col-span-8 bg-surface-container-lowest rounded-xl p-6 border border-slate-200 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] flex flex-col justify-between">
+    <div
+      class="md:col-span-8 bg-surface-container-lowest rounded-xl p-6 border border-slate-200 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] flex flex-col justify-between">
       <div>
         <!-- Pending Transactions Section -->
         {% if pending_transactions %}
         <div class="mb-8">
-            <h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-4">Pending Transactions</h3>
-            <div class="space-y-4">
-                {% for tx in pending_transactions %}
-                <div class="bg-white rounded-xl p-4 shadow-sm border border-orange-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center shrink-0">
-                            <span class="material-symbols-outlined">pending_actions</span>
-                        </div>
-                        <div>
-                            <p class="font-bold text-on-surface">{{ tx.description }}</p>
-                            <p class="text-sm text-on-surface-variant">{{ tx.timestamp|date:"M d, Y" }}</p>
-                            {% if tx.pending_reason %}
-                            <div class="mt-2 p-3 bg-orange-50 border border-orange-100 rounded-lg text-sm text-orange-800 flex items-start gap-2">
-                                <span class="material-symbols-outlined text-[18px] shrink-0 mt-0.5">info</span>
-                                <p><strong>Admin Note:</strong> {{ tx.pending_reason }}</p>
-                            </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="text-right shrink-0">
-                        <p class="font-bold text-orange-600">
-                            {% if tx.sender == profile %}-{% else %}+{% endif %}{{ profile.currency }}{{ tx.amount|intcomma }}
-                        </p>
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
-                            Pending ({{ tx.progress_percentage }}%)
-                        </span>
-                    </div>
+          <h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-4">Pending
+            Transactions</h3>
+          <div class="space-y-4">
+            {% for tx in pending_transactions %}
+            <div
+              class="bg-white rounded-xl p-4 shadow-sm border border-orange-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+              <div class="flex items-center gap-4">
+                <div
+                  class="w-10 h-10 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center shrink-0">
+                  <span class="material-symbols-outlined">pending_actions</span>
                 </div>
-                {% endfor %}
+                <div>
+                  <p class="font-bold text-on-surface">{{ tx.description }}</p>
+                  <p class="text-sm text-on-surface-variant">{{ tx.timestamp|date:"M d, Y" }}</p>
+                  {% if tx.pending_reason %}
+                  <div
+                    class="mt-2 p-3 bg-orange-50 border border-orange-100 rounded-lg text-sm text-orange-800 flex items-start gap-2">
+                    <span class="material-symbols-outlined text-[18px] shrink-0 mt-0.5">info</span>
+                    <p><strong>Admin Note:</strong> {{ tx.pending_reason }}</p>
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="text-right shrink-0">
+                <p class="font-bold text-orange-600">
+                  {% if tx.sender == profile %}-{% else %}+{% endif %}{{ profile.currency }}{{ tx.amount|intcomma }}
+                </p>
+                <span
+                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                  Pending ({{ tx.progress_percentage }}%)
+                </span>
+              </div>
             </div>
+            {% endfor %}
+          </div>
         </div>
         {% endif %}
 
         <div class="flex justify-between items-start mb-6">
           <div>
-            <h2 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-1">Total Available Balance</h2>
+            <h2 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-1">Total
+              Available Balance</h2>
             <div class="flex items-baseline gap-2">
-              <span class="font-headline-lg text-headline-lg text-on-surface">{{ user.userprofile.currency }}{{ user.userprofile.balance|intcomma }}</span>
+              <span class="font-headline-lg text-headline-lg text-on-surface">{{ user.userprofile.currency }}{{
+                user.userprofile.balance|intcomma }}</span>
             </div>
           </div>
           <div class="bg-tertiary-container/10 text-tertiary px-3 py-1 rounded-full flex items-center gap-1">
@@ -69,42 +84,57 @@
         </div>
         <div class="grid grid-cols-2 gap-4 mt-8">
           <div class="p-4 bg-surface rounded-lg border border-outline-variant/50">
-            <p class="font-label-md text-label-md text-on-surface-variant mb-1">Main Account (...{{ user.userprofile.account_number|slice:"-4:" }})</p>
-            <p class="font-body-md text-body-md font-semibold">{{ user.userprofile.currency }}{{ user.userprofile.balance|intcomma }}</p>
+            <p class="font-label-md text-label-md text-on-surface-variant mb-1">Main Account (...{{
+              user.userprofile.account_number|slice:"-4:" }})</p>
+            <p class="font-body-md text-body-md font-semibold">{{ user.userprofile.currency }}{{
+              user.userprofile.balance|intcomma }}</p>
           </div>
         </div>
       </div>
       <div class="mt-6 pt-6 border-t border-outline-variant/50 flex gap-4">
-        <a href="{% url 'history' %}" class="flex-1 text-center bg-surface-container text-on-surface py-2 rounded-lg font-label-md text-label-md hover:bg-surface-container-highest transition-colors border border-outline-variant">View Statements</a>
-        <a href="#" class="flex-1 text-center bg-surface-container text-on-surface py-2 rounded-lg font-label-md text-label-md hover:bg-surface-container-highest transition-colors border border-outline-variant">Account Details</a>
+        <a href="{% url 'history' %}"
+          class="flex-1 text-center bg-surface-container text-on-surface py-2 rounded-lg font-label-md text-label-md hover:bg-surface-container-highest transition-colors border border-outline-variant">View
+          Transaction History</a>
+        <a href="#"
+          class="flex-1 text-center bg-surface-container text-on-surface py-2 rounded-lg font-label-md text-label-md hover:bg-surface-container-highest transition-colors border border-outline-variant">Account
+          Details</a>
       </div>
     </div>
-    <div class="md:col-span-4 bg-surface-container-lowest rounded-xl p-6 border border-slate-200 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] flex flex-col">
+    <div
+      class="md:col-span-4 bg-surface-container-lowest rounded-xl p-6 border border-slate-200 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] flex flex-col">
       <h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-6">Quick Transfer</h3>
       <div class="space-y-4 flex-1">
         <div>
           <label class="block font-label-md text-label-md text-on-surface-variant mb-1">From Account</label>
-          <select class="w-full border border-outline-variant rounded-lg bg-surface px-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-sm">
+          <select
+            class="w-full border border-outline-variant rounded-lg bg-surface px-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-sm">
             <option>Main Account (...{{ user.userprofile.account_number|slice:"-4:" }})</option>
           </select>
         </div>
         <div>
           <label class="block font-label-md text-label-md text-on-surface-variant mb-1">To Account or Contact</label>
-          <input class="w-full border border-outline-variant rounded-lg bg-surface px-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-sm" placeholder="Name, account, or email" type="text" />
+          <input
+            class="w-full border border-outline-variant rounded-lg bg-surface px-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-sm"
+            placeholder="Name, account, or email" type="text" />
         </div>
         <div>
           <label class="block font-label-md text-label-md text-on-surface-variant mb-1">Amount</label>
           <div class="relative">
-            <span class="absolute left-3 top-2 text-on-surface-variant font-body-sm">{{ user.userprofile.currency }}</span>
-            <input class="w-full border border-outline-variant rounded-lg bg-surface pl-8 pr-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none font-label-md tabular-nums" placeholder="0.00" type="number" />
+            <span class="absolute left-3 top-2 text-on-surface-variant font-body-sm">{{ user.userprofile.currency
+              }}</span>
+            <input
+              class="w-full border border-outline-variant rounded-lg bg-surface pl-8 pr-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none font-label-md tabular-nums"
+              placeholder="0.00" type="number" />
           </div>
         </div>
       </div>
-      <a href="{% url 'transfer' %}" class="w-full mt-6 bg-primary-container text-on-primary py-3 rounded-lg font-label-md text-label-md hover:bg-primary transition-colors shadow-sm flex items-center justify-center gap-2">
+      <a href="{% url 'transfer' %}"
+        class="w-full mt-6 bg-primary-container text-on-primary py-3 rounded-lg font-label-md text-label-md hover:bg-primary transition-colors shadow-sm flex items-center justify-center gap-2">
         <span class="material-symbols-outlined text-sm">send</span> Confirm Transfer
       </a>
     </div>
-    <div class="md:col-span-6 bg-surface-container-lowest rounded-xl p-6 border border-slate-200 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)]">
+    <div
+      class="md:col-span-6 bg-surface-container-lowest rounded-xl p-6 border border-slate-200 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)]">
       <div class="flex justify-between items-center mb-6">
         <h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">ATM Cards</h3>
         <a href="{% url 'atm_request' %}" class="text-primary text-sm font-label-md hover:underline">Manage All</a>
@@ -117,22 +147,30 @@
         </div>
         <div class="flex-1">
           <p class="font-body-sm text-body-sm font-semibold">{{ card.card_type }} Debit</p>
-          <p class="font-label-md text-label-md text-on-surface-variant">**** **** **** {{ user.userprofile.account_number|slice:"-4:" }}</p>
+          <p class="font-label-md text-label-md text-on-surface-variant">**** **** **** {{
+            user.userprofile.account_number|slice:"-4:" }}</p>
         </div>
-        <div class="bg-tertiary-container/20 text-tertiary px-2 py-1 rounded text-xs font-label-md">{{ card.status }}</div>
+        <div class="bg-tertiary-container/20 text-tertiary px-2 py-1 rounded text-xs font-label-md">{{ card.status }}
+        </div>
       </div>
       {% empty %}
       <div class="text-center py-4 text-on-surface-variant font-body-sm">No ATM cards requested yet.</div>
       {% endfor %}
       <div class="flex gap-2 mt-4">
-        <button class="flex-1 flex items-center justify-center gap-2 py-2 border border-outline-variant rounded-lg text-on-surface-variant hover:text-primary hover:border-primary transition-colors font-label-md text-xs"><span class="material-symbols-outlined text-[16px]">lock</span> Freeze Card</button>
-        <button class="flex-1 flex items-center justify-center gap-2 py-2 border border-outline-variant rounded-lg text-on-surface-variant hover:text-primary hover:border-primary transition-colors font-label-md text-xs"><span class="material-symbols-outlined text-[16px]">visibility</span> Show PIN</button>
+        <button
+          class="flex-1 flex items-center justify-center gap-2 py-2 border border-outline-variant rounded-lg text-on-surface-variant hover:text-primary hover:border-primary transition-colors font-label-md text-xs"><span
+            class="material-symbols-outlined text-[16px]">lock</span> Freeze Card</button>
+        <button
+          class="flex-1 flex items-center justify-center gap-2 py-2 border border-outline-variant rounded-lg text-on-surface-variant hover:text-primary hover:border-primary transition-colors font-label-md text-xs"><span
+            class="material-symbols-outlined text-[16px]">visibility</span> Show PIN</button>
       </div>
     </div>
-    <div class="md:col-span-6 bg-surface-container-lowest rounded-xl p-6 border border-slate-200 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)]">
+    <div
+      class="md:col-span-6 bg-surface-container-lowest rounded-xl p-6 border border-slate-200 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)]">
       <div class="flex justify-between items-center mb-6">
         <h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Loan Application</h3>
-        <a href="{% url 'loan_application' %}" class="text-primary text-sm font-label-md hover:underline">View Details</a>
+        <a href="{% url 'loan_application' %}" class="text-primary text-sm font-label-md hover:underline">View
+          Details</a>
       </div>
       {% for loan in loan_applications %}
       <div class="p-4 rounded-lg bg-surface border border-outline-variant/50 relative overflow-hidden mb-4">
@@ -142,7 +180,8 @@
             <p class="font-body-sm text-body-sm font-semibold">Personal Loan</p>
             <p class="font-label-md text-label-md text-on-surface-variant">App ID: #AL-{{ loan.id }}</p>
           </div>
-          <span class="bg-primary-container/10 text-primary-container px-2 py-1 rounded text-xs font-label-md">{{ loan.status }}</span>
+          <span class="bg-primary-container/10 text-primary-container px-2 py-1 rounded text-xs font-label-md">{{
+            loan.status }}</span>
         </div>
         <div class="mt-4 pl-2">
           <div class="flex justify-between text-xs font-label-md text-on-surface-variant mb-1">
@@ -150,9 +189,13 @@
             <span>{{ user.userprofile.currency }}{{ loan.amount|intcomma }}</span>
           </div>
           <div class="w-full bg-surface-container-highest rounded-full h-1.5">
-            <div class="bg-primary-container h-1.5 rounded-full" style="width:{% if loan.status == 'Approved' %}100{% elif loan.status == 'Pending' %}50{% else %}30{% endif %}%"></div>
+            <div class="bg-primary-container h-1.5 rounded-full"
+              style="width:{% if loan.status == 'Approved' %}100{% elif loan.status == 'Pending' %}50{% else %}30{% endif %}%">
+            </div>
           </div>
-          <p class="text-xs text-on-surface-variant mt-2 font-body-sm">{% if loan.status == 'Pending' %}Awaiting verification.{% elif loan.status == 'Approved' %}Application approved.{% else %}Application rejected.{% endif %}</p>
+          <p class="text-xs text-on-surface-variant mt-2 font-body-sm">{% if loan.status == 'Pending' %}Awaiting
+            verification.{% elif loan.status == 'Approved' %}Application approved.{% else %}Application rejected.{%
+            endif %}</p>
         </div>
       </div>
       {% empty %}
