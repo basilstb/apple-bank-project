@@ -59,8 +59,7 @@
                 <input type="text" name="bank_name"
                   class="w-full bg-surface border border-slate-200 rounded-lg py-3 px-4 text-on-surface font-body-md focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container"
                   required id="id_bank_name">
-                {% if form.bank_name.errors %}<p class="text-red-500 text-xs mt-1">{{ form.bank_name.errors.0 }}</p>{%
-                endif %}
+                {% if form.bank_name.errors %}<p class="text-red-500 text-xs mt-1">{{ form.bank_name.errors.0 }}</p>{% endif %}
               </div>
               <div class="grid grid-cols-2 gap-4">
                 <div>
@@ -78,8 +77,7 @@
                   <input type="text" name="ifsc_code"
                     class="w-full bg-surface border border-slate-200 rounded-lg py-3 px-4 text-on-surface font-body-md focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container"
                     id="id_ifsc_code">
-                  {% if form.ifsc_code.errors %}<p class="text-red-500 text-xs mt-1">{{ form.ifsc_code.errors.0 }}</p>{%
-                  endif %}
+                  {% if form.ifsc_code.errors %}<p class="text-red-500 text-xs mt-1">{{ form.ifsc_code.errors.0 }}</p>{% endif %}
                 </div>
               </div>
             </div>
@@ -101,8 +99,7 @@
                     class="w-full bg-surface border border-slate-200 rounded-lg py-3 pl-8 pr-4 text-on-surface font-headline-lg-mobile text-headline-lg-mobile focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container text-right tabular-nums"
                     placeholder="0.00" required id="id_amount">
                 </div>
-                {% if form.amount.errors %}<p class="text-red-500 text-xs mt-1">{{ form.amount.errors.0 }}</p>{% endif
-                %}
+                {% if form.amount.errors %}<p class="text-red-500 text-xs mt-1">{{ form.amount.errors.0 }}</p>{% endif %}
               </div>
             </div>
             <div class="mt-4">
@@ -111,8 +108,7 @@
               <input type="text" name="description"
                 class="w-full bg-surface border border-slate-200 rounded-lg py-3 px-4 text-on-surface font-body-sm focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container"
                 placeholder="What is this for?" id="id_description">
-              {% if form.description.errors %}<p class="text-red-500 text-xs mt-1">{{ form.description.errors.0 }}</p>{%
-              endif %}
+              {% if form.description.errors %}<p class="text-red-500 text-xs mt-1">{{ form.description.errors.0 }}</p>{% endif %}
             </div>
           </div>
         </div>
