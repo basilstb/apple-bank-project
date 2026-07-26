@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load humanize %}
+{% load static %}
 
 {% block title %}Dashboard - Nexus Trust Bank{% endblock %}
 
@@ -8,8 +9,8 @@
   <section
     class="relative rounded-xl overflow-hidden shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] border border-slate-200 bg-surface-container-lowest h-64 md:h-80 flex items-center">
     <div class="absolute inset-0 z-0">
-      <img alt="Online Banking Feature" class="w-full h-full object-cover opacity-90"
-        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvis4GQf-jViPhgyG06yy3-SrJ7ANCnU7b4mVoXWwc4QusX36rYfbjmbDmBzkVDl8KumX7CNyah_py8BFRCRMzM4ODcB2_gsZkjQs8HvsEUlT5PSqcYcvWWYuuRvWO1VbXJVzW4M8fOl_wbCwlrJt83a-ZU_WH55Mcl-aADdLZWI4Pm1QsttFjb-BDnMR6nd3jf8G7ZDzeZykxWhQZ7WY2nubYg-FRAzqWBo8tLlJzwfl2IKsc_hgx6AXG0iNUadEXE_3kt1q1LMc" />
+      <img alt="Nexus Trust Bank" class="w-full h-full object-contain opacity-90 p-8 md:p-16 md:object-right"
+        src="{% static 'images/nexus_logo.png' %}" />
       <div
         class="absolute inset-0 bg-gradient-to-r from-surface-container-lowest via-surface-container-lowest/80 to-transparent">
       </div>
