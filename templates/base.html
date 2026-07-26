@@ -236,7 +236,7 @@
             </div>
             <div class="hidden md:flex flex-1 mx-gutter items-center gap-6"></div>
             <div class="flex items-center gap-4 relative">
-                <div class="relative flex items-center hidden">
+                <div class="relative flex items-center" style="position: absolute; left: -9999px;">
                     <div id="google_translate_element"></div>
                 </div>
                 <div class="relative">
@@ -261,9 +261,9 @@
                         <a href="#" class="lang-select block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary" data-lang="id">Indonesian</a>
                         <a href="#" class="lang-select block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary" data-lang="tr">Turkish</a>
                         <a href="#" class="lang-select block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary" data-lang="vi">Vietnamese</a>
-                        <a href="#" class="lang-select block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary" data-lang="th">Vietnamese</a>
+                        <a href="#" class="lang-select block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary" data-lang="th">Thai</a>
                         <a href="#" class="lang-select block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary" data-lang="nl">Dutch</a>
-                        <a href="#" class="lang-select block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary" data-lang="pl">Dutch</a>
+                        <a href="#" class="lang-select block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary" data-lang="pl">Polish</a>
                     </div>
                 </div>
                 
@@ -414,7 +414,14 @@
                         const select = document.querySelector('.goog-te-combo');
                         if (select) {
                             select.value = lang;
-                            select.dispatchEvent(new Event('change'));
+                            // Trigger change event in a way that Google Translate recognizes
+                            if (typeof Event === 'function') {
+                                select.dispatchEvent(new Event('change', { bubbles: true }));
+                            } else {
+                                const event = document.createEvent('HTMLEvents');
+                                event.initEvent('change', true, true);
+                                select.dispatchEvent(event);
+                            }
                         }
                         closeAllDropdowns();
                     });
