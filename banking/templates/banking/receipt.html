@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load humanize %}
 
-{% block title %}Transaction Receipt - Apple Bank{% endblock %}
+{% block title %}Transaction Receipt - Nexus Trust Bank{% endblock %}
 
 {% block extra_head %}
 <style>
@@ -72,7 +72,7 @@
                             </svg>
                         </div>
                         <div>
-                            <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Apple Bank</h2>
+                            <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Nexus Trust Bank</h2>
                             <p class="text-sm font-medium text-gray-500 uppercase tracking-widest mt-1">Official Receipt
                             </p>
                         </div>
@@ -152,7 +152,7 @@
                                 <p class="text-base font-bold text-gray-900 mt-0.5">{{ tx.receiver.user.first_name }} {{ tx.receiver.user.last_name }}</p>
                                 <p class="text-sm font-medium text-gray-600 font-mono">{{ tx.receiver.account_number }}
                                 </p>
-                                <p class="text-xs font-medium text-gray-500">Apple Bank</p>
+                                <p class="text-xs font-medium text-gray-500">Nexus Trust Bank</p>
                             </div>
                             {% elif external_receiver_name %}
                             <div>

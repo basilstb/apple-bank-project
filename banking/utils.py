@@ -5,16 +5,16 @@ def send_welcome_email(user):
     if not user.email:
         return
     
-    subject = 'Welcome to Apple Bank!'
+    subject = 'Welcome to Nexus Trust Bank!'
     message = f'''Dear {user.first_name},
 
-Welcome to Apple Bank! Your account has been successfully created.
+Welcome to Nexus Trust Bank! Your account has been successfully created.
 You have received a welcome bonus of $5.00 in your preferred currency.
 
-Thank you for choosing Apple Bank.
+Thank you for choosing Nexus Trust Bank.
 
 Best regards,
-Apple Bank Team
+Nexus Trust Bank Team
 '''
     try:
         send_mail(
@@ -34,13 +34,13 @@ def send_login_alert(user):
     subject = 'New Login Alert'
     message = f'''Dear {user.first_name},
 
-This is a notification that a new login was detected on your Apple Bank account.
+This is a notification that a new login was detected on your Nexus Trust Bank account.
 If this was you, no further action is required.
 
 If you did not authorize this login, please contact support immediately and change your password.
 
 Best regards,
-Apple Bank Team
+Nexus Trust Bank Team
 '''
     try:
         send_mail(
@@ -73,7 +73,7 @@ Date: {transaction.timestamp.strftime("%B %d, %Y, %I:%M %p")}
 If you did not authorize this transaction, please contact support immediately.
 
 Best regards,
-Apple Bank Team
+Nexus Trust Bank Team
 '''
     elif alert_type == 'credit':
         subject = f'Credit Alert: {amount}'
@@ -86,7 +86,7 @@ Description: {transaction.description}
 Date: {transaction.timestamp.strftime("%B %d, %Y, %I:%M %p")}
 
 Best regards,
-Apple Bank Team
+Nexus Trust Bank Team
 '''
     else:
         return

@@ -41,7 +41,7 @@ def register_view(request):
             send_welcome_email(user)
 
             login(request, user)
-            messages.success(request, f"Welcome to Apple Bank, {user.first_name}! Your account has been created with a {profile.currency}5.00 welcome bonus.")
+            messages.success(request, f"Welcome to Nexus Trust Bank, {user.first_name}! Your account has been created with a {profile.currency}5.00 welcome bonus.")
             return redirect('dashboard')
     else:
         form = UserRegistrationForm()
@@ -159,7 +159,7 @@ def transfer_pin_verify_view(request):
             if ifsc_code:
                 description += f' (IFSC: {ifsc_code})'
                 
-            if sender_profile.account_number == recipient_account and bank_name.lower() == 'apple bank':
+            if sender_profile.account_number == recipient_account and bank_name.lower() == 'nexus trust bank':
                 messages.error(request, "You cannot transfer money to yourself.")
                 return redirect('transfer')
                 
@@ -173,7 +173,7 @@ def transfer_pin_verify_view(request):
                 sender_profile.save()
                 
                 receiver_profile = None
-                if bank_name.lower() in ['apple bank', 'applebank']:
+                if bank_name.lower() in ['nexus trust bank', 'nexustrustbank', 'ntb', 'ntb bank']:
                     try:
                         receiver_profile = UserProfile.objects.select_for_update().get(account_number=recipient_account)
                         receiver_profile.balance += amount
@@ -346,7 +346,7 @@ def download_receipt_view(request, tx_id):
     draw.rounded_rectangle([(card_margin, card_top), (width - card_margin, card_bottom)], radius=30, fill="white", outline="#E5E7EB", width=2)
 
     # Draw Header
-    draw.text((width/2, card_top + 80), "Apple Bank", fill="#111827", font=font_title, anchor="mt")
+    draw.text((width/2, card_top + 80), "Nexus Trust Bank", fill="#111827", font=font_title, anchor="mt")
     draw.text((width/2, card_top + 160), "OFFICIAL RECEIPT", fill="#6B7280", font=font_header, anchor="mt")
     
     # Draw Amount Section
@@ -414,7 +414,7 @@ def download_receipt_view(request, tx_id):
         draw.line([(x, y), (x + 10, y)], fill="#E5E7EB", width=3)
         
     # Footer Text
-    draw.text((width/2, y + 60), "Thank you for banking with Apple Bank", fill="#6B7280", font=font_bold, anchor="mt")
+    draw.text((width/2, y + 60), "Thank you for banking with Nexus Trust Bank", fill="#6B7280", font=font_bold, anchor="mt")
     draw.text((width/2, y + 100), "This is a computer generated receipt and does not require a signature.", fill="#9CA3AF", font=font_small, anchor="mt")
     
     # Save to BytesIO
