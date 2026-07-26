@@ -51,6 +51,8 @@ if not DEBUG:
     SECURE_HSTS_PRELOAD = True
     CSRF_TRUSTED_ORIGINS = [
         'https://apple-bank-web.onrender.com',
+        'https://nexusbank.onrender.com',
+        'https://nexus-trust-bank.onrender.com',
         'https://nexustrustbank.online',
         'https://www.nexustrustbank.online',
     ]
