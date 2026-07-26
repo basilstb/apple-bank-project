@@ -58,6 +58,8 @@ if not DEBUG:
         'https://www.nexustrustbank.online',
         'https://applebank.online',
         'https://www.applebank.online',
+        'https://nexusntb.online',
+        'https://www.nexusntb.online',
     ]
 
 # Application definition
