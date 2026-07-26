@@ -187,28 +187,28 @@
         </div>
         <a href="{% url 'dashboard' %}"
             class="w-full bg-primary-container text-on-primary font-label-md text-label-md py-2 rounded-lg hover:bg-primary transition-colors flex items-center justify-center gap-2 mb-stack-md">
-            <span class="material-symbols-outlined text-[18px]">dashboard</span> Dashboard
+            <span class="material-symbols-outlined text-[18px]" translate="no">dashboard</span> Dashboard
         </a>
         <div class="flex-grow flex flex-col space-y-1">
             <a class="flex items-center space-x-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 ease-in-out font-label-md text-label-md"
                 href="{% url 'dashboard' %}">
-                <span class="material-symbols-outlined">account_balance</span> <span>Accounts</span>
+                <span class="material-symbols-outlined" translate="no">account_balance</span> <span>Accounts</span>
             </a>
             <a class="flex items-center space-x-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 ease-in-out font-label-md text-label-md"
                 href="{% url 'transfer' %}">
-                <span class="material-symbols-outlined">swap_horiz</span> <span>Transfers</span>
+                <span class="material-symbols-outlined" translate="no">swap_horiz</span> <span>Transfers</span>
             </a>
             <a class="flex items-center space-x-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 ease-in-out font-label-md text-label-md"
                 href="{% url 'loan_application' %}">
-                <span class="material-symbols-outlined">trending_up</span> <span>Loans</span>
+                <span class="material-symbols-outlined" translate="no">trending_up</span> <span>Loans</span>
             </a>
             <a class="flex items-center space-x-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 ease-in-out font-label-md text-label-md"
                 href="{% url 'atm_request' %}">
-                <span class="material-symbols-outlined">payments</span> <span>ATM Card</span>
+                <span class="material-symbols-outlined" translate="no">payments</span> <span>ATM Card</span>
             </a>
             <a class="flex items-center space-x-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 ease-in-out font-label-md text-label-md"
                 href="{% url 'history' %}">
-                <span class="material-symbols-outlined">history</span> <span>History</span>
+                <span class="material-symbols-outlined" translate="no">history</span> <span>History</span>
             </a>
         </div>
         <div class="mt-auto border-t border-outline-variant pt-stack-md flex flex-col space-y-1">
@@ -216,7 +216,7 @@
                 {% csrf_token %}
                 <button type="submit"
                     class="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 ease-in-out font-label-md text-label-md">
-                    <span class="material-symbols-outlined">logout</span> <span>Logout</span>
+                    <span class="material-symbols-outlined" translate="no">logout</span> <span>Logout</span>
                 </button>
             </form>
         </div>
@@ -229,7 +229,7 @@
             class="bg-blue-50 text-primary font-headline-lg text-headline-lg font-body-md text-body-md border-b border-outline-variant shadow-sm flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-2 sticky top-0 z-40">
             <div class="flex items-center gap-4">
                 <button id="mobile-menu-btn" class="md:hidden text-on-surface p-2 rounded-lg hover:bg-surface-container-high transition-colors">
-                    <span class="material-symbols-outlined">menu</span>
+                    <span class="material-symbols-outlined" translate="no">menu</span>
                 </button>
                 <span
                     class="text-xl md:text-2xl font-bold text-on-surface"><span class="text-blue-900 font-bold">Nexus Trust Bank</span></span>
@@ -241,7 +241,7 @@
                 </div>
                 <div class="relative">
                     <button id="lang-btn" class="text-on-surface-variant hover:text-primary transition-colors p-1 md:p-2 rounded-full hover:bg-surface-container-high">
-                        <span class="material-symbols-outlined">language</span>
+                        <span class="material-symbols-outlined" translate="no">language</span>
                     </button>
                     <div id="lang-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50 max-h-64 overflow-y-auto">
                         <a href="#" class="lang-select block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary" data-lang="en">English</a>
@@ -271,7 +271,7 @@
                 
                 <div class="relative">
                     <button id="notif-btn" class="text-on-surface-variant hover:text-primary transition-colors p-2 rounded-full hover:bg-surface-container-high">
-                        <span class="material-symbols-outlined">notifications</span>
+                        <span class="material-symbols-outlined" translate="no">notifications</span>
                     </button>
                     <div id="notif-dropdown" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
                         <div class="px-4 py-2 border-b border-gray-100">
@@ -285,7 +285,7 @@
 
                 <div class="relative">
                     <button id="account-btn" class="text-on-surface-variant hover:text-primary transition-colors p-2 rounded-full hover:bg-surface-container-high">
-                        <span class="material-symbols-outlined">account_circle</span>
+                        <span class="material-symbols-outlined" translate="no">account_circle</span>
                     </button>
                     <div id="account-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
                         <a href="{% url 'dashboard' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary">Dashboard</a>

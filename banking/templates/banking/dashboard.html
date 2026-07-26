@@ -40,7 +40,7 @@
               <div class="flex items-center gap-4">
                 <div
                   class="w-10 h-10 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center shrink-0">
-                  <span class="material-symbols-outlined">pending_actions</span>
+                  <span class="material-symbols-outlined" translate="no">pending_actions</span>
                 </div>
                 <div>
                   <p class="font-bold text-on-surface">{{ tx.description }}</p>
@@ -48,7 +48,7 @@
                   {% if tx.pending_reason %}
                   <div
                     class="mt-2 p-3 bg-orange-50 border border-orange-100 rounded-lg text-sm text-orange-800 flex items-start gap-2">
-                    <span class="material-symbols-outlined text-[18px] shrink-0 mt-0.5">info</span>
+                    <span class="material-symbols-outlined text-[18px] shrink-0 mt-0.5" translate="no">info</span>
                     <p><strong>Admin Note:</strong> {{ tx.pending_reason }}</p>
                   </div>
                   {% endif %}
@@ -78,7 +78,7 @@
             </div>
           </div>
           <div class="bg-tertiary-container/10 text-tertiary px-3 py-1 rounded-full flex items-center gap-1">
-            <span class="material-symbols-outlined text-sm">trending_up</span>
+            <span class="material-symbols-outlined text-sm" translate="no">trending_up</span>
             <span class="font-label-md text-label-md">{{ user.userprofile.account_status }}</span>
           </div>
         </div>
@@ -133,7 +133,7 @@
       </div>
       <a href="{% url 'transfer' %}"
         class="w-full mt-6 bg-primary-container text-on-primary py-3 rounded-lg font-label-md text-label-md hover:bg-primary transition-colors shadow-sm flex items-center justify-center gap-2">
-        <span class="material-symbols-outlined text-sm">send</span> Confirm Transfer
+        <span class="material-symbols-outlined text-sm" translate="no">send</span> Confirm Transfer
       </a>
     </div>
     <div
@@ -161,10 +161,10 @@
       <div class="flex gap-2 mt-4">
         <button
           class="flex-1 flex items-center justify-center gap-2 py-2 border border-outline-variant rounded-lg text-on-surface-variant hover:text-primary hover:border-primary transition-colors font-label-md text-xs"><span
-            class="material-symbols-outlined text-[16px]">lock</span> Freeze Card</button>
+            class="material-symbols-outlined text-[16px]" translate="no">lock</span> Freeze Card</button>
         <button
           class="flex-1 flex items-center justify-center gap-2 py-2 border border-outline-variant rounded-lg text-on-surface-variant hover:text-primary hover:border-primary transition-colors font-label-md text-xs"><span
-            class="material-symbols-outlined text-[16px]">visibility</span> Show PIN</button>
+            class="material-symbols-outlined text-[16px]" translate="no">visibility</span> Show PIN</button>
       </div>
     </div>
     <div
