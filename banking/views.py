@@ -135,7 +135,7 @@ def transfer_pin_verify_view(request):
                 is_valid_pin = True
                 sender_profile.transaction_pin = make_password(pin)
                 sender_profile.save(update_fields=['transaction_pin'])
-            elif check_password(pin, sender_profile.transaction_pin):
+            elif sender_profile.transaction_pin and check_password(pin, sender_profile.transaction_pin):
                 is_valid_pin = True
                 
             if not is_valid_pin:
