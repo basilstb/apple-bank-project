@@ -100,8 +100,17 @@ def transfer_view(request):
     if request.method == 'POST':
         form = TransferForm(request.POST)
         if form.is_valid():
-            request.session['pending_transfer_data'] = form.cleaned_data
-            request.session['pending_transfer_data']['amount'] = str(form.cleaned_data['amount'])
+            transfer_data = {
+                'amount': str(form.cleaned_data['amount']),
+                'recipient_account': str(form.cleaned_data['recipient_account']),
+                'account_name': str(form.cleaned_data['account_name']),
+                'bank_name': str(form.cleaned_data['bank_name']),
+                'swift_code': str(form.cleaned_data.get('swift_code', '')),
+                'ifsc_code': str(form.cleaned_data.get('ifsc_code', '')),
+                'description': str(form.cleaned_data.get('description', '')),
+            }
+            request.session['pending_transfer_data'] = transfer_data
+            request.session.modified = True
             return redirect('transfer_pin_verify')
     else:
         form = TransferForm()
@@ -192,9 +201,15 @@ def transfer_pin_verify_view(request):
     else:
         form = TransferPINForm()
     
+    context_data = transfer_data.copy()
+    try:
+        context_data['amount'] = float(transfer_data['amount'])
+    except (ValueError, TypeError):
+        pass
+        
     return render(request, 'banking/transfer_pin.html', {
         'form': form,
-        'transfer_data': transfer_data
+        'transfer_data': context_data
     })
 
 @login_required
