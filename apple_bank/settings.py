@@ -55,6 +55,8 @@ if not DEBUG:
         'https://nexus-trust-bank.onrender.com',
         'https://nexustrustbank.online',
         'https://www.nexustrustbank.online',
+        'https://applebank.online',
+        'https://www.applebank.online',
     ]
 
 # Application definition
