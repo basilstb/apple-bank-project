@@ -30,6 +30,12 @@
                         <span class="text-on-surface-variant text-sm">Account Number:</span>
                         <span class="font-bold text-on-surface">{{ transfer_data.recipient_account }}</span>
                     </div>
+                    {% if transfer_data.iban %}
+                    <div class="flex justify-between">
+                        <span class="text-on-surface-variant text-sm">IBAN:</span>
+                        <span class="font-bold text-on-surface">{{ transfer_data.iban }}</span>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
 

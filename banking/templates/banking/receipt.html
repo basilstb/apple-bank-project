@@ -161,6 +161,9 @@
                                 {% if external_account %}
                                 <p class="text-sm font-medium text-gray-600 font-mono">{{ external_account }}</p>
                                 {% endif %}
+                                {% if external_iban %}
+                                <p class="text-sm font-medium text-gray-600 font-mono">IBAN: {{ external_iban }}</p>
+                                {% endif %}
                                 <p class="text-xs font-medium text-gray-500">{{ external_bank_name }}</p>
                             </div>
                             {% endif %}

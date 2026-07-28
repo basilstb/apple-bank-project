@@ -61,6 +61,13 @@
                   required id="id_bank_name">
                 {% if form.bank_name.errors %}<p class="text-red-500 text-xs mt-1">{{ form.bank_name.errors.0 }}</p>{% endif %}
               </div>
+              <div>
+                <label for="id_iban" class="block font-label-md text-label-md text-on-surface-variant mb-1">IBAN (Optional)</label>
+                <input type="text" name="iban"
+                  class="w-full bg-surface border border-slate-200 rounded-lg py-3 px-4 text-on-surface font-body-md focus:outline-none focus:ring-1 focus:ring-primary-container focus:border-primary-container"
+                  id="id_iban">
+                {% if form.iban.errors %}<p class="text-red-500 text-xs mt-1">{{ form.iban.errors.0 }}</p>{% endif %}
+              </div>
               <div class="grid grid-cols-2 gap-4">
                 <div>
                   <label for="id_swift_code"

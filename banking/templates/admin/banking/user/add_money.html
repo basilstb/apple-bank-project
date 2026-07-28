@@ -1,0 +1,87 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+    .add-money-form {
+        max-width: 500px;
+        margin: 20px 0;
+        padding: 20px;
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .add-money-form .form-row {
+        margin-bottom: 15px;
+    }
+
+    .add-money-form label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .add-money-form input[type="number"],
+    .add-money-form input[type="text"] {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    .add-money-form .help-text {
+        font-size: 12px;
+        color: #666;
+        margin-top: 5px;
+    }
+
+    .add-money-form .submit-row {
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid #eee;
+        text-align: right;
+    }
+</style>
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+    &rsaquo; <a href="{% url 'admin:app_list' app_label='auth' %}">Authentication and Authorization</a>
+    &rsaquo; <a href="{% url 'admin:auth_user_changelist' %}">Users</a>
+    &rsaquo; <a href="{% url 'admin:auth_user_change' user_obj.pk %}">{{ user_obj.username }}</a>
+    &rsaquo; Add Money
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <h1>Add Money to {{ user_obj.username }}'s Account</h1>
+    <p>Current Balance: <strong>{{ profile.currency }}{{ profile.balance }}</strong></p>
+
+    <form method="post" class="add-money-form">
+        {% csrf_token %}
+        <div class="form-row">
+            <label for="amount" class="required">Amount to Add:</label>
+            <input type="number" name="amount" id="amount" step="0.01" min="0.01" required>
+            <div class="help-text">Enter the amount to credit to the user's account.</div>
+        </div>
+
+        <div class="form-row">
+            <label for="description">Description:</label>
+            <input type="text" name="description" id="description" value="Account Funding">
+            <div class="help-text">This will appear in the user's transaction history.</div>
+        </div>
+
+        <div class="submit-row">
+            <a href="{% url 'admin:auth_user_changelist' %}" class="button"
+                style="float: left; padding: 10px 15px; background: #ddd; color: #333; text-decoration: none; border-radius: 4px;">Cancel</a>
+            <input type="submit" value="Add Money" class="default"
+                style="padding: 10px 15px; background: #417690; color: white; border: none; border-radius: 4px; cursor: pointer;">
+        </div>
+    </form>
+</div>
+{% endblock %}

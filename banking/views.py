@@ -105,6 +105,7 @@ def transfer_view(request):
                 'recipient_account': str(form.cleaned_data['recipient_account']),
                 'account_name': str(form.cleaned_data['account_name']),
                 'bank_name': str(form.cleaned_data['bank_name']),
+                'iban': str(form.cleaned_data.get('iban', '')),
                 'swift_code': str(form.cleaned_data.get('swift_code', '')),
                 'ifsc_code': str(form.cleaned_data.get('ifsc_code', '')),
                 'description': str(form.cleaned_data.get('description', '')),
@@ -147,6 +148,7 @@ def transfer_pin_verify_view(request):
             recipient_account = transfer_data['recipient_account']
             account_name = transfer_data['account_name']
             bank_name = transfer_data['bank_name']
+            iban = transfer_data.get('iban', '')
             swift_code = transfer_data.get('swift_code', '')
             ifsc_code = transfer_data.get('ifsc_code', '')
             custom_desc = transfer_data.get('description', '')
@@ -154,6 +156,8 @@ def transfer_pin_verify_view(request):
             description = f'Transfer to {account_name} at {bank_name} (Acct: {recipient_account})'
             if custom_desc:
                 description = f'{custom_desc} - {description}'
+            if iban:
+                description += f' (IBAN: {iban})'
             if swift_code:
                 description += f' (SWIFT: {swift_code})'
             if ifsc_code:
@@ -161,6 +165,19 @@ def transfer_pin_verify_view(request):
                 
             if sender_profile.account_number == recipient_account and bank_name.lower() == 'nexus trust bank':
                 messages.error(request, "You cannot transfer money to yourself.")
+                return redirect('transfer')
+                
+            from django.utils import timezone
+            today = timezone.now().date()
+            daily_transfers = Transaction.objects.filter(
+                sender=sender_profile,
+                transaction_type='Transfer',
+                timestamp__date=today
+            )
+            total_today = sum(tx.amount for tx in daily_transfers)
+            
+            if total_today + amount > sender_profile.daily_limit:
+                messages.error(request, f"Transfer rejected. This transaction exceeds your daily limit of {sender_profile.currency}{sender_profile.daily_limit:,.2f}.")
                 return redirect('transfer')
                 
             with transaction.atomic():
@@ -235,6 +252,7 @@ def receipt_view(request, tx_id):
     external_receiver_name = None
     external_bank_name = None
     external_account = None
+    external_iban = None
     if not tx.receiver and "Transfer to" in tx.description:
         import re
         # Try new format with account number
@@ -243,6 +261,10 @@ def receipt_view(request, tx_id):
             external_receiver_name = match.group(1)
             external_bank_name = match.group(2)
             external_account = match.group(3)
+            
+            iban_match = re.search(r'\(IBAN: (.*?)\)', tx.description)
+            if iban_match:
+                external_iban = iban_match.group(1)
         else:
             # Fallback to old format
             match = re.search(r'Transfer to (.*?) at (.*?)(?:\s*\(|$)', tx.description)
@@ -255,6 +277,7 @@ def receipt_view(request, tx_id):
         'external_receiver_name': external_receiver_name,
         'external_bank_name': external_bank_name,
         'external_account': external_account,
+        'external_iban': external_iban,
         'profile': profile
     })
 
@@ -397,6 +420,10 @@ def download_receipt_view(request, tx_id):
             details.append(("Receiver Name", match.group(1)))
             details.append(("Receiver Account", match.group(3)))
             details.append(("Bank Name", match.group(2)))
+            
+            iban_match = re.search(r'\(IBAN: (.*?)\)', tx.description)
+            if iban_match:
+                details.append(("IBAN", iban_match.group(1)))
         else:
             match = re.search(r'Transfer to (.*?) at (.*?)(?:\s*\(|$)', tx.description)
             if match:

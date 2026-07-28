@@ -29,6 +29,7 @@ class UserProfile(models.Model):
     account_status = models.CharField(max_length=20, choices=ACCOUNT_STATUS_CHOICES, default='Active')
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     transaction_pin = models.CharField(max_length=128, default='0000')
+    daily_limit = models.DecimalField(max_digits=12, decimal_places=2, default=5000.00)
 
     def __str__(self):
         return f"{self.user.username} - {self.account_number}"
@@ -43,6 +44,7 @@ class Transaction(models.Model):
         ('Successful', 'Successful'),
         ('Pending', 'Pending'),
         ('Failed', 'Failed'),
+        ('Reversed', 'Reversed'),
     )
     sender = models.ForeignKey(UserProfile, related_name='sent_transactions', on_delete=models.SET_NULL, null=True, blank=True)
     receiver = models.ForeignKey(UserProfile, related_name='received_transactions', on_delete=models.SET_NULL, null=True, blank=True)
