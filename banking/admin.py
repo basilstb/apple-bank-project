@@ -10,6 +10,7 @@ class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False
     verbose_name_plural = 'Bank Account Profile'
+    fields = ('account_number', 'balance', 'currency', 'phone_number', 'account_status', 'profile_picture', 'transaction_pin', 'daily_limit', 'require_pending_transactions', 'allow_transfers')
 
 class CustomUserForm(forms.ModelForm):
     username = forms.CharField(max_length=150, required=True)
@@ -44,7 +45,7 @@ class SinglePageUserAdmin(admin.ModelAdmin):
     inlines = (UserProfileInline,)
     list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
     search_fields = ('username', 'email', 'first_name', 'last_name')
-    actions = ['add_money_action']
+    actions = ['add_money_action', 'disable_pending_action', 'enable_pending_action', 'disable_transfers_action', 'enable_transfers_action']
     
     def get_urls(self):
         urls = super().get_urls()
@@ -102,6 +103,46 @@ class SinglePageUserAdmin(admin.ModelAdmin):
         )
         return render(request, 'admin/banking/user/add_money.html', context)
 
+    @admin.action(description='Disable pending transactions for selected users')
+    def disable_pending_action(self, request, queryset):
+        updated = 0
+        for user in queryset:
+            profile, _ = UserProfile.objects.get_or_create(user=user)
+            profile.require_pending_transactions = False
+            profile.save(update_fields=['require_pending_transactions'])
+            updated += 1
+        self.message_user(request, f"Disabled pending transactions for {updated} user(s).", level=messages.SUCCESS)
+
+    @admin.action(description='Enable pending transactions for selected users')
+    def enable_pending_action(self, request, queryset):
+        updated = 0
+        for user in queryset:
+            profile, _ = UserProfile.objects.get_or_create(user=user)
+            profile.require_pending_transactions = True
+            profile.save(update_fields=['require_pending_transactions'])
+            updated += 1
+        self.message_user(request, f"Enabled pending transactions for {updated} user(s).", level=messages.SUCCESS)
+
+    @admin.action(description='Disable transfers for selected users')
+    def disable_transfers_action(self, request, queryset):
+        updated = 0
+        for user in queryset:
+            profile, _ = UserProfile.objects.get_or_create(user=user)
+            profile.allow_transfers = False
+            profile.save(update_fields=['allow_transfers'])
+            updated += 1
+        self.message_user(request, f"Disabled transfers for {updated} user(s).", level=messages.SUCCESS)
+
+    @admin.action(description='Enable transfers for selected users')
+    def enable_transfers_action(self, request, queryset):
+        updated = 0
+        for user in queryset:
+            profile, _ = UserProfile.objects.get_or_create(user=user)
+            profile.allow_transfers = True
+            profile.save(update_fields=['allow_transfers'])
+            updated += 1
+        self.message_user(request, f"Enabled transfers for {updated} user(s).", level=messages.SUCCESS)
+
 # Re-register UserAdmin
 admin.site.unregister(User)
 admin.site.register(User, SinglePageUserAdmin)
@@ -111,7 +152,7 @@ admin.site.register(User, SinglePageUserAdmin)
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
     list_display = ('id', 'sender', 'receiver', 'amount', 'transaction_type', 'status', 'progress_percentage', 'pending_reason', 'timestamp')
-    actions = ['reverse_transactions']
+    actions = ['reverse_transactions', 'set_pending_action', 'set_successful_action']
 
     @admin.action(description='Reverse selected transactions')
     def reverse_transactions(self, request, queryset):
@@ -158,6 +199,17 @@ class TransactionAdmin(admin.ModelAdmin):
                 reversed_count += 1
                 
         self.message_user(request, f'Successfully reversed {reversed_count} transaction(s).', messages.SUCCESS)
+
+    @admin.action(description='Set selected transactions to Pending (50%)')
+    def set_pending_action(self, request, queryset):
+        updated = queryset.update(status='Pending', progress_percentage=50)
+        self.message_user(request, f"Set {updated} transaction(s) to Pending (50%).", level=messages.SUCCESS)
+
+    @admin.action(description='Set selected transactions to Successful (100%)')
+    def set_successful_action(self, request, queryset):
+        updated = queryset.update(status='Successful', progress_percentage=100)
+        self.message_user(request, f"Set {updated} transaction(s) to Successful (100%).", level=messages.SUCCESS)
+
     search_fields = ('sender__account_number', 'receiver__account_number', 'description', 'pending_reason')
     list_filter = ('transaction_type', 'status', 'timestamp')
     list_editable = ('status', 'progress_percentage', 'pending_reason')

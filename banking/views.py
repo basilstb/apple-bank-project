@@ -97,6 +97,11 @@ def dashboard_view(request):
 @login_required
 @ratelimit(key='user', rate='3/m', block=True)
 def transfer_view(request):
+    profile, _ = UserProfile.objects.get_or_create(user=request.user)
+    if not profile.allow_transfers:
+        messages.error(request, "Transfers are disabled for your account.")
+        return redirect('dashboard')
+
     if request.method == 'POST':
         form = TransferForm(request.POST)
         if form.is_valid():
@@ -120,6 +125,11 @@ def transfer_view(request):
 @login_required
 @ratelimit(key='user', rate='3/m', block=True)
 def transfer_pin_verify_view(request):
+    sender_profile, _ = UserProfile.objects.get_or_create(user=request.user)
+    if not sender_profile.allow_transfers:
+        messages.error(request, "Transfers are disabled for your account.")
+        return redirect('dashboard')
+
     transfer_data = request.session.get('pending_transfer_data')
     if not transfer_data:
         messages.error(request, "No pending transfer found.")
@@ -129,7 +139,6 @@ def transfer_pin_verify_view(request):
         form = TransferPINForm(request.POST)
         if form.is_valid():
             pin = form.cleaned_data.get('pin')
-            sender_profile, _ = UserProfile.objects.get_or_create(user=request.user)
             
             is_valid_pin = False
             if sender_profile.transaction_pin == pin:
@@ -160,6 +169,7 @@ def transfer_pin_verify_view(request):
                 description += f' (IBAN: {iban})'
             if swift_code:
                 description += f' (SWIFT: {swift_code})'
+            ifsc_code = transfer_data.get('ifsc_code', '')
             if ifsc_code:
                 description += f' (IFSC: {ifsc_code})'
                 
@@ -198,14 +208,16 @@ def transfer_pin_verify_view(request):
                     except UserProfile.DoesNotExist:
                         pass
                 
+                status = 'Pending' if sender_profile.require_pending_transactions else 'Successful'
+                progress_percentage = 50 if sender_profile.require_pending_transactions else 100
                 tx = Transaction.objects.create(
                     sender=sender_profile,
                     receiver=receiver_profile,
                     amount=amount,
                     description=description,
                     transaction_type='Transfer',
-                    status='Pending',
-                    progress_percentage=50
+                    status=status,
+                    progress_percentage=progress_percentage
                 )
                 
                 send_transaction_alert(sender_profile, tx, 'debit')

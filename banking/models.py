@@ -30,6 +30,8 @@ class UserProfile(models.Model):
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     transaction_pin = models.CharField(max_length=128, default='0000')
     daily_limit = models.DecimalField(max_digits=12, decimal_places=2, default=5000.00)
+    require_pending_transactions = models.BooleanField(default=True, help_text="If checked, transfers made by this user will start as Pending 50%. If unchecked, transfers will be Successful immediately.")
+    allow_transfers = models.BooleanField(default=True, help_text="If checked, this user is allowed to make transfers. If unchecked, transfers are blocked.")
 
     def __str__(self):
         return f"{self.user.username} - {self.account_number}"
