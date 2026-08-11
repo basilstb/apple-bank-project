@@ -37,6 +37,10 @@ SECRET_KEY = _secret_key
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
+# Force DEBUG to False in production (Render)
+if 'RENDER' in os.environ:
+    DEBUG = False
+
 ALLOWED_HOSTS = ['*']  # Allow all hosts to prevent 400 Bad Request errors with custom domains
 
 if not DEBUG:
