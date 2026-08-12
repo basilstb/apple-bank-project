@@ -91,13 +91,11 @@
                     <div class="bg-gray-50 rounded-2xl p-6 text-center border border-gray-100 print-exact">
                         <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Transaction Amount
                         </p>
-                        <p class="text-5xl font-extrabold text-gray-900 tracking-tight mb-3">{{ profile.currency }}{{
-                            tx.amount|intcomma }}</p>
+                        <p class="text-5xl font-extrabold text-gray-900 tracking-tight mb-3">{{ profile.currency }}{{ tx.amount|intcomma }}</p>
                         {% if tx.status == 'Pending' %}
                         <span
                             class="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider print-exact bg-yellow-100 text-yellow-800">
-                            Pending <span class="text-green-600 loading-dots mx-1 lowercase"></span> {{
-                            tx.progress_percentage }}%
+                            Pending <span class="text-green-600 loading-dots mx-1 lowercase"></span> {{ tx.progress_percentage }}%
                         </span>
                         {% elif tx.status == 'Successful' %}
                         <span
@@ -137,8 +135,7 @@
 
                             <div>
                                 <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Reference</p>
-                                <p class="text-base font-bold text-gray-900 font-mono mt-0.5">REF-{{
-                                    tx.id|stringformat:"08d" }}-{{ tx.timestamp|date:"ymd" }}</p>
+                                <p class="text-base font-bold text-gray-900 font-mono mt-0.5">REF-{{ tx.id|stringformat:"08d" }}-{{ tx.timestamp|date:"ymd" }}</p>
                             </div>
                         </div>
 
@@ -151,8 +148,7 @@
                             {% if tx.sender %}
                             <div>
                                 <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Sender</p>
-                                <p class="text-base font-bold text-gray-900 mt-0.5">{{ tx.sender.user.first_name }} {{
-                                    tx.sender.user.last_name }}</p>
+                                <p class="text-base font-bold text-gray-900 mt-0.5">{{ tx.sender.user.first_name }} {{ tx.sender.user.last_name }}</p>
                                 <p class="text-sm font-medium text-gray-600 font-mono">{{ tx.sender.account_number }}
                                 </p>
                             </div>
@@ -161,8 +157,7 @@
                             {% if tx.receiver %}
                             <div>
                                 <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Receiver</p>
-                                <p class="text-base font-bold text-gray-900 mt-0.5">{{ tx.receiver.user.first_name }} {{
-                                    tx.receiver.user.last_name }}</p>
+                                <p class="text-base font-bold text-gray-900 mt-0.5">{{ tx.receiver.user.first_name }} {{ tx.receiver.user.last_name }}</p>
                                 <p class="text-sm font-medium text-gray-600 font-mono">{{ tx.receiver.account_number }}
                                 </p>
                                 <p class="text-xs font-medium text-blue-900 font-bold">Nexus Trust Bank</p>
