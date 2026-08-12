@@ -443,9 +443,37 @@ def download_receipt_view(request, tx_id):
                 details.append(("Bank Name", match.group(2)))
         
     for label, value in details:
+        # Wrap value if it's too long
+        max_val_width = 580
+        words = value.split(' ')
+        lines = []
+        current_line = []
+        for word in words:
+            test_line = ' '.join(current_line + [word])
+            bbox = draw.textbbox((0, 0), test_line, font=font_bold)
+            w = bbox[2] - bbox[0]
+            if w <= max_val_width:
+                current_line.append(word)
+            else:
+                if current_line:
+                    lines.append(' '.join(current_line))
+                    current_line = [word]
+                else:
+                    lines.append(word)
+                    current_line = []
+        if current_line:
+            lines.append(' '.join(current_line))
+            
+        if not lines:
+            lines = ['']
+            
+        # Draw label
         draw.text((card_margin + 80, y), label, fill="#6B7280", font=font_body)
-        draw.text((width - card_margin - 80, y), value, fill="#111827", font=font_bold, anchor="rt")
-        y += line_height
+        
+        # Draw wrapped lines
+        for line in lines:
+            draw.text((width - card_margin - 80, y), line, fill="#111827", font=font_bold, anchor="rt")
+            y += line_height
         
     # Footer Dashed Line
     y += 40
