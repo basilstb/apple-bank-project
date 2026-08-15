@@ -239,6 +239,10 @@
                 <span class="material-symbols-outlined" translate="no">history</span> <span>History</span>
             </a>
         </div>
+        <!-- PWA Install Button (SideNavBar) -->
+        <button id="pwa-install-btn-sidebar" class="hidden w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 ease-in-out font-label-md text-label-md">
+            <span class="material-symbols-outlined" translate="no">download</span> <span>Install App</span>
+        </button>
         <div class="mt-auto border-t border-outline-variant pt-stack-md flex flex-col space-y-1">
             <form method="post" action="{% url 'logout' %}" class="block w-full">
                 {% csrf_token %}
@@ -265,6 +269,11 @@
             </div>
             <div class="hidden md:flex flex-1 mx-gutter items-center gap-6"></div>
             <div class="flex items-center gap-4 relative">
+                <!-- PWA Install Button (TopNavBar Authenticated) -->
+                <button id="pwa-install-btn-top" class="hidden text-on-surface-variant hover:text-primary transition-colors p-1 md:p-2 rounded-full hover:bg-surface-container-high flex items-center gap-1">
+                    <span class="material-symbols-outlined" translate="no">download</span>
+                    <span class="text-xs font-bold hidden sm:inline">Install App</span>
+                </button>
                 <div class="relative flex items-center" style="position: absolute; left: -9999px;">
                     <div id="google_translate_element"></div>
                 </div>
@@ -391,6 +400,11 @@
                             class="text-blue-900 font-bold">Nexus Trust Bank</span></span>
                 </div>
                 <div class="flex items-center gap-4">
+                    <!-- PWA Install Button (TopNavBar Unauthenticated) -->
+                    <button id="pwa-install-btn-top-unauth" class="hidden text-on-surface-variant hover:text-primary transition-colors p-1 md:p-2 rounded-full hover:bg-surface-container-high flex items-center gap-1">
+                        <span class="material-symbols-outlined" translate="no">download</span>
+                        <span class="text-xs font-bold hidden sm:inline">Install App</span>
+                    </button>
                     <div class="relative flex items-center" style="position: absolute; left: -9999px;">
                         <div id="google_translate_element"></div>
                     </div>
@@ -624,6 +638,171 @@
                         .catch(err => console.warn('PWA: Service Worker registration failed.', err));
                 });
             }
+        </script>
+
+        <!-- PWA Install Banner -->
+        <div id="pwa-install-banner" class="hidden fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 bg-white rounded-2xl shadow-2xl border border-gray-100 p-4 z-50 flex flex-col gap-3 animate-bounce-subtle">
+            <div class="flex items-start justify-between">
+                <div class="flex items-center gap-3">
+                    <img src="/static/images/nexus_app_icon.png" class="w-12 h-12 rounded-xl object-cover shadow-sm" alt="Nexus Bank Icon">
+                    <div>
+                        <h4 class="font-bold text-gray-900 text-sm">Nexus Trust Bank</h4>
+                        <p class="text-xs text-gray-500">Install our app for a better experience</p>
+                    </div>
+                </div>
+                <button id="pwa-close-banner-btn" class="text-gray-400 hover:text-gray-600">
+                    <span class="material-symbols-outlined text-[18px]" translate="no">close</span>
+                </button>
+            </div>
+            <div class="flex gap-2">
+                <button id="pwa-install-btn-banner" class="flex-1 bg-primary text-white text-xs font-bold py-2 px-4 rounded-full hover:bg-gray-800 transition-colors shadow-sm">
+                    Install Now
+                </button>
+            </div>
+        </div>
+
+        <!-- iOS Install Guide Modal -->
+        <div id="pwa-ios-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-gray-100 flex flex-col gap-4">
+                <div class="flex justify-between items-start">
+                    <h3 class="text-lg font-bold text-gray-900">Install Nexus Trust Bank</h3>
+                    <button id="pwa-close-ios-modal" class="text-gray-400 hover:text-gray-600">
+                        <span class="material-symbols-outlined text-[18px]" translate="no">close</span>
+                    </button>
+                </div>
+                <p class="text-sm text-gray-600">To install this app on your iPhone/iPad:</p>
+                <ol class="list-decimal list-inside text-sm text-gray-700 space-y-2">
+                    <li>Tap the <span class="font-bold">Share</span> button <span class="material-symbols-outlined inline text-sm align-middle" translate="no">ios_share</span> in Safari.</li>
+                    <li>Scroll down and select <span class="font-bold">Add to Home Screen</span> <span class="material-symbols-outlined inline text-sm align-middle" translate="no">add_box</span>.</li>
+                    <li>Tap <span class="font-bold">Add</span> in the top right corner.</li>
+                </ol>
+                <button id="pwa-close-ios-modal-btn" class="w-full bg-primary text-white text-sm font-bold py-2.5 rounded-full hover:bg-gray-800 transition-colors mt-2">
+                    Got it
+                </button>
+            </div>
+        </div>
+
+        <!-- PWA Install Prompt Logic -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                let deferredPrompt;
+                const installBanner = document.getElementById('pwa-install-banner');
+                const closeBannerBtn = document.getElementById('pwa-close-banner-btn');
+                const installBtnBanner = document.getElementById('pwa-install-btn-banner');
+                
+                const installBtnTop = document.getElementById('pwa-install-btn-top');
+                const installBtnTopUnauth = document.getElementById('pwa-install-btn-top-unauth');
+                const installBtnSidebar = document.getElementById('pwa-install-btn-sidebar');
+                
+                const iosModal = document.getElementById('pwa-ios-modal');
+                const closeIosModal = document.getElementById('pwa-close-ios-modal');
+                const closeIosModalBtn = document.getElementById('pwa-close-ios-modal-btn');
+
+                // Check if already running in standalone mode (app is installed)
+                const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+
+                // Detect iOS
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+                // Function to show all install UI elements
+                function showInstallUI() {
+                    if (isStandalone) return;
+
+                    // Show TopNavBar buttons
+                    if (installBtnTop) installBtnTop.classList.remove('hidden');
+                    if (installBtnTopUnauth) installBtnTopUnauth.classList.remove('hidden');
+                    
+                    // Show SideNavBar button
+                    if (installBtnSidebar) installBtnSidebar.classList.remove('hidden');
+
+                    // Show banner if not closed in this session
+                    if (installBanner && !sessionStorage.getItem('pwa-banner-closed')) {
+                        installBanner.classList.remove('hidden');
+                    }
+                }
+
+                // Function to hide all install UI elements
+                function hideInstallUI() {
+                    if (installBanner) installBanner.classList.add('hidden');
+                    if (installBtnTop) installBtnTop.classList.add('hidden');
+                    if (installBtnTopUnauth) installBtnTopUnauth.classList.add('hidden');
+                    if (installBtnSidebar) installBtnSidebar.classList.add('hidden');
+                }
+
+                // If iOS Safari, we can show the install UI steadily since beforeinstallprompt won't fire
+                if (isIOS && !isStandalone) {
+                    showInstallUI();
+                }
+
+                // Listen for the beforeinstallprompt event
+                window.addEventListener('beforeinstallprompt', (e) => {
+                    // Prevent Chrome 67 and earlier from automatically showing the prompt
+                    e.preventDefault();
+                    // Stash the event so it can be triggered later.
+                    deferredPrompt = e;
+                    // Update UI notify the user they can install the PWA
+                    showInstallUI();
+                });
+
+                // Handle install action
+                function triggerInstall() {
+                    if (isIOS) {
+                        // Show iOS guide modal
+                        if (iosModal) iosModal.classList.remove('hidden');
+                    } else if (deferredPrompt) {
+                        // Show the native install prompt
+                        deferredPrompt.prompt();
+                        // Wait for the user to respond to the prompt
+                        deferredPrompt.userChoice.then((choiceResult) => {
+                            if (choiceResult.outcome === 'accepted') {
+                                console.log('User accepted the install prompt');
+                                hideInstallUI();
+                            } else {
+                                console.log('User dismissed the install prompt');
+                            }
+                            deferredPrompt = null;
+                        });
+                    } else {
+                        // If deferredPrompt is not available and not iOS, we can try to trigger it or just show a message
+                        // Since user wants it steady, we keep the UI visible
+                        alert('To install, please use your browser settings menu (e.g. "Install app" or "Add to Home screen").');
+                    }
+                }
+
+                // Attach event listeners
+                if (installBtnBanner) installBtnBanner.addEventListener('click', triggerInstall);
+                if (installBtnTop) installBtnTop.addEventListener('click', triggerInstall);
+                if (installBtnTopUnauth) installBtnTopUnauth.addEventListener('click', triggerInstall);
+                if (installBtnSidebar) installBtnSidebar.addEventListener('click', triggerInstall);
+
+                // Close banner button
+                if (closeBannerBtn && installBanner) {
+                    closeBannerBtn.addEventListener('click', () => {
+                        installBanner.classList.add('hidden');
+                        // Store in sessionStorage so it doesn't pop up again on this page view,
+                        // but will show again if they open a new session or visit the login page again.
+                        sessionStorage.setItem('pwa-banner-closed', 'true');
+                    });
+                }
+
+                // Close iOS modal buttons
+                if (closeIosModal && iosModal) {
+                    closeIosModal.addEventListener('click', () => {
+                        iosModal.classList.add('hidden');
+                    });
+                }
+                if (closeIosModalBtn && iosModal) {
+                    closeIosModalBtn.addEventListener('click', () => {
+                        iosModal.classList.add('hidden');
+                    });
+                }
+
+                // Listen for appinstalled event
+                window.addEventListener('appinstalled', (evt) => {
+                    console.log('PWA: App installed successfully.');
+                    hideInstallUI();
+                });
+            });
         </script>
 </body>
 
