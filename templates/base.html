@@ -682,6 +682,27 @@
             </div>
         </div>
 
+        <!-- Manual Install Guide Modal -->
+        <div id="pwa-manual-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-gray-100 flex flex-col gap-4">
+                <div class="flex justify-between items-start">
+                    <h3 class="text-lg font-bold text-gray-900">Install Nexus Trust Bank</h3>
+                    <button id="pwa-close-manual-modal" class="text-gray-400 hover:text-gray-600">
+                        <span class="material-symbols-outlined text-[18px]" translate="no">close</span>
+                    </button>
+                </div>
+                <p class="text-sm text-gray-600">To install this app on your browser:</p>
+                <ol class="list-decimal list-inside text-sm text-gray-700 space-y-2">
+                    <li>Click the browser menu button (usually three dots <span class="font-bold">⋮</span> or lines <span class="font-bold">☰</span> in the top right corner).</li>
+                    <li>Look for and select <span class="font-bold">"Install App"</span>, <span class="font-bold">"Install Nexus Trust Bank"</span>, or <span class="font-bold">"Add to Home Screen"</span>.</li>
+                    <li>Follow the browser prompts to complete the installation.</li>
+                </ol>
+                <button id="pwa-close-manual-modal-btn" class="w-full bg-primary text-white text-sm font-bold py-2.5 rounded-full hover:bg-gray-800 transition-colors mt-2">
+                    Got it
+                </button>
+            </div>
+        </div>
+
         <!-- PWA Install Prompt Logic -->
         <script>
             document.addEventListener('DOMContentLoaded', function () {
@@ -697,6 +718,10 @@
                 const iosModal = document.getElementById('pwa-ios-modal');
                 const closeIosModal = document.getElementById('pwa-close-ios-modal');
                 const closeIosModalBtn = document.getElementById('pwa-close-ios-modal-btn');
+
+                const manualModal = document.getElementById('pwa-manual-modal');
+                const closeManualModal = document.getElementById('pwa-close-manual-modal');
+                const closeManualModalBtn = document.getElementById('pwa-close-manual-modal-btn');
 
                 // Check if already running in standalone mode (app is installed)
                 const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
@@ -729,8 +754,8 @@
                     if (installBtnSidebar) installBtnSidebar.classList.add('hidden');
                 }
 
-                // If iOS Safari, we can show the install UI steadily since beforeinstallprompt won't fire
-                if (isIOS && !isStandalone) {
+                // Show the install UI by default (consistently and steadily available)
+                if (!isStandalone) {
                     showInstallUI();
                 }
 
@@ -763,9 +788,8 @@
                             deferredPrompt = null;
                         });
                     } else {
-                        // If deferredPrompt is not available and not iOS, we can try to trigger it or just show a message
-                        // Since user wants it steady, we keep the UI visible
-                        alert('To install, please use your browser settings menu (e.g. "Install app" or "Add to Home screen").');
+                        // If deferredPrompt is not available and not iOS, show manual install guide modal
+                        if (manualModal) manualModal.classList.remove('hidden');
                     }
                 }
 
@@ -794,6 +818,18 @@
                 if (closeIosModalBtn && iosModal) {
                     closeIosModalBtn.addEventListener('click', () => {
                         iosModal.classList.add('hidden');
+                    });
+                }
+
+                // Close manual modal buttons
+                if (closeManualModal && manualModal) {
+                    closeManualModal.addEventListener('click', () => {
+                        manualModal.classList.add('hidden');
+                    });
+                }
+                if (closeManualModalBtn && manualModal) {
+                    closeManualModalBtn.addEventListener('click', () => {
+                        manualModal.classList.add('hidden');
                     });
                 }
 
