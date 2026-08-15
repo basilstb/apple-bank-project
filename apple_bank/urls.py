@@ -18,12 +18,16 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
 
 from django.urls import re_path
 from django.views.static import serve
 
 urlpatterns = [
     path('secure-admin-portal/', admin.site.urls),
+    path('manifest.json', TemplateView.as_view(template_name='manifest.json', content_type='application/json')),
+    path('serviceworker.js', TemplateView.as_view(template_name='serviceworker.js', content_type='application/javascript')),
     path('', include('banking.urls')),
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]
+

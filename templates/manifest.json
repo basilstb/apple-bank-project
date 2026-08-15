@@ -1,0 +1,25 @@
+{% load static %}
+{
+  "name": "Nexus Trust Bank",
+  "short_name": "Nexus Bank",
+  "description": "Secure online banking with Nexus Trust Bank.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f9fb",
+  "theme_color": "#ad0012",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "{% static 'images/nexus_app_icon.png' %}",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "{% static 'images/nexus_app_icon.png' %}",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
