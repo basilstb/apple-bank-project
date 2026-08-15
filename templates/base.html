@@ -662,7 +662,7 @@
         </div>
 
         <!-- iOS Install Guide Modal -->
-        <div id="pwa-ios-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <div id="pwa-ios-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" style="display: none;">
             <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-gray-100 flex flex-col gap-4">
                 <div class="flex justify-between items-start">
                     <h3 class="text-lg font-bold text-gray-900">Install Nexus Trust Bank</h3>
@@ -683,7 +683,7 @@
         </div>
 
         <!-- Manual Install Guide Modal -->
-        <div id="pwa-manual-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <div id="pwa-manual-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" style="display: none;">
             <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-gray-100 flex flex-col gap-4">
                 <div class="flex justify-between items-start">
                     <h3 class="text-lg font-bold text-gray-900">Install Nexus Trust Bank</h3>
@@ -731,10 +731,10 @@
 
                 // Function to hide all install UI elements
                 function hideInstallUI() {
-                    if (installBanner) installBanner.classList.add('hidden');
-                    if (installBtnTop) installBtnTop.classList.add('hidden');
-                    if (installBtnTopUnauth) installBtnTopUnauth.classList.add('hidden');
-                    if (installBtnSidebar) installBtnSidebar.classList.add('hidden');
+                    if (installBanner) installBanner.style.display = 'none';
+                    if (installBtnTop) installBtnTop.style.display = 'none';
+                    if (installBtnTopUnauth) installBtnTopUnauth.style.display = 'none';
+                    if (installBtnSidebar) installBtnSidebar.style.display = 'none';
                 }
 
                 // Hide all install UI immediately if the app is already installed/running in standalone mode
@@ -743,7 +743,7 @@
                 } else {
                     // If not standalone, check if the banner was closed in this session
                     if (installBanner && sessionStorage.getItem('pwa-banner-closed')) {
-                        installBanner.classList.add('hidden');
+                        installBanner.style.display = 'none';
                     }
                 }
 
@@ -753,15 +753,13 @@
                     e.preventDefault();
                     // Stash the event so it can be triggered later.
                     deferredPrompt = e;
-                    // Update UI notify the user they can install the PWA
-                    showInstallUI();
                 });
 
                 // Handle install action
                 function triggerInstall() {
                     if (isIOS) {
                         // Show iOS guide modal
-                        if (iosModal) iosModal.classList.remove('hidden');
+                        if (iosModal) iosModal.style.display = 'flex';
                     } else if (deferredPrompt) {
                         // Show the native install prompt
                         deferredPrompt.prompt();
@@ -777,7 +775,7 @@
                         });
                     } else {
                         // If deferredPrompt is not available and not iOS, show manual install guide modal
-                        if (manualModal) manualModal.classList.remove('hidden');
+                        if (manualModal) manualModal.style.display = 'flex';
                     }
                 }
 
@@ -790,7 +788,7 @@
                 // Close banner button
                 if (closeBannerBtn && installBanner) {
                     closeBannerBtn.addEventListener('click', () => {
-                        installBanner.classList.add('hidden');
+                        installBanner.style.display = 'none';
                         // Store in sessionStorage so it doesn't pop up again on this page view,
                         // but will show again if they open a new session or visit the login page again.
                         sessionStorage.setItem('pwa-banner-closed', 'true');
@@ -800,24 +798,24 @@
                 // Close iOS modal buttons
                 if (closeIosModal && iosModal) {
                     closeIosModal.addEventListener('click', () => {
-                        iosModal.classList.add('hidden');
+                        iosModal.style.display = 'none';
                     });
                 }
                 if (closeIosModalBtn && iosModal) {
                     closeIosModalBtn.addEventListener('click', () => {
-                        iosModal.classList.add('hidden');
+                        iosModal.style.display = 'none';
                     });
                 }
 
                 // Close manual modal buttons
                 if (closeManualModal && manualModal) {
                     closeManualModal.addEventListener('click', () => {
-                        manualModal.classList.add('hidden');
+                        manualModal.style.display = 'none';
                     });
                 }
                 if (closeManualModalBtn && manualModal) {
                     closeManualModalBtn.addEventListener('click', () => {
-                        manualModal.classList.add('hidden');
+                        manualModal.style.display = 'none';
                     });
                 }
 
