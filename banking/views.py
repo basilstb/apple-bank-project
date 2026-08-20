@@ -16,36 +16,7 @@ from .utils import send_welcome_email, send_transaction_alert
 import io
 
 def register_view(request):
-    if request.method == 'POST':
-        form = UserRegistrationForm(request.POST, request.FILES)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.set_password(form.cleaned_data['password'])
-            user.save()
-            
-            # Update phone number and profile picture in profile
-            profile, _ = UserProfile.objects.get_or_create(user=user)
-            profile.phone_number = form.cleaned_data.get('phone_number', '')
-            profile.currency = form.cleaned_data.get('currency', '$')
-            if 'profile_picture' in request.FILES:
-                profile.profile_picture = request.FILES['profile_picture']
-            
-            # Hash and save the transaction PIN
-            raw_pin = form.cleaned_data.get('transaction_pin')
-            if raw_pin:
-                profile.transaction_pin = make_password(raw_pin)
-                
-            profile.save()
-            
-            # Send welcome email
-            send_welcome_email(user)
-
-            login(request, user)
-            messages.success(request, f"Welcome to Nexus Trust Bank, {user.first_name}! Your account has been created with a {profile.currency}5.00 welcome bonus.")
-            return redirect('dashboard')
-    else:
-        form = UserRegistrationForm()
-    return render(request, 'banking/register.html', {'form': form})
+    return redirect('login')
 
 @ratelimit(key='ip', rate='5/m', block=True)
 def login_view(request):
