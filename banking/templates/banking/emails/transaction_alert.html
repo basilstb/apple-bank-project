@@ -1,0 +1,41 @@
+{% extends "banking/emails/base_email.html" %}
+{% load humanize %}
+
+{% block subject %}{{ transaction_type|title }} Alert - Nexus Trust Bank{% endblock %}
+
+{% block content %}
+<h2>Dear {{ user.first_name|default:user.username }},</h2>
+<p>This is an automated alert to inform you of a recent transaction on your account.</p>
+
+<div
+    style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0; border-left: 4px solid {% if transaction_type == 'credit' %}#28a745{% else %}#dc3545{% endif %};">
+    <h3 style="margin-top: 0; color: {% if transaction_type == 'credit' %}#28a745{% else %}#dc3545{% endif %};">{{
+        transaction_type|upper }} ALERT</h3>
+    <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td style="padding: 5px 0;"><strong>Amount:</strong></td>
+            <td style="padding: 5px 0; font-weight: bold; font-size: 18px;">${{ amount|intcomma }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 5px 0;"><strong>Date & Time:</strong></td>
+            <td style="padding: 5px 0;">{{ date|date:"F j, Y, g:i a" }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 5px 0;"><strong>Description:</strong></td>
+            <td style="padding: 5px 0;">{{ description }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 5px 0;"><strong>Reference No:</strong></td>
+            <td style="padding: 5px 0;">{{ reference }}</td>
+        </tr>
+    </table>
+</div>
+
+<p>Your current available balance is: <strong style="font-size: 16px;">${{ balance|intcomma }}</strong></p>
+
+<p>If you did not authorize this transaction, please contact our support team immediately.</p>
+
+<div style="text-align: center;">
+    <a href="{{ request.scheme }}://{{ request.get_host }}/dashboard/" class="button">View Dashboard</a>
+</div>
+{% endblock %}

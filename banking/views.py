@@ -352,8 +352,21 @@ def download_receipt_view(request, tx_id):
     draw.rounded_rectangle([(card_margin, card_top), (width - card_margin, card_bottom)], radius=30, fill="white", outline="#E5E7EB", width=2)
 
     # Draw Header
-    draw.text((width/2, card_top + 80), "Nexus Trust Bank", fill="#111827", font=font_title, anchor="mt")
-    draw.text((width/2, card_top + 160), "OFFICIAL RECEIPT", fill="#6B7280", font=font_header, anchor="mt")
+    try:
+        logo_path = os.path.join(settings.BASE_DIR, 'static', 'images', 'nexus_logo.png')
+        logo = Image.open(logo_path)
+        logo.thumbnail((300, 300))
+        logo_w, logo_h = logo.size
+        # Paste logo with alpha channel if it exists
+        if logo.mode == 'RGBA':
+            image.paste(logo, (int(width/2 - logo_w/2), card_top + 40), logo)
+        else:
+            image.paste(logo, (int(width/2 - logo_w/2), card_top + 40))
+        
+        draw.text((width/2, card_top + 40 + logo_h + 20), "OFFICIAL RECEIPT", fill="#6B7280", font=font_header, anchor="mt")
+    except Exception as e:
+        draw.text((width/2, card_top + 80), "Nexus Trust Bank", fill="#111827", font=font_title, anchor="mt")
+        draw.text((width/2, card_top + 160), "OFFICIAL RECEIPT", fill="#6B7280", font=font_header, anchor="mt")
     
     # Draw Amount Section
     amount_y = card_top + 260

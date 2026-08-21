@@ -1,0 +1,30 @@
+{% extends "banking/emails/base_email.html" %}
+
+{% block subject %}New User Registration Alert{% endblock %}
+
+{% block content %}
+<h2>Admin Alert: New User Registration</h2>
+<p>A new user has just registered on Nexus Trust Bank.</p>
+<table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+    <tr>
+        <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Username:</strong></td>
+        <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ user.username }}</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Email:</strong></td>
+        <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ user.email }}</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Full Name:</strong></td>
+        <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ user.get_full_name }}</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Registration Time:</strong></td>
+        <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ user.date_joined|date:"F j, Y, g:i a" }}</td>
+    </tr>
+</table>
+<div style="text-align: center;">
+    <a href="{{ request.scheme }}://{{ request.get_host }}/admin/auth/user/{{ user.id }}/change/" class="button">View
+        User in Admin</a>
+</div>
+{% endblock %}

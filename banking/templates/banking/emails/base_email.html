@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block subject %}Nexus Trust Bank{% endblock %}</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 0;
+            color: #333333;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            background-color: #0d1b2a;
+            text-align: center;
+            padding: 0;
+        }
+
+        .header img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .content {
+            padding: 30px;
+            line-height: 1.6;
+        }
+
+        .footer {
+            background-color: #f4f7f6;
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: #777777;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #d4af37;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .highlight {
+            color: #0d1b2a;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="email-container">
+        <div class="header">
+            <!-- Using absolute URL for images in emails -->
+            <img src="{{ request.scheme }}://{{ request.get_host }}/static/images/nexus_email_header.png"
+                alt="Nexus Trust Bank">
+        </div>
+        <div class="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+        <div class="footer">
+            <p>&copy; {% now "Y" %} Nexus Trust Bank. All rights reserved.</p>
+            <p>This is an automated message, please do not reply directly to this email.</p>
+        </div>
+    </div>
+</body>
+
+</html>

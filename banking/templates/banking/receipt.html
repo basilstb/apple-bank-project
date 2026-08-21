@@ -61,181 +61,167 @@
                         d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.64-2.25 1.64-1.74 0-2.1-.96-2.17-1.92H8.01c.08 1.81 1.23 3.1 2.89 3.49V20h2.34v-1.73c1.7-.36 2.86-1.43 2.86-2.98 0-1.98-1.55-2.71-3.79-3.15z" />
                 </svg>
             </div>
+            <div class="text-right">
+                <p class="text-sm font-bold text-gray-900 font-mono">#TXN-{{ tx.id|stringformat:"06d" }}</p>
+                <p class="text-sm text-gray-600 mt-1">{{ tx.timestamp|date:"M d, Y" }}</p>
+                <p class="text-sm text-gray-600">{{ tx.timestamp|date:"h:i A" }}</p>
+            </div>
+        </div>
 
-            <div class="relative z-10">
-                <!-- Receipt Header -->
-                <div class="flex justify-between items-start mb-8 border-b-2 border-gray-100 pb-8">
-                    <div class="flex items-center gap-3">
-                        <div class="bg-primary/10 p-3 rounded-xl print-exact">
-                            <svg class="h-8 w-8 text-primary" fill="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.64-2.25 1.64-1.74 0-2.1-.96-2.17-1.92H8.01c.08 1.81 1.23 3.1 2.89 3.49V20h2.34v-1.73c1.7-.36 2.86-1.43 2.86-2.98 0-1.98-1.55-2.71-3.79-3.15z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h2 class="text-2xl font-bold text-blue-900 tracking-tight">Nexus Trust Bank</h2>
-                            <p class="text-sm font-medium text-gray-500 uppercase tracking-widest mt-1">Official Receipt
-                            </p>
-                        </div>
+        <!-- Receipt Body -->
+        <div class="space-y-8">
+            <!-- Amount Section -->
+            <div class="bg-gray-50 rounded-2xl p-6 text-center border border-gray-100 print-exact">
+                <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Transaction Amount
+                </p>
+                <p class="text-5xl font-extrabold text-gray-900 tracking-tight mb-3">{{ profile.currency }}{{
+                    tx.amount|intcomma }}</p>
+                {% if tx.status == 'Pending' %}
+                <span
+                    class="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider print-exact bg-yellow-100 text-yellow-800">
+                    Pending <span class="text-green-600 loading-dots mx-1 lowercase"></span> {{ tx.progress_percentage
+                    }}%
+                </span>
+                {% elif tx.status == 'Successful' %}
+                <span
+                    class="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider print-exact bg-green-100 text-green-800">
+                    <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    Successful
+                </span>
+                {% else %}
+                <span
+                    class="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider print-exact bg-red-100 text-red-800">
+                    {{ tx.status }}
+                </span>
+                {% endif %}
+            </div>
+
+            <!-- Details Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Transaction Details -->
+                <div class="space-y-4">
+                    <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 pb-2">
+                        Transaction Details</h3>
+
+                    <div>
+                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Type</p>
+                        <p class="text-base font-bold text-gray-900 mt-0.5">{{ tx.transaction_type }}</p>
                     </div>
-                    <div class="text-right">
-                        <p class="text-sm font-bold text-gray-900 font-mono">#TXN-{{ tx.id|stringformat:"06d" }}</p>
-                        <p class="text-sm text-gray-600 mt-1">{{ tx.timestamp|date:"M d, Y" }}</p>
-                        <p class="text-sm text-gray-600">{{ tx.timestamp|date:"h:i A" }}</p>
+
+                    <div>
+                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Description</p>
+                        <p class="text-base font-bold text-gray-900 mt-0.5 break-words">{{ tx.description }}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Reference</p>
+                        <p class="text-base font-bold text-gray-900 font-mono mt-0.5">REF-{{ tx.id|stringformat:"08d"
+                            }}-{{ tx.timestamp|date:"ymd" }}</p>
                     </div>
                 </div>
 
-                <!-- Receipt Body -->
-                <div class="space-y-8">
-                    <!-- Amount Section -->
-                    <div class="bg-gray-50 rounded-2xl p-6 text-center border border-gray-100 print-exact">
-                        <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Transaction Amount
+                <!-- Account Details -->
+                <div class="space-y-4">
+                    <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 pb-2">
+                        Account Details</h3>
+
+                    {% if tx.sender %}
+                    <div>
+                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Sender</p>
+                        <p class="text-base font-bold text-gray-900 mt-0.5">{{ tx.sender.user.first_name }} {{
+                            tx.sender.user.last_name }}</p>
+                        <p class="text-sm font-medium text-gray-600 font-mono">{{ tx.sender.account_number }}
                         </p>
-                        <p class="text-5xl font-extrabold text-gray-900 tracking-tight mb-3">{{ profile.currency }}{{ tx.amount|intcomma }}</p>
-                        {% if tx.status == 'Pending' %}
-                        <span
-                            class="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider print-exact bg-yellow-100 text-yellow-800">
-                            Pending <span class="text-green-600 loading-dots mx-1 lowercase"></span> {{ tx.progress_percentage }}%
-                        </span>
-                        {% elif tx.status == 'Successful' %}
-                        <span
-                            class="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider print-exact bg-green-100 text-green-800">
-                            <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                    clip-rule="evenodd"></path>
-                            </svg>
-                            Successful
-                        </span>
-                        {% else %}
-                        <span
-                            class="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider print-exact bg-red-100 text-red-800">
-                            {{ tx.status }}
-                        </span>
+                    </div>
+                    {% endif %}
+
+                    {% if tx.receiver %}
+                    <div>
+                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Receiver</p>
+                        <p class="text-base font-bold text-gray-900 mt-0.5">{{ tx.receiver.user.first_name }} {{
+                            tx.receiver.user.last_name }}</p>
+                        <p class="text-sm font-medium text-gray-600 font-mono">{{ tx.receiver.account_number }}
+                        </p>
+                        <p class="text-xs font-medium text-blue-900 font-bold">Nexus Trust Bank</p>
+                    </div>
+                    {% elif external_receiver_name %}
+                    <div>
+                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Receiver</p>
+                        <p class="text-base font-bold text-gray-900 mt-0.5">{{ external_receiver_name }}</p>
+                        {% if external_account %}
+                        <p class="text-sm font-medium text-gray-600 font-mono">{{ external_account }}</p>
                         {% endif %}
+                        {% if external_iban %}
+                        <p class="text-sm font-medium text-gray-600 font-mono">IBAN: {{ external_iban }}</p>
+                        {% endif %}
+                        <p class="text-xs font-medium text-gray-500">{{ external_bank_name }}</p>
                     </div>
-
-                    <!-- Details Grid -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <!-- Transaction Details -->
-                        <div class="space-y-4">
-                            <h3
-                                class="text-sm font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 pb-2">
-                                Transaction Details</h3>
-
-                            <div>
-                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Type</p>
-                                <p class="text-base font-bold text-gray-900 mt-0.5">{{ tx.transaction_type }}</p>
-                            </div>
-
-                            <div>
-                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Description</p>
-                                <p class="text-base font-bold text-gray-900 mt-0.5 break-words">{{ tx.description }}</p>
-                            </div>
-
-                            <div>
-                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Reference</p>
-                                <p class="text-base font-bold text-gray-900 font-mono mt-0.5">REF-{{ tx.id|stringformat:"08d" }}-{{ tx.timestamp|date:"ymd" }}</p>
-                            </div>
-                        </div>
-
-                        <!-- Account Details -->
-                        <div class="space-y-4">
-                            <h3
-                                class="text-sm font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 pb-2">
-                                Account Details</h3>
-
-                            {% if tx.sender %}
-                            <div>
-                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Sender</p>
-                                <p class="text-base font-bold text-gray-900 mt-0.5">{{ tx.sender.user.first_name }} {{ tx.sender.user.last_name }}</p>
-                                <p class="text-sm font-medium text-gray-600 font-mono">{{ tx.sender.account_number }}
-                                </p>
-                            </div>
-                            {% endif %}
-
-                            {% if tx.receiver %}
-                            <div>
-                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Receiver</p>
-                                <p class="text-base font-bold text-gray-900 mt-0.5">{{ tx.receiver.user.first_name }} {{ tx.receiver.user.last_name }}</p>
-                                <p class="text-sm font-medium text-gray-600 font-mono">{{ tx.receiver.account_number }}
-                                </p>
-                                <p class="text-xs font-medium text-blue-900 font-bold">Nexus Trust Bank</p>
-                            </div>
-                            {% elif external_receiver_name %}
-                            <div>
-                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Receiver</p>
-                                <p class="text-base font-bold text-gray-900 mt-0.5">{{ external_receiver_name }}</p>
-                                {% if external_account %}
-                                <p class="text-sm font-medium text-gray-600 font-mono">{{ external_account }}</p>
-                                {% endif %}
-                                {% if external_iban %}
-                                <p class="text-sm font-medium text-gray-600 font-mono">IBAN: {{ external_iban }}</p>
-                                {% endif %}
-                                <p class="text-xs font-medium text-gray-500">{{ external_bank_name }}</p>
-                            </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Footer -->
-                <div class="mt-12 pt-8 border-t-2 border-gray-100 border-dashed flex flex-col items-center text-center">
-                    <!-- Fake Barcode -->
-                    <div class="mb-4 flex justify-center opacity-70">
-                        <svg class="h-12 w-48" preserveAspectRatio="none" viewBox="0 0 200 40">
-                            <rect x="0" y="0" width="4" height="40" fill="#000" />
-                            <rect x="6" y="0" width="2" height="40" fill="#000" />
-                            <rect x="12" y="0" width="6" height="40" fill="#000" />
-                            <rect x="22" y="0" width="2" height="40" fill="#000" />
-                            <rect x="28" y="0" width="8" height="40" fill="#000" />
-                            <rect x="40" y="0" width="2" height="40" fill="#000" />
-                            <rect x="46" y="0" width="4" height="40" fill="#000" />
-                            <rect x="54" y="0" width="2" height="40" fill="#000" />
-                            <rect x="60" y="0" width="6" height="40" fill="#000" />
-                            <rect x="70" y="0" width="2" height="40" fill="#000" />
-                            <rect x="76" y="0" width="4" height="40" fill="#000" />
-                            <rect x="84" y="0" width="8" height="40" fill="#000" />
-                            <rect x="96" y="0" width="2" height="40" fill="#000" />
-                            <rect x="102" y="0" width="6" height="40" fill="#000" />
-                            <rect x="112" y="0" width="2" height="40" fill="#000" />
-                            <rect x="118" y="0" width="4" height="40" fill="#000" />
-                            <rect x="126" y="0" width="2" height="40" fill="#000" />
-                            <rect x="132" y="0" width="8" height="40" fill="#000" />
-                            <rect x="144" y="0" width="2" height="40" fill="#000" />
-                            <rect x="150" y="0" width="6" height="40" fill="#000" />
-                            <rect x="160" y="0" width="4" height="40" fill="#000" />
-                            <rect x="168" y="0" width="2" height="40" fill="#000" />
-                            <rect x="174" y="0" width="8" height="40" fill="#000" />
-                            <rect x="186" y="0" width="2" height="40" fill="#000" />
-                            <rect x="192" y="0" width="4" height="40" fill="#000" />
-                            <rect x="198" y="0" width="2" height="40" fill="#000" />
-                        </svg>
-                    </div>
-                    <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Thank you for banking with us
-                    </p>
-                    <p class="text-xs text-gray-400 mt-1">This is a computer generated receipt and does not require a
-                        signature.</p>
+                    {% endif %}
                 </div>
             </div>
         </div>
 
-        <!-- Action Buttons -->
-        <div
-            class="bg-gray-50 px-8 py-6 border-t border-gray-100 flex flex-col sm:flex-row justify-center items-center gap-4 no-print">
-            <a href="{% url 'download_receipt' tx.id %}"
-                class="w-full sm:w-auto inline-flex justify-center items-center px-6 py-3 border border-transparent shadow-sm text-sm font-bold rounded-xl text-white bg-primary hover:bg-primary-container focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all">
-                <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+        <!-- Footer -->
+        <div class="mt-12 pt-8 border-t-2 border-gray-100 border-dashed flex flex-col items-center text-center">
+            <!-- Fake Barcode -->
+            <div class="mb-4 flex justify-center opacity-70">
+                <svg class="h-12 w-48" preserveAspectRatio="none" viewBox="0 0 200 40">
+                    <rect x="0" y="0" width="4" height="40" fill="#000" />
+                    <rect x="6" y="0" width="2" height="40" fill="#000" />
+                    <rect x="12" y="0" width="6" height="40" fill="#000" />
+                    <rect x="22" y="0" width="2" height="40" fill="#000" />
+                    <rect x="28" y="0" width="8" height="40" fill="#000" />
+                    <rect x="40" y="0" width="2" height="40" fill="#000" />
+                    <rect x="46" y="0" width="4" height="40" fill="#000" />
+                    <rect x="54" y="0" width="2" height="40" fill="#000" />
+                    <rect x="60" y="0" width="6" height="40" fill="#000" />
+                    <rect x="70" y="0" width="2" height="40" fill="#000" />
+                    <rect x="76" y="0" width="4" height="40" fill="#000" />
+                    <rect x="84" y="0" width="8" height="40" fill="#000" />
+                    <rect x="96" y="0" width="2" height="40" fill="#000" />
+                    <rect x="102" y="0" width="6" height="40" fill="#000" />
+                    <rect x="112" y="0" width="2" height="40" fill="#000" />
+                    <rect x="118" y="0" width="4" height="40" fill="#000" />
+                    <rect x="126" y="0" width="2" height="40" fill="#000" />
+                    <rect x="132" y="0" width="8" height="40" fill="#000" />
+                    <rect x="144" y="0" width="2" height="40" fill="#000" />
+                    <rect x="150" y="0" width="6" height="40" fill="#000" />
+                    <rect x="160" y="0" width="4" height="40" fill="#000" />
+                    <rect x="168" y="0" width="2" height="40" fill="#000" />
+                    <rect x="174" y="0" width="8" height="40" fill="#000" />
+                    <rect x="186" y="0" width="2" height="40" fill="#000" />
+                    <rect x="192" y="0" width="4" height="40" fill="#000" />
+                    <rect x="198" y="0" width="2" height="40" fill="#000" />
                 </svg>
-                Download Image
-            </a>
-            <a href="{% url 'dashboard' %}"
-                class="w-full sm:w-auto inline-flex justify-center items-center px-6 py-3 border border-transparent text-sm font-bold rounded-xl text-primary hover:bg-primary/10 transition-all">
-                Back to Dashboard
-            </a>
+            </div>
+            <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Thank you for banking with us
+            </p>
+            <p class="text-xs text-gray-400 mt-1">This is a computer generated receipt and does not require a
+                signature.</p>
         </div>
     </div>
+</div>
+
+<!-- Action Buttons -->
+<div
+    class="bg-gray-50 px-8 py-6 border-t border-gray-100 flex flex-col sm:flex-row justify-center items-center gap-4 no-print">
+    <a href="{% url 'download_receipt' tx.id %}"
+        class="w-full sm:w-auto inline-flex justify-center items-center px-6 py-3 border border-transparent shadow-sm text-sm font-bold rounded-xl text-white bg-primary hover:bg-primary-container focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all">
+        <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+        </svg>
+        Download Image
+    </a>
+    <a href="{% url 'dashboard' %}"
+        class="w-full sm:w-auto inline-flex justify-center items-center px-6 py-3 border border-transparent text-sm font-bold rounded-xl text-primary hover:bg-primary/10 transition-all">
+        Back to Dashboard
+    </a>
+</div>
+</div>
 </div>
 {% endblock %}

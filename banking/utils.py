@@ -1,31 +1,55 @@
 from django.core.mail import send_mail
 from django.conf import settings
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 def send_welcome_email(user):
     if not user.email:
         return
     
     subject = 'Welcome to Nexus Trust Bank!'
-    message = f'''Dear {user.first_name},
-
-Welcome to Nexus Trust Bank! Your account has been successfully created.
-You have received a welcome bonus of $5.00 in your preferred currency.
-
-Thank you for choosing Nexus Trust Bank.
-
-Best regards,
-Nexus Trust Bank Team
-'''
+    
+    context = {
+        'user': user,
+    }
+    html_message = render_to_string('banking/emails/welcome.html', context)
+    plain_message = strip_tags(html_message)
+    
     try:
         send_mail(
             subject,
-            message,
+            plain_message,
             settings.DEFAULT_FROM_EMAIL,
             [user.email],
+            html_message=html_message,
             fail_silently=True,
         )
     except Exception as e:
         print(f"Failed to send welcome email: {e}")
+
+def send_admin_registration_alert(user):
+    subject = 'New User Registration Alert'
+    
+    context = {
+        'user': user,
+    }
+    html_message = render_to_string('banking/emails/admin_alert_registration.html', context)
+    plain_message = strip_tags(html_message)
+    
+    # Send to the default from email or a specific admin email
+    admin_email = settings.DEFAULT_FROM_EMAIL
+    
+    try:
+        send_mail(
+            subject,
+            plain_message,
+            settings.DEFAULT_FROM_EMAIL,
+            [admin_email],
+            html_message=html_message,
+            fail_silently=True,
+        )
+    except Exception as e:
+        print(f"Failed to send admin registration alert: {e}")
 
 def send_login_alert(user):
     if not user.email:
@@ -58,45 +82,29 @@ def send_transaction_alert(user_profile, transaction, alert_type):
         return
         
     currency = user_profile.currency
-    amount = f"{currency}{transaction.amount}"
     
-    if alert_type == 'debit':
-        subject = f'Debit Alert: {amount}'
-        message = f'''Dear {user_profile.user.first_name},
-
-This is a notification of a debit transaction on your account.
-
-Amount: {amount}
-Description: {transaction.description}
-Date: {transaction.timestamp.strftime("%B %d, %Y, %I:%M %p")}
-
-If you did not authorize this transaction, please contact support immediately.
-
-Best regards,
-Nexus Trust Bank Team
-'''
-    elif alert_type == 'credit':
-        subject = f'Credit Alert: {amount}'
-        message = f'''Dear {user_profile.user.first_name},
-
-This is a notification of a credit transaction on your account.
-
-Amount: {amount}
-Description: {transaction.description}
-Date: {transaction.timestamp.strftime("%B %d, %Y, %I:%M %p")}
-
-Best regards,
-Nexus Trust Bank Team
-'''
-    else:
-        return
+    subject = f'{alert_type.capitalize()} Alert - Nexus Trust Bank'
+    
+    context = {
+        'user': user_profile.user,
+        'transaction_type': alert_type,
+        'amount': transaction.amount,
+        'date': transaction.timestamp,
+        'description': transaction.description,
+        'reference': f'TXN-{transaction.id:06d}',
+        'balance': user_profile.balance,
+    }
+    
+    html_message = render_to_string('banking/emails/transaction_alert.html', context)
+    plain_message = strip_tags(html_message)
 
     try:
         send_mail(
             subject,
-            message,
+            plain_message,
             settings.DEFAULT_FROM_EMAIL,
             [user_profile.user.email],
+            html_message=html_message,
             fail_silently=True,
         )
     except Exception as e:

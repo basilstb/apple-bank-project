@@ -1,0 +1,16 @@
+{% extends "banking/emails/base_email.html" %}
+
+{% block subject %}Welcome to Nexus Trust Bank{% endblock %}
+
+{% block content %}
+<h2>Dear {{ user.first_name|default:user.username }},</h2>
+<p>Welcome to <span class="highlight">Nexus Trust Bank</span>! We are thrilled to have you on board.</p>
+<p>Your account has been successfully created. You can now log in to your dashboard to manage your finances, make
+    transfers, and explore our services.</p>
+<p>At Nexus Trust Bank, we are committed to providing you with secure, reliable, and convenient banking solutions.</p>
+<div style="text-align: center;">
+    <a href="{{ request.scheme }}://{{ request.get_host }}/login/" class="button">Log In to Your Account</a>
+</div>
+<p>If you have any questions or need assistance, our support team is always here to help.</p>
+<p>Best regards,<br>The Nexus Trust Bank Team</p>
+{% endblock %}
