@@ -46,7 +46,7 @@
                   <span class="material-symbols-outlined" translate="no">pending_actions</span>
                 </div>
                 <div>
-                  <p class="font-bold text-on-surface">{{ tx.description }}</p>
+                  <p class="font-bold text-on-surface">{{ tx.clean_description }}</p>
                   <p class="text-sm text-on-surface-variant">{{ tx.timestamp|date:"M d, Y" }}</p>
                   {% if tx.pending_reason %}
                   <div
@@ -124,153 +124,143 @@
         <a href="#"
           class="text-center bg-surface-container text-on-surface py-2 rounded-lg font-label-md text-label-md hover:bg-surface-container-highest transition-colors border border-outline-variant">Account
           Details</a>
-        Transfer</h3>
-        <div class="space-y-4 flex-1">
-          <div>
-            <label class="block font-label-md text-label-md text-on-surface-variant mb-1">From Account</label>
-            <select
-              class="w-full border border-outline-variant rounded-lg bg-surface px-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-sm">
-              <option>Main Account (...{{ user.userprofile.account_number|slice:"-4:" }})</option>
-            </select>
-          </div>
-          <div>
-            <label class="block font-label-md text-label-md text-on-surface-variant mb-1">To Account or
-              Contact</label>
-            <input
-              class="w-full border border-outline-variant rounded-lg bg-surface px-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-sm"
-              placeholder="Name, account, or email" type="text" />
-          </div>
-          <div>
-            <label class="block font-label-md text-label-md text-on-surface-variant mb-1">Amount</label>
-            <div class="relative">
-              <span class="absolute left-3 top-2 text-on-surface-variant font-body-sm">{{ user.userprofile.currency
-                }}</span>
-              <input
-                class="w-full border border-outline-variant rounded-lg bg-surface pl-8 pr-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none font-label-md tabular-nums"
-                placeholder="0.00" type="number" />
-            </div>
-          </div>
-        </div>
-        <a href="{% url 'transfer' %}"
-          class="w-full mt-6 bg-primary-container text-on-primary py-3 rounded-lg font-label-md text-label-md hover:bg-primary transition-colors shadow-sm flex items-center justify-center gap-2">
-          <span class="material-symbols-outlined text-sm" translate="no">send</span> Confirm Transfer
+        <a href="{% url 'loan_application' %}"
+          class="text-center bg-surface-container text-on-surface py-2 rounded-lg font-label-md text-label-md hover:bg-surface-container-highest transition-colors border border-outline-variant">Apply
+          for Loan</a>
+        <a href="{% url 'atm_request' %}"
+          class="text-center bg-surface-container text-on-surface py-2 rounded-lg font-label-md text-label-md hover:bg-surface-container-highest transition-colors border border-outline-variant">Apply
+          for ATM Card</a>
+        <a href="https://wa.me/447345851907" target="_blank" rel="noopener noreferrer"
+          class="text-center bg-[#25D366] text-white py-2 rounded-lg font-label-md text-label-md hover:bg-[#20ba5a] transition-colors shadow-sm col-span-2 flex items-center justify-center gap-2">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+            <path
+              d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.413 9.863-9.864.001-2.641-1.024-5.124-2.888-6.991A9.782 9.782 0 0 0 12.008 1.24c-5.434 0-9.858 4.413-9.862 9.865-.001 1.739.461 3.43 1.337 4.937l-.989 3.612 3.701-.97c1.517.827 3.09 1.26 4.852 1.262zm9.733-7.224c-.269-.134-1.593-.786-1.839-.876-.246-.09-.425-.134-.604.134-.179.269-.694.876-.851 1.056-.157.179-.313.202-.582.067-.269-.134-1.137-.419-2.166-1.337-.801-.714-1.342-1.596-1.499-1.865-.157-.269-.017-.414.118-.548.121-.121.269-.314.403-.471.134-.157.179-.269.269-.449.09-.179.045-.336-.022-.471-.067-.134-.604-1.456-.827-1.994-.217-.523-.456-.452-.627-.461-.163-.008-.349-.01-.535-.01-.186 0-.49.07-.747.349-.257.279-.982.96-9.82.96s-1.066-.681-1.324-.96c-.257-.279-.49-.07-.747-.07-.257 0-.425.045-.604.179-.179.134-1.593 1.558-1.593 3.801 0 2.243 1.637 4.413 1.861 4.713.224.3 3.225 4.925 7.814 6.903 1.092.47 1.944.75 2.609.961 1.097.349 2.096.3 2.886.182.88-.132 2.707-1.106 3.088-2.122.381-1.016.381-1.886.269-2.065-.113-.179-.313-.269-.582-.403z" />
+          </svg>
+          Contact Customer Service (WhatsApp)
         </a>
       </div>
-      <div
-        class="md:col-span-6 bg-surface-container-lowest rounded-xl p-6 border border-slate-200 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)]">
-        <div class="flex justify-between items-center mb-6">
-          <h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">ATM Cards
-          </h3>
-          <a href="{% url 'atm_request' %}" class="text-primary text-sm font-label-md hover:underline">Manage
-            All</a>
+    </div>
+    <div
+      class="md:col-span-4 bg-surface-container-lowest rounded-xl p-6 border border-slate-200 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] flex flex-col">
+      <h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-6">Quick
+        Transfer</h3>
+      <div class="space-y-4 flex-1">
+        <div>
+          <label class="block font-label-md text-label-md text-on-surface-variant mb-1">From Account</label>
+          <select
+            class="w-full border border-outline-variant rounded-lg bg-surface px-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-sm">
+            <option>Main Account (...{{ user.userprofile.account_number|slice:"-4:" }})</option>
+          </select>
         </div>
-        {% for card in atm_requests %}
-        <div class="flex items-center gap-4 p-4 rounded-lg border border-outline-variant/50 bg-surface mb-4">
-          <div class="w-12 h-8 bg-on-surface rounded flex items-center justify-end px-2 relative overflow-hidden">
-            <div class="absolute -right-2 -top-2 w-8 h-8 bg-primary rounded-full opacity-50"></div>
-            <span class="text-white text-xs font-bold relative z-10">VISA</span>
-          </div>
-          <div class="flex-1">
-            <p class="font-body-sm text-body-sm font-semibold">{{ card.card_type }} Debit</p>
-            <p class="font-label-md text-label-md text-on-surface-variant">**** **** **** {{
-              user.userprofile.account_number|slice:"-4:" }}</p>
-          </div>
-          <div class="bg-tertiary-container/20 text-tertiary px-2 py-1 rounded text-xs font-label-md">{{ card.status }}
-          </div>
+        <div>
+          <label class="block font-label-md text-label-md text-on-surface-variant mb-1">To Account or
+            Contact</label>
+          <input
+            class="w-full border border-outline-variant rounded-lg bg-surface px-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-sm"
+            placeholder="Name, account, or email" type="text" />
         </div>
-        {% empty %}
-        <div class="text-center py-4 text-on-surface-variant font-body-sm">No ATM cards requested yet.</div>
-        {% endfor %}
-        <div class="flex gap-2 mt-4">
-          <button
-            class="flex-1 flex items-center justify-center gap-2 py-2 border border-outline-variant rounded-lg text-on-surface-variant hover:text-primary hover:border-primary transition-colors font-label-md text-xs"><span
-              class="material-symbols-outlined text-[16px]" translate="no">lock</span> Freeze Card</button>
-          <button
-            class="flex-1 flex items-center justify-center gap-2 py-2 border border-outline-variant rounded-lg text-on-surface-variant hover:text-primary hover:border-primary transition-colors font-label-md text-xs"><span
-              class="material-symbols-outlined text-[16px]" translate="no">visibility</span> Show PIN</button>
+        <div>
+          <label class="block font-label-md text-label-md text-on-surface-variant mb-1">Amount</label>
+          <div class="relative">
+            <span class="absolute left-3 top-2 text-on-surface-variant font-body-sm">{{ user.userprofile.currency
+              }}</span>
+            <input
+              class="w-full border border-outline-variant rounded-lg bg-surface pl-8 pr-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none font-label-md tabular-nums"
+              placeholder="0.00" type="number" />
+          </div>
         </div>
       </div>
-      <div
-        class="md:col-span-6 bg-surface-container-lowest rounded-xl p-6 border border-slate-200 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)]">
-        <div class="flex justify-between items-center mb-6">
-          <h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Loan
-            Application</h3>
-          <a href="{% url 'loan_application' %}" class="text-primary text-sm font-label-md hover:underline">View
-            Details</a>
+      <a href="{% url 'transfer' %}"
+        class="w-full mt-6 bg-primary-container text-on-primary py-3 rounded-lg font-label-md text-label-md hover:bg-primary transition-colors shadow-sm flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined text-sm" translate="no">send</span> Confirm Transfer
+      </a>
+    </div>
+    <div
+      class="md:col-span-6 bg-surface-container-lowest rounded-xl p-6 border border-slate-200 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)]">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">ATM Cards
+        </h3>
+        <a href="{% url 'atm_request' %}" class="text-primary text-sm font-label-md hover:underline">Manage
+          All</a>
+      </div>
+      {% for card in atm_requests %}
+      <div class="flex items-center gap-4 p-4 rounded-lg border border-outline-variant/50 bg-surface mb-4">
+        <div class="w-12 h-8 bg-on-surface rounded flex items-center justify-end px-2 relative overflow-hidden">
+          <div class="absolute -right-2 -top-2 w-8 h-8 bg-primary rounded-full opacity-50"></div>
+          <span class="text-white text-xs font-bold relative z-10">VISA</span>
         </div>
-        {% for loan in loan_applications %}
-        <div class="p-4 rounded-lg bg-surface border border-outline-variant/50 relative overflow-hidden mb-4">
-          <div class="absolute top-0 left-0 w-1 h-full bg-primary-container"></div>
-          <div class="flex justify-between items-start mb-2 pl-2">
-            <div>
-              <p class="font-body-sm text-body-sm font-semibold">Personal Loan</p>
-              <p class="font-label-md text-label-md text-on-surface-variant">App ID: #AL-{{ loan.id }}</p>
-            </div>
-            <span class="bg-primary-container/10 text-primary-container px-2 py-1 rounded text-xs font-label-md">{{
-              loan.status }}</span>
-          </div>
-          <div class="mt-4 pl-2">
-            <div class="flex justify-between text-xs font-label-md text-on-surface-variant mb-1">
-              <span>Amount</span>
-              <span>{{ user.userprofile.currency }}{{ loan.amount|intcomma }}</span>
-            </div>
-            <div class="w-full bg-surface-container-highest rounded-full h-1.5">
-              <div class="bg-primary-container h-1.5 rounded-full"
-                style="width:{% if loan.status == 'Approved' %}100{% elif loan.status == 'Pending' %}50{% else %}30{% endif %}%">
-              </div>
-            </div>
-            <p class="text-xs text-on-surface-variant mt-2 font-body-sm">{% if loan.status == 'Pending' %}Awaiting verification.{% elif loan.status == 'Approved' %}Application approved.{% else %}Application rejected.{% endif %}</p>
-          </div>
+        <div class="flex-1">
+          <p class="font-body-sm text-body-sm font-semibold">{{ card.card_type }} Debit</p>
+          <p class="font-label-md text-label-md text-on-surface-variant">**** **** **** {{
+            user.userprofile.account_number|slice:"-4:" }}</p>
         </div>
-        {% empty %}
-        <div class="text-center py-4 text-on-surface-variant font-body-sm">No loan applications found.</div>
-        {% endfor %}
+        <div class="bg-tertiary-container/20 text-tertiary px-2 py-1 rounded text-xs font-label-md">{{ card.status }}
+        </div>
+      </div>
+      {% empty %}
+      <div class="text-center py-4 text-on-surface-variant font-body-sm">No ATM cards requested yet.</div>
+      {% endfor %}
+      <div class="flex gap-2 mt-4">
+        <button
+          class="flex-1 flex items-center justify-center gap-2 py-2 border border-outline-variant rounded-lg text-on-surface-variant hover:text-primary hover:border-primary transition-colors font-label-md text-xs"><span
+            class="material-symbols-outlined text-[16px]" translate="no">lock</span> Freeze Card</button>
+        <button
+          class="flex-1 flex items-center justify-center gap-2 py-2 border border-outline-variant rounded-lg text-on-surface-variant hover:text-primary hover:border-primary transition-colors font-label-md text-xs"><span
+            class="material-symbols-outlined text-[16px]" translate="no">visibility</span> Show PIN</button>
       </div>
     </div>
-  </div>
-
-        <!-- Floating Customer Service Button -->
-        <button
-          onclick="document.getElementById('customer-service-modal').classList.remove('hidden'); document.getElementById('customer-service-modal').classList.add('flex');"
-          class="fixed bottom-6 right-6 z-50 bg-primary text-white p-4 rounded-full shadow-lg hover:bg-primary-container transition-all duration-300 flex items-center justify-center hover:scale-110 group"
-          title="Contact Customer Service">
-          <span class="material-symbols-outlined text-[24px]" translate="no">support_agent</span>
-          <span
-            class="max-w-0 overflow-hidden group-hover:max-w-xs group-hover:ml-2 transition-all duration-500 ease-in-out whitespace-nowrap text-sm font-bold">
-            Contact Support
-          </span>
-        </button>
-
-        <!-- Customer Service Modal -->
-        <div id="customer-service-modal"
-          class="hidden fixed inset-0 bg-black/50 z-[60] items-center justify-center p-4">
-          <div
-            class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-gray-100 flex flex-col gap-4 relative">
-            <div class="flex justify-between items-start">
-              <h3 class="text-lg font-bold text-gray-900">Contact Support</h3>
-              <button
-                onclick="document.getElementById('customer-service-modal').classList.add('hidden'); document.getElementById('customer-service-modal').classList.remove('flex');"
-                class="text-gray-400 hover:text-gray-600">
-                <span class="material-symbols-outlined text-[18px]" translate="no">close</span>
-              </button>
-            </div>
-            <p class="text-sm text-gray-600 mb-2">How would you like to contact us?</p>
-
-            <a href="https://wa.me/447345851907" target="_blank" rel="noopener noreferrer"
-              class="w-full bg-[#25D366] text-white py-3 px-4 rounded-xl font-bold text-sm hover:bg-[#20ba5a] transition-colors shadow-sm flex items-center gap-3">
-              <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                <path
-                  d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.413 9.863-9.864.001-2.641-1.024-5.124-2.888-6.991A9.782 9.782 0 0 0 12.008 1.24c-5.434 0-9.858 4.413-9.862 9.865-.001 1.739.461 3.43 1.337 4.937l-.989 3.612 3.701-.97c1.517.827 3.09 1.26 4.852 1.262zm9.733-7.224c-.269-.134-1.593-.786-1.839-.876-.246-.09-.425-.134-.604.134-.179.269-.694.876-.851 1.056-.157.179-.313.202-.582.067-.269-.134-1.137-.419-2.166-1.337-.801-.714-1.342-1.596-1.499-1.865-.157-.269-.017-.414.118-.548.121-.121.269-.314.403-.471.134-.157.179-.269.269-.449.09-.179.045-.336-.022-.471-.067-.134-.604-1.456-.827-1.994-.217-.523-.456-.452-.627-.461-.163-.008-.349-.01-.535-.01-.186 0-.49.07-.747.349-.257.279-.982.96-9.82.96s-1.066-.681-1.324-.96c-.257-.279-.49-.07-.747-.07-.257 0-.425.045-.604.179-.179.134-1.593 1.558-1.593 3.801 0 2.243 1.637 4.413 1.861 4.713.224.3 3.225 4.925 7.814 6.903 1.092.47 1.944.75 2.609.961 1.097.349 2.096.3 2.886.182.88-.132 2.707-1.106 3.088-2.122.381-1.016.381-1.886.269-2.065-.113-.179-.313-.269-.582-.403z" />
-              </svg>
-              WhatsApp
-            </a>
-
-            <a href="mailto:info@nexuscustomerservice.online"
-              class="w-full bg-blue-600 text-white py-3 px-4 rounded-xl font-bold text-sm hover:bg-blue-700 transition-colors shadow-sm flex items-center gap-3">
-              <span class="material-symbols-outlined text-[20px]" translate="no">mail</span>
-              Email Support
-            </a>
+    <div
+      class="md:col-span-6 bg-surface-container-lowest rounded-xl p-6 border border-slate-200 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)]">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Loan
+          Application</h3>
+        <a href="{% url 'loan_application' %}" class="text-primary text-sm font-label-md hover:underline">View
+          Details</a>
+      </div>
+      {% for loan in loan_applications %}
+      <div class="p-4 rounded-lg bg-surface border border-outline-variant/50 relative overflow-hidden mb-4">
+        <div class="absolute top-0 left-0 w-1 h-full bg-primary-container"></div>
+        <div class="flex justify-between items-start mb-2 pl-2">
+          <div>
+            <p class="font-body-sm text-body-sm font-semibold">Personal Loan</p>
+            <p class="font-label-md text-label-md text-on-surface-variant">App ID: #AL-{{ loan.id }}</p>
           </div>
+          <span class="bg-primary-container/10 text-primary-container px-2 py-1 rounded text-xs font-label-md">{{
+            loan.status }}</span>
         </div>
+        <div class="mt-4 pl-2">
+          <div class="flex justify-between text-xs font-label-md text-on-surface-variant mb-1">
+            <span>Amount</span>
+            <span>{{ user.userprofile.currency }}{{ loan.amount|intcomma }}</span>
+          </div>
+          <div class="w-full bg-surface-container-highest rounded-full h-1.5">
+            <div class="bg-primary-container h-1.5 rounded-full"
+              style="width:{% if loan.status == 'Approved' %}100{% elif loan.status == 'Pending' %}50{% else %}30{% endif %}%">
+            </div>
+          </div>
+          <p class="text-xs text-on-surface-variant mt-2 font-body-sm">{% if loan.status == 'Pending' %}Awaiting
+            verification.{% elif loan.status == 'Approved' %}Application approved.{% else %}Application rejected.{%
+            endif %}</p>
+        </div>
+      </div>
+      {% empty %}
+      <div class="text-center py-4 text-on-surface-variant font-body-sm">No loan applications found.</div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
 
-        {% endblock %}
+<!-- Floating WhatsApp Button -->
+<a href="https://wa.me/447345851907" target="_blank" rel="noopener noreferrer"
+  class="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white p-4 rounded-full shadow-lg hover:bg-[#20ba5a] transition-all duration-300 flex items-center justify-center hover:scale-110 group"
+  title="Contact Customer Service on WhatsApp">
+  <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+    <path
+      d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.413 9.863-9.864.001-2.641-1.024-5.124-2.888-6.991A9.782 9.782 0 0 0 12.008 1.24c-5.434 0-9.858 4.413-9.862 9.865-.001 1.739.461 3.43 1.337 4.937l-.989 3.612 3.701-.97c1.517.827 3.09 1.26 4.852 1.262zm9.733-7.224c-.269-.134-1.593-.786-1.839-.876-.246-.09-.425-.134-.604.134-.179.269-.694.876-.851 1.056-.157.179-.313.202-.582.067-.269-.134-1.137-.419-2.166-1.337-.801-.714-1.342-1.596-1.499-1.865-.157-.269-.017-.414.118-.548.121-.121.269-.314.403-.471.134-.157.179-.269.269-.449.09-.179.045-.336-.022-.471-.067-.134-.604-1.456-.827-1.994-.217-.523-.456-.452-.627-.461-.163-.008-.349-.01-.535-.01-.186 0-.49.07-.747.349-.257.279-.982.96-9.82.96s-1.066-.681-1.324-.96c-.257-.279-.49-.07-.747-.07-.257 0-.425.045-.604.179-.179.134-1.593 1.558-1.593 3.801 0 2.243 1.637 4.413 1.861 4.713.224.3 3.225 4.925 7.814 6.903 1.092.47 1.944.75 2.609.961 1.097.349 2.096.3 2.886.182.88-.132 2.707-1.106 3.088-2.122.381-1.016.381-1.886.269-2.065-.113-.179-.313-.269-.582-.403z" />
+  </svg>
+  <span
+    class="max-w-0 overflow-hidden group-hover:max-w-xs group-hover:ml-2 transition-all duration-500 ease-in-out whitespace-nowrap text-sm font-bold">
+    Chat with Support
+  </span>
+</a>
+{% endblock %}

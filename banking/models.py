@@ -67,6 +67,16 @@ class Transaction(models.Model):
     def __str__(self):
         return f"{self.transaction_type} of ${self.amount} on {self.timestamp.strftime('%Y-%m-%d')}"
 
+    @property
+    def clean_description(self):
+        import re
+        desc = self.description
+        desc = re.sub(r'\s*\(Acct:.*?\)', '', desc)
+        desc = re.sub(r'\s*\(IBAN:.*?\)', '', desc)
+        desc = re.sub(r'\s*\(SWIFT:.*?\)', '', desc)
+        desc = re.sub(r'\s*\(IFSC:.*?\)', '', desc)
+        return desc
+
 class LoanApplication(models.Model):
     STATUS_CHOICES = (
         ('Pending', 'Pending'),
