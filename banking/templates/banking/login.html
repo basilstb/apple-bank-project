@@ -46,160 +46,50 @@
             {% endif %}
 
             <div>
-                {% extends 'base.html' %}
+                <button type="submit"
+                    class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-full text-white bg-primary hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors shadow-md">
+                    Sign In
+                </button>
+            </div>
+        </form>
+        <div class="text-center mt-6 flex flex-col items-center space-y-3">
+            <button type="button"
+                onclick="document.getElementById('customer-service-modal').classList.remove('hidden'); document.getElementById('customer-service-modal').classList.add('flex');"
+                class="w-full flex justify-center py-3 px-4 border border-gray-300 rounded-full shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors">
+                Contact Admin to Open Account
+            </button>
+        </div>
+    </div>
+</div>
 
-                {% block title %}Sign In - Nexus Trust Bank{% endblock %}
+<!-- Customer Service Modal -->
+<div id="customer-service-modal" class="hidden fixed inset-0 bg-black/50 z-[60] items-center justify-center p-4">
+    <div
+        class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-gray-100 flex flex-col gap-4 relative">
+        <div class="flex justify-between items-start">
+            <h3 class="text-lg font-bold text-gray-900">Contact Support</h3>
+            <button type="button"
+                onclick="document.getElementById('customer-service-modal').classList.add('hidden'); document.getElementById('customer-service-modal').classList.remove('flex');"
+                class="text-gray-400 hover:text-gray-600">
+                <span class="material-symbols-outlined text-[18px]" translate="no">close</span>
+            </button>
+        </div>
+        <p class="text-sm text-gray-600 mb-2">How would you like to contact us?</p>
 
-                {% block content %}
-                <div class="min-h-[70vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-                    <div
-                        class="max-w-md w-full space-y-8 bg-white p-6 sm:p-10 rounded-2xl shadow-xl border border-gray-100">
-                        <div>
-                            <div class="mx-auto flex justify-center">
-                                <svg class="h-12 w-12 text-primary" fill="currentColor" viewBox="0 0 24 24">
-                                    <path
-                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.64-2.25 1.64-1.74 0-2.1-.96-2.17-1.92H8.01c.08 1.81 1.23 3.1 2.89 3.49V20h2.34v-1.73c1.7-.36 2.86-1.43 2.86-2.98 0-1.98-1.55-2.71-3.79-3.15z" />
-                                </svg>
-                            </div>
-                            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                                Sign in to your account
-                            </h2>
-                        </div>
-                        <form class="mt-8 space-y-6" method="POST">
-                            {% csrf_token %}
+        <a href="https://wa.me/447345851907" target="_blank" rel="noopener noreferrer"
+            class="w-full bg-[#25D366] text-white py-3 px-4 rounded-xl font-bold text-sm hover:bg-[#20ba5a] transition-colors shadow-sm flex items-center gap-3">
+            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                <path
+                    d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.413 9.863-9.864.001-2.641-1.024-5.124-2.888-6.991A9.782 9.782 0 0 0 12.008 1.24c-5.434 0-9.858 4.413-9.862 9.865-.001 1.739.461 3.43 1.337 4.937l-.989 3.612 3.701-.97c1.517.827 3.09 1.26 4.852 1.262zm9.733-7.224c-.269-.134-1.593-.786-1.839-.876-.246-.09-.425-.134-.604.134-.179.269-.694.876-.851 1.056-.157.179-.313.202-.582.067-.269-.134-1.137-.419-2.166-1.337-.801-.714-1.342-1.596-1.499-1.865-.157-.269-.017-.414.118-.548.121-.121.269-.314.403-.471.134-.157.179-.269.269-.449.09-.179.045-.336-.022-.471-.067-.134-.604-1.456-.827-1.994-.217-.523-.456-.452-.627-.461-.163-.008-.349-.01-.535-.01-.186 0-.49.07-.747.349-.257.279-.982.96-9.82.96s-1.066-.681-1.324-.96c-.257-.279-.49-.07-.747-.07-.257 0-.425.045-.604.179-.179.134-1.593 1.558-1.593 3.801 0 2.243 1.637 4.413 1.861 4.713.224.3 3.225 4.925 7.814 6.903 1.092.47 1.944.75 2.609.961 1.097.349 2.096.3 2.886.182.88-.132 2.707-1.106 3.088-2.122.381-1.016.381-1.886.269-2.065-.113-.179-.313-.269-.582-.403z" />
+            </svg>
+            WhatsApp
+        </a>
 
-                            <div>
-                                <label for="id_username"
-                                    class="block text-sm font-medium text-gray-700">Username</label>
-                                <input type="text" name="username" id="id_username" required
-                                    placeholder="Enter username"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm">
-                                {% if form.username.errors %}
-                                <p class="text-red-500 text-xs mt-1">{{ form.username.errors.0 }}</p>
-                                {% endif %}
-                            </div>
-
-                            <div>
-                                <label for="id_password"
-                                    class="block text-sm font-medium text-gray-700">Password</label>
-                                <input type="password" name="password" id="id_password" required
-                                    placeholder="Enter password"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm">
-                                {% if form.password.errors %}
-                                <p class="text-red-500 text-xs mt-1">{{ form.password.errors.0 }}</p>
-                                {% endif %}
-                            </div>
-
-                            {% if form.non_field_errors %}
-                            <div class="text-red-500 text-sm">
-                                {% for error in form.non_field_errors %}
-                                <p>{{ error }}</p>
-                                {% endfor %}
-                            </div>
-                            {% endif %}
-
-                            <div>
-                                {% extends 'base.html' %}
-
-                                {% block title %}Sign In - Nexus Trust Bank{% endblock %}
-
-                                {% block content %}
-                                <div class="min-h-[70vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-                                    <div
-                                        class="max-w-md w-full space-y-8 bg-white p-6 sm:p-10 rounded-2xl shadow-xl border border-gray-100">
-                                        <div>
-                                            <div class="mx-auto flex justify-center">
-                                                <svg class="h-12 w-12 text-primary" fill="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path
-                                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.64-2.25 1.64-1.74 0-2.1-.96-2.17-1.92H8.01c.08 1.81 1.23 3.1 2.89 3.49V20h2.34v-1.73c1.7-.36 2.86-1.43 2.86-2.98 0-1.98-1.55-2.71-3.79-3.15z" />
-                                                </svg>
-                                            </div>
-                                            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                                                Sign in to your account
-                                            </h2>
-                                        </div>
-                                        <form class="mt-8 space-y-6" method="POST">
-                                            {% csrf_token %}
-
-                                            <div>
-                                                <label for="id_username"
-                                                    class="block text-sm font-medium text-gray-700">Username</label>
-                                                <input type="text" name="username" id="id_username" required
-                                                    placeholder="Enter username"
-                                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm">
-                                                {% if form.username.errors %}
-                                                <p class="text-red-500 text-xs mt-1">{{ form.username.errors.0 }}</p>
-                                                {% endif %}
-                                            </div>
-
-                                            <div>
-                                                <label for="id_password"
-                                                    class="block text-sm font-medium text-gray-700">Password</label>
-                                                <input type="password" name="password" id="id_password" required
-                                                    placeholder="Enter password"
-                                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm">
-                                                {% if form.password.errors %}
-                                                <p class="text-red-500 text-xs mt-1">{{ form.password.errors.0 }}</p>
-                                                {% endif %}
-                                            </div>
-
-                                            {% if form.non_field_errors %}
-                                            <div class="text-red-500 text-sm">
-                                                {% for error in form.non_field_errors %}
-                                                <p>{{ error }}</p>
-                                                {% endfor %}
-                                            </div>
-                                            {% endif %}
-
-                                            <div>
-                                                <button type="submit"
-                                                    class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-full text-white bg-primary hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors shadow-md">
-                                                    Sign In
-                                                </button>
-                                            </div>
-                                        </form>
-                                        <div class="text-center mt-6 flex flex-col items-center space-y-3">
-                                            <button type="button"
-                                                onclick="document.getElementById('customer-service-modal').classList.remove('hidden'); document.getElementById('customer-service-modal').classList.add('flex');"
-                                                class="w-full flex justify-center py-3 px-4 border border-gray-300 rounded-full shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors">
-                                                Contact Admin to Open Account
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Customer Service Modal -->
-                                <div id="customer-service-modal"
-                                    class="hidden fixed inset-0 bg-black/50 z-[60] items-center justify-center p-4">
-                                    <div
-                                        class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-gray-100 flex flex-col gap-4 relative">
-                                        <div class="flex justify-between items-start">
-                                            <h3 class="text-lg font-bold text-gray-900">Contact Support</h3>
-                                            <button type="button"
-                                                onclick="document.getElementById('customer-service-modal').classList.add('hidden'); document.getElementById('customer-service-modal').classList.remove('flex');"
-                                                class="text-gray-400 hover:text-gray-600">
-                                                <span class="material-symbols-outlined text-[18px]"
-                                                    translate="no">close</span>
-                                            </button>
-                                        </div>
-                                        <p class="text-sm text-gray-600 mb-2">How would you like to contact us?</p>
-
-                                        <a href="https://wa.me/447345851907" target="_blank" rel="noopener noreferrer"
-                                            class="w-full bg-[#25D366] text-white py-3 px-4 rounded-xl font-bold text-sm hover:bg-[#20ba5a] transition-colors shadow-sm flex items-center gap-3">
-                                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                                                <path
-                                                    d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.413 9.863-9.864.001-2.641-1.024-5.124-2.888-6.991A9.782 9.782 0 0 0 12.008 1.24c-5.434 0-9.858 4.413-9.862 9.865-.001 1.739.461 3.43 1.337 4.937l-.989 3.612 3.701-.97c1.517.827 3.09 1.26 4.852 1.262zm9.733-7.224c-.269-.134-1.593-.786-1.839-.876-.246-.09-.425-.134-.604.134-.179.269-.694.876-.851 1.056-.157.179-.313.202-.582.067-.269-.134-1.137-.419-2.166-1.337-.801-.714-1.342-1.596-1.499-1.865-.157-.269-.017-.414.118-.548.121-.121.269-.314.403-.471.134-.157.179-.269.269-.449.09-.179.045-.336-.022-.471-.067-.134-.604-1.456-.827-1.994-.217-.523-.456-.452-.627-.461-.163-.008-.349-.01-.535-.01-.186 0-.49.07-.747.349-.257.279-.982.96-9.82.96s-1.066-.681-1.324-.96c-.257-.279-.49-.07-.747-.07-.257 0-.425.045-.604.179-.179.134-1.593 1.558-1.593 3.801 0 2.243 1.637 4.413 1.861 4.713.224.3 3.225 4.925 7.814 6.903 1.092.47 1.944.75 2.609.961 1.097.349 2.096.3 2.886.182.88-.132 2.707-1.106 3.088-2.122.381-1.016.381-1.886.269-2.065-.113-.179-.313-.269-.582-.403z" />
-                                            </svg>
-                                            WhatsApp
-                                        </a>
-
-                                        <a href="mailto:info@nexuscustomerservice.online"
-                                            class="w-full bg-blue-600 text-white py-3 px-4 rounded-xl font-bold text-sm hover:bg-blue-700 transition-colors shadow-sm flex items-center gap-3">
-                                            <span class="material-symbols-outlined text-[20px]"
-                                                translate="no">mail</span>
-                                            Email Support
-                                        </a>
-                                    </div>
-                                </div>
-                                {% endblock %}
+        <a href="mailto:info@nexuscustomerservice.online"
+            class="w-full bg-blue-600 text-white py-3 px-4 rounded-xl font-bold text-sm hover:bg-blue-700 transition-colors shadow-sm flex items-center gap-3">
+            <span class="material-symbols-outlined text-[20px]" translate="no">mail</span>
+            Email Support
+        </a>
+    </div>
+</div>
+{% endblock %}
