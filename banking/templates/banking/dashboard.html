@@ -34,8 +34,7 @@
         {% if pending_transactions %}
         <div class="mb-8">
           <h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-4">
-            Pending
-            Transactions</h3>
+            Pending Transactions</h3>
           <div class="space-y-4">
             {% for tx in pending_transactions %}
             <div
@@ -84,7 +83,8 @@
             </div>
             {% endif %}
             <div>
-              <h2 class="font-headline-lg text-2xl md:text-3xl font-bold text-on-surface">Welcome, {{user.first_name }}!</h2>
+              <h2 class="font-headline-lg text-2xl md:text-3xl font-bold text-on-surface">Welcome, {{ user.first_name
+                }}!</h2>
               <p class="font-body-sm text-body-sm text-on-surface-variant">Here's your account overview</p>
             </div>
           </div>
@@ -93,10 +93,10 @@
         <div class="flex justify-between items-start mb-6">
           <div>
             <h2 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-1">
-              Total
-              Available Balance</h2>
+              Total Available Balance</h2>
             <div class="flex items-baseline gap-2">
-              <span class="font-headline-lg text-headline-lg text-on-surface">{{ user.userprofile.currency }}{{ user.userprofile.balance|intcomma}}</span>
+              <span class="font-headline-lg text-headline-lg text-on-surface">{{ user.userprofile.currency }}{{
+                user.userprofile.balance|intcomma }}</span>
             </div>
           </div>
           <div class="bg-tertiary-container/10 text-tertiary px-3 py-1 rounded-full flex items-center gap-1">
@@ -106,8 +106,10 @@
         </div>
         <div class="grid grid-cols-2 gap-4 mt-8">
           <div class="p-4 bg-surface rounded-lg border border-outline-variant/50">
-            <p class="font-label-md text-label-md text-on-surface-variant mb-1">Main Account (...{{ user.userprofile.account_number|slice:"-4:"}})</p>
-            <p class="font-body-md text-body-md font-semibold">{{ user.userprofile.currency }}{{ user.userprofile.balance|intcomma}}</p>
+            <p class="font-label-md text-label-md text-on-surface-variant mb-1">Main Account (...{{
+              user.userprofile.account_number|slice:"-4:" }})</p>
+            <p class="font-body-md text-body-md font-semibold">{{ user.userprofile.currency }}{{
+              user.userprofile.balance|intcomma }}</p>
           </div>
         </div>
       </div>
@@ -126,14 +128,11 @@
         <a href="{% url 'atm_request' %}"
           class="text-center bg-surface-container text-on-surface py-2 rounded-lg font-label-md text-label-md hover:bg-surface-container-highest transition-colors border border-outline-variant">Apply
           for ATM Card</a>
-        <a href="https://wa.me/447345851907" target="_blank" rel="noopener noreferrer"
-          class="text-center bg-[#25D366] text-white py-2 rounded-lg font-label-md text-label-md hover:bg-[#20ba5a] transition-colors shadow-sm col-span-2 flex items-center justify-center gap-2">
-          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
-            <path
-              d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.413 9.863-9.864.001-2.641-1.024-5.124-2.888-6.991A9.782 9.782 0 0 0 12.008 1.24c-5.434 0-9.858 4.413-9.862 9.865-.001 1.739.461 3.43 1.337 4.937l-.989 3.612 3.701-.97c1.517.827 3.09 1.26 4.852 1.262zm9.733-7.224c-.269-.134-1.593-.786-1.839-.876-.246-.09-.425-.134-.604.134-.179.269-.694.876-.851 1.056-.157.179-.313.202-.582.067-.269-.134-1.137-.419-2.166-1.337-.801-.714-1.342-1.596-1.499-1.865-.157-.269-.017-.414.118-.548.121-.121.269-.314.403-.471.134-.157.179-.269.269-.449.09-.179.045-.336-.022-.471-.067-.134-.604-1.456-.827-1.994-.217-.523-.456-.452-.627-.461-.163-.008-.349-.01-.535-.01-.186 0-.49.07-.747.349-.257.279-.982.96-9.82.96s-1.066-.681-1.324-.96c-.257-.279-.49-.07-.747-.07-.257 0-.425.045-.604.179-.179.134-1.593 1.558-1.593 3.801 0 2.243 1.637 4.413 1.861 4.713.224.3 3.225 4.925 7.814 6.903 1.092.47 1.944.75 2.609.961 1.097.349 2.096.3 2.886.182.88-.132 2.707-1.106 3.088-2.122.381-1.016.381-1.886.269-2.065-.113-.179-.313-.269-.582-.403z" />
-          </svg>
-          Contact Customer Service (WhatsApp)
-        </a>
+        <button onclick="document.getElementById('contact-modal').classList.remove('hidden')"
+          class="text-center bg-primary-container text-on-primary py-2 rounded-lg font-label-md text-label-md hover:bg-primary transition-colors shadow-sm col-span-2 flex items-center justify-center gap-2">
+          <span class="material-symbols-outlined text-sm" translate="no">support_agent</span>
+          Contact Customer Service
+        </button>
       </div>
     </div>
     <div
@@ -158,7 +157,8 @@
         <div>
           <label class="block font-label-md text-label-md text-on-surface-variant mb-1">Amount</label>
           <div class="relative">
-            <span class="absolute left-3 top-2 text-on-surface-variant font-body-sm">{{user.userprofile.currency }}</span>
+            <span class="absolute left-3 top-2 text-on-surface-variant font-body-sm">{{ user.userprofile.currency
+              }}</span>
             <input
               class="w-full border border-outline-variant rounded-lg bg-surface pl-8 pr-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none font-label-md tabular-nums"
               placeholder="0.00" type="number" />
@@ -186,7 +186,8 @@
         </div>
         <div class="flex-1">
           <p class="font-body-sm text-body-sm font-semibold">{{ card.card_type }} Debit</p>
-          <p class="font-label-md text-label-md text-on-surface-variant">**** **** **** {{ user.userprofile.account_number|slice:"-4:"}}</p>
+          <p class="font-label-md text-label-md text-on-surface-variant">**** **** **** {{
+            user.userprofile.account_number|slice:"-4:" }}</p>
         </div>
         <div class="bg-tertiary-container/20 text-tertiary px-2 py-1 rounded text-xs font-label-md">{{ card.status }}
         </div>
@@ -219,7 +220,8 @@
             <p class="font-body-sm text-body-sm font-semibold">Personal Loan</p>
             <p class="font-label-md text-label-md text-on-surface-variant">App ID: #AL-{{ loan.id }}</p>
           </div>
-          <span class="bg-primary-container/10 text-primary-container px-2 py-1 rounded text-xs font-label-md">{{ loan.status}}</span>
+          <span class="bg-primary-container/10 text-primary-container px-2 py-1 rounded text-xs font-label-md">{{
+            loan.status }}</span>
         </div>
         <div class="mt-4 pl-2">
           <div class="flex justify-between text-xs font-label-md text-on-surface-variant mb-1">
@@ -232,7 +234,8 @@
             </div>
           </div>
           <p class="text-xs text-on-surface-variant mt-2 font-body-sm">{% if loan.status == 'Pending' %}Awaiting
-            verification.{% elif loan.status == 'Approved' %}Application approved.{% else %}Application rejected.{% endif%}</p>
+            verification.{% elif loan.status == 'Approved' %}Application approved.{% else %}Application rejected.{%
+            endif %}</p>
         </div>
       </div>
       {% empty %}
@@ -242,17 +245,59 @@
   </div>
 </div>
 
-<!-- Floating WhatsApp Button -->
-<a href="https://wa.me/447345851907" target="_blank" rel="noopener noreferrer"
-  class="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white p-4 rounded-full shadow-lg hover:bg-[#20ba5a] transition-all duration-300 flex items-center justify-center hover:scale-110 group"
-  title="Contact Customer Service on WhatsApp">
-  <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
-    <path
-      d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.413 9.863-9.864.001-2.641-1.024-5.124-2.888-6.991A9.782 9.782 0 0 0 12.008 1.24c-5.434 0-9.858 4.413-9.862 9.865-.001 1.739.461 3.43 1.337 4.937l-.989 3.612 3.701-.97c1.517.827 3.09 1.26 4.852 1.262zm9.733-7.224c-.269-.134-1.593-.786-1.839-.876-.246-.09-.425-.134-.604.134-.179.269-.694.876-.851 1.056-.157.179-.313.202-.582.067-.269-.134-1.137-.419-2.166-1.337-.801-.714-1.342-1.596-1.499-1.865-.157-.269-.017-.414.118-.548.121-.121.269-.314.403-.471.134-.157.179-.269.269-.449.09-.179.045-.336-.022-.471-.067-.134-.604-1.456-.827-1.994-.217-.523-.456-.452-.627-.461-.163-.008-.349-.01-.535-.01-.186 0-.49.07-.747.349-.257.279-.982.96-9.82.96s-1.066-.681-1.324-.96c-.257-.279-.49-.07-.747-.07-.257 0-.425.045-.604.179-.179.134-1.593 1.558-1.593 3.801 0 2.243 1.637 4.413 1.861 4.713.224.3 3.225 4.925 7.814 6.903 1.092.47 1.944.75 2.609.961 1.097.349 2.096.3 2.886.182.88-.132 2.707-1.106 3.088-2.122.381-1.016.381-1.886.269-2.065-.113-.179-.313-.269-.582-.403z" />
-  </svg>
+<!-- Floating Support Button -->
+<button onclick="document.getElementById('contact-modal').classList.remove('hidden')"
+  class="fixed bottom-6 right-6 z-50 bg-primary-container text-on-primary p-4 rounded-full shadow-lg hover:bg-primary transition-all duration-300 flex items-center justify-center hover:scale-110 group"
+  title="Contact Customer Service">
+  <span class="material-symbols-outlined" translate="no">support_agent</span>
   <span
     class="max-w-0 overflow-hidden group-hover:max-w-xs group-hover:ml-2 transition-all duration-500 ease-in-out whitespace-nowrap text-sm font-bold">
-    Chat with Support
+    Contact Support
   </span>
-</a>
+</button>
+
+<!-- Contact Modal -->
+<div id="contact-modal"
+  class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm"
+  onclick="if(event.target===this)this.classList.add('hidden')">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden">
+    <div class="bg-primary-container px-6 py-5 flex justify-between items-center">
+      <h3 class="font-bold text-on-primary text-lg">Contact Customer Service</h3>
+      <button onclick="document.getElementById('contact-modal').classList.add('hidden')"
+        class="text-on-primary hover:opacity-70 transition-opacity">
+        <span class="material-symbols-outlined" translate="no">close</span>
+      </button>
+    </div>
+    <div class="p-6 space-y-4">
+      <p class="text-sm text-on-surface-variant">Choose how you'd like to reach us:</p>
+      <!-- WhatsApp -->
+      <a href="https://wa.me/447345851907" target="_blank" rel="noopener noreferrer"
+        class="flex items-center gap-4 p-4 rounded-xl border-2 border-[#25D366]/30 hover:border-[#25D366] hover:bg-[#25D366]/5 transition-all group">
+        <div class="w-12 h-12 rounded-full bg-[#25D366] flex items-center justify-center shrink-0">
+          <svg class="w-6 h-6 fill-white" viewBox="0 0 24 24">
+            <path
+              d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.413 9.863-9.864.001-2.641-1.024-5.124-2.888-6.991A9.782 9.782 0 0 0 12.008 1.24c-5.434 0-9.858 4.413-9.862 9.865-.001 1.739.461 3.43 1.337 4.937l-.989 3.612 3.701-.97c1.517.827 3.09 1.26 4.852 1.262zm9.733-7.224c-.269-.134-1.593-.786-1.839-.876-.246-.09-.425-.134-.604.134-.179.269-.694.876-.851 1.056-.157.179-.313.202-.582.067-.269-.134-1.137-.419-2.166-1.337-.801-.714-1.342-1.596-1.499-1.865-.157-.269-.017-.414.118-.548.121-.121.269-.314.403-.471.134-.157.179-.269.269-.449.09-.179.045-.336-.022-.471-.067-.134-.604-1.456-.827-1.994-.217-.523-.456-.452-.627-.461-.163-.008-.349-.01-.535-.01-.186 0-.49.07-.747.349-.257.279-.982.96-9.82.96s-1.066-.681-1.324-.96c-.257-.279-.49-.07-.747-.07-.257 0-.425.045-.604.179-.179.134-1.593 1.558-1.593 3.801 0 2.243 1.637 4.413 1.861 4.713.224.3 3.225 4.925 7.814 6.903 1.092.47 1.944.75 2.609.961 1.097.349 2.096.3 2.886.182.88-.132 2.707-1.106 3.088-2.122.381-1.016.381-1.886.269-2.065-.113-.179-.313-.269-.582-.403z" />
+          </svg>
+        </div>
+        <div>
+          <p class="font-bold text-gray-900 group-hover:text-[#25D366] transition-colors">WhatsApp</p>
+          <p class="text-sm text-gray-500">Chat with us instantly</p>
+        </div>
+        <span class="material-symbols-outlined text-gray-400 ml-auto" translate="no">arrow_forward</span>
+      </a>
+      <!-- Email -->
+      <a href="mailto:info@nexuscustomerservice.online"
+        class="flex items-center gap-4 p-4 rounded-xl border-2 border-primary/20 hover:border-primary hover:bg-primary/5 transition-all group">
+        <div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-on-primary" translate="no">mail</span>
+        </div>
+        <div>
+          <p class="font-bold text-gray-900 group-hover:text-primary transition-colors">Email</p>
+          <p class="text-sm text-gray-500">info@nexuscustomerservice.online</p>
+        </div>
+        <span class="material-symbols-outlined text-gray-400 ml-auto" translate="no">arrow_forward</span>
+      </a>
+    </div>
+  </div>
+</div>
 {% endblock %}
