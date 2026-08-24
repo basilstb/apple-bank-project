@@ -56,16 +56,30 @@ if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     CSRF_TRUSTED_ORIGINS = [
         'https://apple-bank-web.onrender.com',
+        'http://apple-bank-web.onrender.com',
         'https://nexusbank.onrender.com',
+        'http://nexusbank.onrender.com',
         'https://nexus-trust-bank.onrender.com',
+        'http://nexus-trust-bank.onrender.com',
         'https://nexustrustbank.online',
+        'http://nexustrustbank.online',
         'https://www.nexustrustbank.online',
+        'http://www.nexustrustbank.online',
         'https://applebank.online',
+        'http://applebank.online',
         'https://www.applebank.online',
+        'http://www.applebank.online',
         'https://nexusntb.online',
+        'http://nexusntb.online',
         'https://www.nexusntb.online',
+        'http://www.nexusntb.online',
         'https://nexuscustomerservice.online',
+        'http://nexuscustomerservice.online',
         'https://www.nexuscustomerservice.online',
+        'http://www.nexuscustomerservice.online',
+        'http://localhost',
+        'https://localhost',
+        'http://127.0.0.1',
     ]
 
 # Application definition
