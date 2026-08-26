@@ -72,8 +72,7 @@
         <div class="space-y-8">
             <!-- Amount Section -->
             <div class="bg-gray-50 rounded-2xl p-6 text-center border border-gray-100 print-exact">
-                <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Transaction Amount
-                </p>
+                <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Transaction Amount</p>
                 <p class="text-5xl font-extrabold text-gray-900 tracking-tight mb-3">{{ profile.currency }}{{
                     tx.amount|intcomma }}</p>
                 {% if tx.status == 'Pending' %}
@@ -196,10 +195,9 @@
                     <rect x="198" y="0" width="2" height="40" fill="#000" />
                 </svg>
             </div>
-            <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Thank you for banking with us
+            <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Thank you for banking with us</p>
+            <p class="text-xs text-gray-400 mt-1">This is a computer generated receipt and does not require a signature.
             </p>
-            <p class="text-xs text-gray-400 mt-1">This is a computer generated receipt and does not require a
-                signature.</p>
         </div>
     </div>
 </div>
