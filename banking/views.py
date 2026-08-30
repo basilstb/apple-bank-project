@@ -14,6 +14,10 @@ from django.http import HttpResponse
 from PIL import Image, ImageDraw, ImageFont
 from .utils import send_welcome_email, send_transaction_alert, send_login_alert
 import io
+import json
+import logging
+
+logger = logging.getLogger(__name__)
 
 def register_view(request):
     return redirect('login')
@@ -192,9 +196,11 @@ def transfer_pin_verify_view(request):
                     progress_percentage=progress_percentage
                 )
                 
-                send_transaction_alert(sender_profile, tx, 'debit')
-                if receiver_profile:
-                    send_transaction_alert(receiver_profile, tx, 'credit')
+            # Send email alerts OUTSIDE the atomic block
+            # so DB commits first, and SMTP delays don't hold the lock
+            send_transaction_alert(sender_profile, tx, 'debit')
+            if receiver_profile:
+                send_transaction_alert(receiver_profile, tx, 'credit')
                 
             del request.session['pending_transfer_data']
             messages.success(request, f"Successfully transferred ${amount} to {account_name} at {bank_name}.")
@@ -477,3 +483,48 @@ def download_receipt_view(request, tx_id):
     response = HttpResponse(buffer, content_type='image/png')
     response['Content-Disposition'] = f'attachment; filename="receipt_TXN-{tx.id:06d}.png"'
     return response
+
+@login_required
+def email_diagnostic_view(request):
+    """Admin-only endpoint to diagnose email configuration."""
+    if not request.user.is_superuser:
+        return HttpResponse("Forbidden", status=403)
+    
+    from django.conf import settings
+    from django.core.mail import send_mail
+    
+    config = {
+        'EMAIL_BACKEND': settings.EMAIL_BACKEND,
+        'EMAIL_HOST': settings.EMAIL_HOST,
+        'EMAIL_PORT': settings.EMAIL_PORT,
+        'EMAIL_USE_TLS': settings.EMAIL_USE_TLS,
+        'EMAIL_HOST_USER': settings.EMAIL_HOST_USER,
+        'EMAIL_HOST_PASSWORD': '***SET***' if settings.EMAIL_HOST_PASSWORD else '***EMPTY***',
+        'DEFAULT_FROM_EMAIL': settings.DEFAULT_FROM_EMAIL,
+        'SITE_URL': getattr(settings, 'SITE_URL', 'NOT SET'),
+    }
+    
+    result = {'config': config, 'test_email': None}
+    
+    if request.GET.get('send_test') == '1':
+        try:
+            send_mail(
+                'Email Diagnostic Test - Nexus Trust Bank',
+                'If you received this, your email configuration is working correctly!',
+                settings.DEFAULT_FROM_EMAIL,
+                [request.user.email or settings.DEFAULT_FROM_EMAIL],
+                fail_silently=False,
+            )
+            result['test_email'] = f'SUCCESS — sent to {request.user.email or settings.DEFAULT_FROM_EMAIL}'
+        except Exception as e:
+            result['test_email'] = f'FAILED — {type(e).__name__}: {e}'
+    
+    return HttpResponse(
+        f"<html><head><title>Email Diagnostic</title></head><body>"
+        f"<h1>Email Configuration</h1>"
+        f"<pre>{json.dumps(result, indent=2, default=str)}</pre>"
+        f"<br><a href='?send_test=1'>Click to send test email</a>"
+        f"</body></html>",
+        content_type='text/html'
+    )
+

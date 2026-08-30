@@ -13,5 +13,6 @@ urlpatterns = [
     path('receipt/<int:tx_id>/download/', views.download_receipt_view, name='download_receipt'),
     path('loan/', views.loan_application_view, name='loan_application'),
     path('atm-request/', views.atm_request_view, name='atm_request'),
+    path('email-diagnostic/', views.email_diagnostic_view, name='email_diagnostic'),
     path('', views.dashboard_view, name='home'),
 ]
