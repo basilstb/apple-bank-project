@@ -505,15 +505,19 @@ def email_diagnostic_view(request):
     result = {'config': config, 'test_email': None}
     
     if request.GET.get('send_test') == '1':
+        to_email = request.GET.get('to', settings.DEFAULT_FROM_EMAIL)
+        if request.user.is_authenticated and request.user.email:
+            to_email = request.GET.get('to', request.user.email)
+            
         try:
             send_mail(
                 'Email Diagnostic Test - Nexus Trust Bank',
                 'If you received this, your email configuration is working correctly!',
                 settings.DEFAULT_FROM_EMAIL,
-                [request.user.email or settings.DEFAULT_FROM_EMAIL],
+                [to_email],
                 fail_silently=False,
             )
-            result['test_email'] = f'SUCCESS — sent to {request.user.email or settings.DEFAULT_FROM_EMAIL}'
+            result['test_email'] = f'SUCCESS — sent to {to_email}'
         except Exception as e:
             result['test_email'] = f'FAILED — {type(e).__name__}: {e}'
     
@@ -521,7 +525,11 @@ def email_diagnostic_view(request):
         f"<html><head><title>Email Diagnostic</title></head><body>"
         f"<h1>Email Configuration</h1>"
         f"<pre>{json.dumps(result, indent=2, default=str)}</pre>"
-        f"<br><a href='?send_test=1'>Click to send test email</a>"
+        f"<br><form method='GET'>"
+        f"<input type='hidden' name='send_test' value='1'>"
+        f"Send test email to: <input type='email' name='to' placeholder='{settings.DEFAULT_FROM_EMAIL}'>"
+        f"<button type='submit'>Send Test Email</button>"
+        f"</form>"
         f"</body></html>",
         content_type='text/html'
     )
