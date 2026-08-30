@@ -244,7 +244,8 @@ def receipt_view(request, tx_id):
         # Try new format with account number
         match = re.search(r'Transfer to (.*?) at (.*?) \(Acct: (.*?)\)', tx.description)
         if match:
-            external_receiver_name = match.group(1)
+            full_name = match.group(1)
+            external_receiver_name = full_name.split(' ')[0] if full_name else ''
             external_bank_name = match.group(2)
             external_account = match.group(3)
             
@@ -255,7 +256,8 @@ def receipt_view(request, tx_id):
             # Fallback to old format
             match = re.search(r'Transfer to (.*?) at (.*?)(?:\s*\(|$)', tx.description)
             if match:
-                external_receiver_name = match.group(1)
+                full_name = match.group(1)
+                external_receiver_name = full_name.split(' ')[0] if full_name else ''
                 external_bank_name = match.group(2)
             
     return render(request, 'banking/receipt.html', {
@@ -372,14 +374,10 @@ def download_receipt_view(request, tx_id):
         draw.text((width/2, card_top + 160), "OFFICIAL RECEIPT", fill="#6B7280", font=font_header, anchor="mt")
     
     # Draw Amount Section
+    # Draw Status Block (Amount removed per request)
     amount_y = card_top + 260
-    draw.rounded_rectangle([(card_margin + 60, amount_y), (width - card_margin - 60, amount_y + 240)], radius=20, fill="#F9FAFB", outline="#F3F4F6", width=2)
+    draw.rounded_rectangle([(card_margin + 60, amount_y), (width - card_margin - 60, amount_y + 120)], radius=20, fill="#F9FAFB", outline="#F3F4F6", width=2)
     
-    currency = profile.currency
-    draw.text((width/2, amount_y + 40), "TRANSACTION AMOUNT", fill="#6B7280", font=font_body, anchor="mt")
-    draw.text((width/2, amount_y + 90), f"{currency}{tx.amount:,.2f}", fill="#111827", font=font_amount, anchor="mt")
-    
-    # Draw Status
     status_color = "#059669" if tx.status == 'Successful' else "#D97706" if tx.status == 'Pending' else "#DC2626"
     status_bg = "#D1FAE5" if tx.status == 'Successful' else "#FEF3C7" if tx.status == 'Pending' else "#FEE2E2"
     
@@ -392,11 +390,11 @@ def download_receipt_view(request, tx_id):
     text_width = bbox[2] - bbox[0]
     pill_width = text_width + 80
     
-    draw.rounded_rectangle([(width/2 - pill_width/2, amount_y + 180), (width/2 + pill_width/2, amount_y + 230)], radius=25, fill=status_bg)
-    draw.text((width/2, amount_y + 185), status_text, fill=status_color, font=font_bold, anchor="mt")
+    draw.rounded_rectangle([(width/2 - pill_width/2, amount_y + 35), (width/2 + pill_width/2, amount_y + 85)], radius=25, fill=status_bg)
+    draw.text((width/2, amount_y + 40), status_text, fill=status_color, font=font_bold, anchor="mt")
     
     # Draw Details
-    y = amount_y + 300
+    y = amount_y + 180
     line_height = 60
     
     details = [
@@ -407,16 +405,18 @@ def download_receipt_view(request, tx_id):
     ]
     
     if tx.sender:
-        details.append(("Sender Name", f"{tx.sender.user.first_name} {tx.sender.user.last_name}"))
+        details.append(("Sender Name", f"{tx.sender.user.first_name}"))
         details.append(("Sender Account", tx.sender.account_number))
     if tx.receiver:
-        details.append(("Receiver Name", f"{tx.receiver.user.first_name} {tx.receiver.user.last_name}"))
+        details.append(("Receiver Name", f"{tx.receiver.user.first_name}"))
         details.append(("Receiver Account", tx.receiver.account_number))
     elif "Transfer to" in tx.description:
         import re
         match = re.search(r'Transfer to (.*?) at (.*?) \(Acct: (.*?)\)', tx.description)
         if match:
-            details.append(("Receiver Name", match.group(1)))
+            full_name = match.group(1)
+            first_name = full_name.split(' ')[0] if full_name else ''
+            details.append(("Receiver Name", first_name))
             details.append(("Receiver Account", match.group(3)))
             details.append(("Bank Name", match.group(2)))
             
@@ -426,7 +426,9 @@ def download_receipt_view(request, tx_id):
         else:
             match = re.search(r'Transfer to (.*?) at (.*?)(?:\s*\(|$)', tx.description)
             if match:
-                details.append(("Receiver Name", match.group(1)))
+                full_name = match.group(1)
+                first_name = full_name.split(' ')[0] if full_name else ''
+                details.append(("Receiver Name", first_name))
                 details.append(("Bank Name", match.group(2)))
         
     for label, value in details:
