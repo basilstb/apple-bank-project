@@ -499,7 +499,8 @@ def email_diagnostic_view(request):
         'EMAIL_PORT': settings.EMAIL_PORT,
         'EMAIL_USE_TLS': settings.EMAIL_USE_TLS,
         'EMAIL_HOST_USER': settings.EMAIL_HOST_USER,
-        'EMAIL_HOST_PASSWORD': '***SET***' if settings.EMAIL_HOST_PASSWORD else '***EMPTY***',
+        'EMAIL_HOST_PASSWORD_LENGTH': len(settings.EMAIL_HOST_PASSWORD) if settings.EMAIL_HOST_PASSWORD else 0,
+        'EMAIL_HOST_PASSWORD_ENDS_WITH_HASH': settings.EMAIL_HOST_PASSWORD.endswith('#') if settings.EMAIL_HOST_PASSWORD else False,
         'DEFAULT_FROM_EMAIL': settings.DEFAULT_FROM_EMAIL,
         'SITE_URL': getattr(settings, 'SITE_URL', 'NOT SET'),
     }
