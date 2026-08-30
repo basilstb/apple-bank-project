@@ -9,11 +9,12 @@
 
 <div
     style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0; border-left: 4px solid {% if transaction_type == 'credit' %}#28a745{% else %}#dc3545{% endif %};">
-    <h3 style="margin-top: 0; color: {% if transaction_type == 'credit' %}#28a745{% else %}#dc3545{% endif %};">{{ transaction_type|upper }} ALERT</h3>
+    <h3 style="margin-top: 0; color: {% if transaction_type == 'credit' %}#28a745{% else %}#dc3545{% endif %};">{{
+        transaction_type|upper }} ALERT</h3>
     <table style="width: 100%; border-collapse: collapse;">
         <tr>
             <td style="padding: 5px 0;"><strong>Amount:</strong></td>
-            <td style="padding: 5px 0; font-weight: bold; font-size: 18px;">${{ amount|intcomma }}</td>
+            <td style="padding: 5px 0; font-weight: bold; font-size: 18px;">{{ currency }}{{ amount|intcomma }}</td>
         </tr>
         <tr>
             <td style="padding: 5px 0;"><strong>Date & Time:</strong></td>
@@ -30,11 +31,11 @@
     </table>
 </div>
 
-<p>Your current available balance is: <strong style="font-size: 16px;">${{ balance|intcomma }}</strong></p>
+<p>Your current available balance is: <strong style="font-size: 16px;">{{ currency }}{{ balance|intcomma }}</strong></p>
 
 <p>If you did not authorize this transaction, please contact our support team immediately.</p>
 
 <div style="text-align: center;">
-    <a href="{{ request.scheme }}://{{ request.get_host }}/dashboard/" class="button">View Dashboard</a>
+    <a href="{{ site_url }}/dashboard/" class="button">View Dashboard</a>
 </div>
 {% endblock %}

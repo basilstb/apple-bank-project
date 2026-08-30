@@ -24,3 +24,23 @@ services:
         value: "False"
       - key: ALLOWED_HOSTS
         value: "*"
+      # Email settings — sync: false keeps Render from overwriting your manual values
+      - key: EMAIL_BACKEND
+        sync: false
+      - key: EMAIL_HOST
+        sync: false
+      - key: EMAIL_PORT
+        sync: false
+      - key: EMAIL_USE_TLS
+        sync: false
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+      - key: DEFAULT_FROM_EMAIL
+        sync: false
+      - key: SITE_URL
+        sync: false
+      # Cloudinary — sync: false stops this from being wiped on deploys
+      - key: CLOUDINARY_URL
+        sync: false

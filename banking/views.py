@@ -12,7 +12,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from django_ratelimit.decorators import ratelimit
 from django.http import HttpResponse
 from PIL import Image, ImageDraw, ImageFont
-from .utils import send_welcome_email, send_transaction_alert
+from .utils import send_welcome_email, send_transaction_alert, send_login_alert
 import io
 
 def register_view(request):
@@ -28,6 +28,7 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
+                send_login_alert(user)
                 messages.info(request, f"You are now logged in as {username}.")
                 return redirect('dashboard')
             else:
