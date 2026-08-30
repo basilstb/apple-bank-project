@@ -196,11 +196,7 @@ def transfer_pin_verify_view(request):
                     progress_percentage=progress_percentage
                 )
                 
-            # Send email alerts OUTSIDE the atomic block
-            # so DB commits first, and SMTP delays don't hold the lock
-            send_transaction_alert(sender_profile, tx, 'debit')
-            if receiver_profile:
-                send_transaction_alert(receiver_profile, tx, 'credit')
+            # Email alerts are now handled automatically on commit by signals.py
                 
             del request.session['pending_transfer_data']
             messages.success(request, f"Successfully transferred ${amount} to {account_name} at {bank_name}.")

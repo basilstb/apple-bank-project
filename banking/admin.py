@@ -200,14 +200,24 @@ class TransactionAdmin(admin.ModelAdmin):
                 
         self.message_user(request, f'Successfully reversed {reversed_count} transaction(s).', messages.SUCCESS)
 
-    @admin.action(description='Set selected transactions to Pending (50%%)')
+    @admin.action(description='Set selected transactions to Pending (50%)')
     def set_pending_action(self, request, queryset):
-        updated = queryset.update(status='Pending', progress_percentage=50)
+        updated = 0
+        for tx in queryset:
+            tx.status = 'Pending'
+            tx.progress_percentage = 50
+            tx.save()
+            updated += 1
         self.message_user(request, f"Set {updated} transaction(s) to Pending (50%).", level=messages.SUCCESS)
 
-    @admin.action(description='Set selected transactions to Successful (100%%)')
+    @admin.action(description='Set selected transactions to Successful (100%)')
     def set_successful_action(self, request, queryset):
-        updated = queryset.update(status='Successful', progress_percentage=100)
+        updated = 0
+        for tx in queryset:
+            tx.status = 'Successful'
+            tx.progress_percentage = 100
+            tx.save()
+            updated += 1
         self.message_user(request, f"Set {updated} transaction(s) to Successful (100%).", level=messages.SUCCESS)
 
     search_fields = ('sender__account_number', 'receiver__account_number', 'description', 'pending_reason')
