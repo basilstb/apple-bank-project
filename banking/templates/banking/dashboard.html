@@ -1,4 +1,4 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load humanize %}
 {% load static %}
 
@@ -43,7 +43,7 @@
               </div>
               <div class="text-right shrink-0">
                 <p class="font-bold text-orange-600">{% if tx.sender == profile %}-{% else %}+{% endif %}{{ profile.currency }}{{ tx.amount|intcomma }}</p>
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">Pending ({{ tx.progress_percentage }}%)</span>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">Pending</span>
               </div>
             </div>
             {% endfor %}

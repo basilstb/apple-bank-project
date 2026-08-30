@@ -383,7 +383,7 @@ def download_receipt_view(request, tx_id):
     
     status_text = tx.status.upper()
     if tx.status == 'Pending':
-        status_text = f"PENDING ({tx.progress_percentage}%)"
+        status_text = "PENDING"
     
     # Simple status pill
     bbox = draw.textbbox((0, 0), status_text, font=font_bold)

@@ -1,4 +1,4 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load humanize %}
 
 {% block title %}Transaction History - Nexus Trust Bank{% endblock %}
@@ -36,7 +36,7 @@
                 <div>
                     {% if tx.status == 'Pending' %}
                     <span class="px-2 py-1 inline-flex items-center text-xs leading-5 font-bold rounded-full bg-yellow-100 text-yellow-800">
-                        Pending <span class="text-green-600 loading-dots mx-1"></span> {{ tx.progress_percentage }}%
+                        Pending <span class="text-green-600 loading-dots mx-1"></span>
                     </span>
                     {% elif tx.status == 'Successful' %}
                     <span class="px-2 py-1 inline-flex items-center text-xs leading-5 font-bold rounded-full bg-green-100 text-green-800">
