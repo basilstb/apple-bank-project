@@ -357,6 +357,7 @@ def download_receipt_view(request, tx_id):
     draw.rounded_rectangle([(card_margin, card_top), (width - card_margin, card_bottom)], radius=30, fill="white", outline="#E5E7EB", width=2)
 
     # Draw Header
+    header_bottom_y = card_top + 340
     try:
         logo_path = os.path.join(settings.BASE_DIR, 'static', 'images', 'nexus_logo.png')
         logo = Image.open(logo_path)
@@ -369,13 +370,14 @@ def download_receipt_view(request, tx_id):
             image.paste(logo, (int(width/2 - logo_w/2), card_top + 40))
         
         draw.text((width/2, card_top + 40 + logo_h + 20), "OFFICIAL RECEIPT", fill="#6B7280", font=font_header, anchor="mt")
+        header_bottom_y = card_top + 40 + logo_h + 100
     except Exception as e:
         draw.text((width/2, card_top + 80), "Nexus Trust Bank", fill="#111827", font=font_title, anchor="mt")
         draw.text((width/2, card_top + 160), "OFFICIAL RECEIPT", fill="#6B7280", font=font_header, anchor="mt")
+        header_bottom_y = card_top + 240
     
-    # Draw Amount Section
     # Draw Status Block (Amount removed per request)
-    amount_y = card_top + 260
+    amount_y = header_bottom_y
     draw.rounded_rectangle([(card_margin + 60, amount_y), (width - card_margin - 60, amount_y + 120)], radius=20, fill="#F9FAFB", outline="#F3F4F6", width=2)
     
     status_color = "#059669" if tx.status == 'Successful' else "#D97706" if tx.status == 'Pending' else "#DC2626"
