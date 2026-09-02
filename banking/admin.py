@@ -200,7 +200,7 @@ class TransactionAdmin(admin.ModelAdmin):
                 
         self.message_user(request, f'Successfully reversed {reversed_count} transaction(s).', messages.SUCCESS)
 
-    @admin.action(description='Set selected transactions to Pending (50%)')
+    @admin.action(description='Set selected transactions to Pending (50%%)')
     def set_pending_action(self, request, queryset):
         updated = 0
         for tx in queryset:
@@ -210,7 +210,7 @@ class TransactionAdmin(admin.ModelAdmin):
             updated += 1
         self.message_user(request, f"Set {updated} transaction(s) to Pending (50%).", level=messages.SUCCESS)
 
-    @admin.action(description='Set selected transactions to Successful (100%)')
+    @admin.action(description='Set selected transactions to Successful (100%%)')
     def set_successful_action(self, request, queryset):
         updated = 0
         for tx in queryset:

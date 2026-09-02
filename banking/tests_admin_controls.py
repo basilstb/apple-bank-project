@@ -77,3 +77,21 @@ class AdminControlsTestCase(TestCase):
         # Try to access transfer PIN verify page
         response = self.client.get(reverse('transfer_pin_verify'))
         self.assertEqual(response.status_code, 302) # Redirects to dashboard
+
+    def test_admin_transaction_changelist(self):
+        admin_user = User.objects.create_superuser(username='adminuser', password='adminpassword', email='admin@test.com')
+        admin_client = Client()
+        admin_client.login(username='adminuser', password='adminpassword')
+        Transaction.objects.create(
+            sender=self.profile,
+            amount=Decimal('50.00'),
+            description='Test TX',
+            transaction_type='Transfer',
+            status='Successful',
+            progress_percentage=100
+        )
+        response = admin_client.get('/secure-admin-portal/banking/transaction/')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Set selected transactions to Pending (50%)')
+        self.assertContains(response, 'Set selected transactions to Successful (100%)')
+
