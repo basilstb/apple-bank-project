@@ -43,6 +43,11 @@ if 'RENDER' in os.environ:
 
 ALLOWED_HOSTS = ['*']  # Allow all hosts to prevent 400 Bad Request errors with custom domains
 
+# Reverse Proxy Settings (Render, Cloudflare, etc.)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
+
 if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
@@ -53,34 +58,63 @@ if not DEBUG:
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    CSRF_TRUSTED_ORIGINS = [
-        'https://apple-bank-web.onrender.com',
-        'http://apple-bank-web.onrender.com',
-        'https://nexusbank.onrender.com',
-        'http://nexusbank.onrender.com',
-        'https://nexus-trust-bank.onrender.com',
-        'http://nexus-trust-bank.onrender.com',
-        'https://nexustrustbank.online',
-        'http://nexustrustbank.online',
-        'https://www.nexustrustbank.online',
-        'http://www.nexustrustbank.online',
-        'https://applebank.online',
-        'http://applebank.online',
-        'https://www.applebank.online',
-        'http://www.applebank.online',
-        'https://nexusntb.online',
-        'http://nexusntb.online',
-        'https://www.nexusntb.online',
-        'http://www.nexusntb.online',
-        'https://nexuscustomerservice.online',
-        'http://nexuscustomerservice.online',
-        'https://www.nexuscustomerservice.online',
-        'http://www.nexuscustomerservice.online',
-        'http://localhost',
-        'https://localhost',
-        'http://127.0.0.1',
-    ]
+
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_HTTPONLY = False
+
+# CSRF Trusted Origins
+CSRF_TRUSTED_ORIGINS = [
+    # Wildcards for Render subdomains and .online domains
+    'https://*.onrender.com',
+    'http://*.onrender.com',
+    'https://*.online',
+    'http://*.online',
+
+    # Known live domains
+    'https://apple-bank-web.onrender.com',
+    'http://apple-bank-web.onrender.com',
+    'https://nexusbank.onrender.com',
+    'http://nexusbank.onrender.com',
+    'https://nexus-trust-bank.onrender.com',
+    'http://nexus-trust-bank.onrender.com',
+    'https://nexustrustbank.online',
+    'http://nexustrustbank.online',
+    'https://www.nexustrustbank.online',
+    'http://www.nexustrustbank.online',
+    'https://applebank.online',
+    'http://applebank.online',
+    'https://www.applebank.online',
+    'http://www.applebank.online',
+    'https://nexusntb.online',
+    'http://nexusntb.online',
+    'https://www.nexusntb.online',
+    'http://www.nexusntb.online',
+    'https://nexuscustomerservice.online',
+    'http://nexuscustomerservice.online',
+    'https://www.nexuscustomerservice.online',
+    'http://www.nexuscustomerservice.online',
+
+    # Local development hosts and ports
+    'http://localhost',
+    'https://localhost',
+    'http://127.0.0.1',
+    'https://127.0.0.1',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://localhost:5000',
+    'http://127.0.0.1:5000',
+]
+
+# Allow adding additional origins dynamically via environment variable (comma-separated)
+_extra_csrf_origins = os.environ.get('CSRF_TRUSTED_ORIGINS')
+if _extra_csrf_origins:
+    for origin in _extra_csrf_origins.split(','):
+        origin = origin.strip()
+        if origin and origin not in CSRF_TRUSTED_ORIGINS:
+            CSRF_TRUSTED_ORIGINS.append(origin)
 
 # Application definition
 
@@ -239,6 +273,16 @@ LOGGING = {
         'django.mail': {
             'handlers': ['console'],
             'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.security.csrf': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+            'propagate': True,
+        },
+        'django.security': {
+            'handlers': ['console'],
+            'level': 'WARNING',
             'propagate': True,
         },
     },
