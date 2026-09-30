@@ -37,8 +37,8 @@ SECRET_KEY = _secret_key
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-# Force DEBUG to False in production (Render)
-if 'RENDER' in os.environ:
+# Force DEBUG to False in production (Render or PythonAnywhere)
+if 'RENDER' in os.environ or 'PYTHONANYWHERE_DOMAIN' in os.environ:
     DEBUG = False
 
 ALLOWED_HOSTS = ['*']  # Allow all hosts to prevent 400 Bad Request errors with custom domains
@@ -49,7 +49,9 @@ USE_X_FORWARDED_HOST = True
 USE_X_FORWARDED_PORT = True
 
 if not DEBUG:
-    SECURE_SSL_REDIRECT = True
+    # Don't redirect on PythonAnywhere — PA's nginx handles HTTPS termination
+    if 'PYTHONANYWHERE_DOMAIN' not in os.environ:
+        SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_BROWSER_XSS_FILTER = True
@@ -70,6 +72,10 @@ CSRF_TRUSTED_ORIGINS = [
     'http://*.onrender.com',
     'https://*.online',
     'http://*.online',
+
+    # PythonAnywhere
+    'https://nexustrustbank.pythonanywhere.com',
+    'http://nexustrustbank.pythonanywhere.com',
 
     # Known live domains
     'https://apple-bank-web.onrender.com',
@@ -246,7 +252,7 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'info@nexuscustomerservice.online')
 
 # Site URL for email templates (no trailing slash)
-SITE_URL = os.environ.get('SITE_URL', 'https://apple-bank-web.onrender.com')
+SITE_URL = os.environ.get('SITE_URL', 'https://nexustrustbank.pythonanywhere.com')
 
 # Logging — ensures email errors appear in Render logs
 LOGGING = {
