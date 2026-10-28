@@ -27,6 +27,7 @@ class UserProfile(models.Model):
     currency = models.CharField(max_length=5, choices=CURRENCY_CHOICES, default='$')
     phone_number = models.CharField(max_length=20, blank=True)
     account_status = models.CharField(max_length=20, choices=ACCOUNT_STATUS_CHOICES, default='Active')
+    suspension_reason = models.TextField(blank=True, null=True, help_text="Reason for account suspension, displayed on the user dashboard")
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     transaction_pin = models.CharField(max_length=128, default='0000')
     daily_limit = models.DecimalField(max_digits=12, decimal_places=2, default=5000.00)

@@ -95,3 +95,51 @@ class AdminControlsTestCase(TestCase):
         self.assertContains(response, 'Set selected transactions to Pending (50%)')
         self.assertContains(response, 'Set selected transactions to Successful (100%)')
 
+    def test_dashboard_displays_suspension_reason_when_suspended(self):
+        self.profile.account_status = 'Suspended'
+        self.profile.suspension_reason = 'Account suspended pending KYC document verification.'
+        self.profile.save()
+
+        response = self.client.get(reverse('dashboard'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Account Access Restricted (Suspended)')
+        self.assertContains(response, 'Account suspended pending KYC document verification.')
+        self.assertContains(response, 'Reason for Suspension:')
+
+    def test_transfer_blocked_when_account_suspended(self):
+        self.profile.account_status = 'Suspended'
+        self.profile.suspension_reason = 'Fraud check in progress.'
+        self.profile.save()
+
+        response = self.client.get(reverse('transfer'), follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Your account is suspended: Fraud check in progress.')
+
+    def test_admin_suspend_account_view(self):
+        admin_user = User.objects.create_superuser(username='admin2', password='adminpassword2', email='admin2@test.com')
+        admin_client = Client()
+        admin_client.login(username='admin2', password='adminpassword2')
+
+        # Suspend user with custom reason
+        suspend_url = reverse('admin:user_suspend_account', args=[self.user.pk])
+        response = admin_client.post(suspend_url, {
+            'action_type': 'suspend',
+            'reason': 'Suspicious IP login detected.'
+        }, follow=True)
+        self.assertEqual(response.status_code, 200)
+        
+        self.profile.refresh_from_db()
+        self.assertEqual(self.profile.account_status, 'Suspended')
+        self.assertEqual(self.profile.suspension_reason, 'Suspicious IP login detected.')
+
+        # Reactivate user
+        response = admin_client.post(suspend_url, {
+            'action_type': 'activate'
+        }, follow=True)
+        self.assertEqual(response.status_code, 200)
+        
+        self.profile.refresh_from_db()
+        self.assertEqual(self.profile.account_status, 'Active')
+        self.assertIsNone(self.profile.suspension_reason)
+
+

@@ -35,10 +35,11 @@ def login_view(request):
                 send_login_alert(user)
                 messages.info(request, f"You are now logged in as {username}.")
                 return redirect('dashboard')
-            else:
-                messages.error(request, "Invalid username or password.")
         else:
-            messages.error(request, "Invalid username or password.")
+            for error in form.non_field_errors():
+                messages.error(request, error)
+            if not form.non_field_errors():
+                messages.error(request, "Invalid username or password.")
     else:
         form = AuthenticationForm()
     return render(request, 'banking/login.html', {'form': form})
@@ -74,6 +75,10 @@ def dashboard_view(request):
 @ratelimit(key='user', rate='3/m', block=True)
 def transfer_view(request):
     profile, _ = UserProfile.objects.get_or_create(user=request.user)
+    if profile.account_status == 'Suspended':
+        reason = profile.suspension_reason or "Transfers and withdrawals are restricted on suspended accounts."
+        messages.error(request, f"Your account is suspended: {reason}")
+        return redirect('dashboard')
     if not profile.allow_transfers:
         messages.error(request, "Transfers are disabled for your account.")
         return redirect('dashboard')
@@ -102,6 +107,10 @@ def transfer_view(request):
 @ratelimit(key='user', rate='3/m', block=True)
 def transfer_pin_verify_view(request):
     sender_profile, _ = UserProfile.objects.get_or_create(user=request.user)
+    if sender_profile.account_status == 'Suspended':
+        reason = sender_profile.suspension_reason or "Transfers and withdrawals are restricted on suspended accounts."
+        messages.error(request, f"Your account is suspended: {reason}")
+        return redirect('dashboard')
     if not sender_profile.allow_transfers:
         messages.error(request, "Transfers are disabled for your account.")
         return redirect('dashboard')

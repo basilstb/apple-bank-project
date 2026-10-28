@@ -10,7 +10,7 @@ class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False
     verbose_name_plural = 'Bank Account Profile'
-    fields = ('account_number', 'balance', 'currency', 'phone_number', 'account_status', 'profile_picture', 'transaction_pin', 'daily_limit', 'require_pending_transactions', 'allow_transfers')
+    fields = ('account_number', 'balance', 'currency', 'phone_number', 'account_status', 'suspension_reason', 'profile_picture', 'transaction_pin', 'daily_limit', 'require_pending_transactions', 'allow_transfers')
 
 class CustomUserForm(forms.ModelForm):
     username = forms.CharField(max_length=150, required=True)
@@ -19,6 +19,10 @@ class CustomUserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username', 'password', 'email', 'first_name', 'last_name', 'is_active', 'is_staff', 'is_superuser')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.orig_password = self.instance.password if (self.instance and self.instance.pk) else None
 
     def clean(self):
         cleaned_data = super().clean()
@@ -31,6 +35,8 @@ class CustomUserForm(forms.ModelForm):
         password = self.cleaned_data.get('password')
         if password:
             user.set_password(password)
+        elif self.orig_password:
+            user.password = self.orig_password
         if commit:
             user.save()
         return user
@@ -43,16 +49,90 @@ from django.db import transaction
 class SinglePageUserAdmin(admin.ModelAdmin):
     form = CustomUserForm
     inlines = (UserProfileInline,)
-    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
+    list_display = ('username', 'email', 'first_name', 'last_name', 'get_account_status', 'is_staff')
     search_fields = ('username', 'email', 'first_name', 'last_name')
-    actions = ['add_money_action', 'disable_pending_action', 'enable_pending_action', 'disable_transfers_action', 'enable_transfers_action']
+    actions = ['add_money_action', 'suspend_account_action', 'reactivate_account_action', 'disable_pending_action', 'enable_pending_action', 'disable_transfers_action', 'enable_transfers_action']
     
+    @admin.display(description='Account Status')
+    def get_account_status(self, obj):
+        profile = getattr(obj, 'userprofile', None)
+        if profile:
+            from django.utils.safestring import mark_safe
+            if profile.account_status == 'Suspended':
+                return mark_safe('<span style="color: #b91c1c; font-weight: 700; background: #fee2e2; padding: 2px 8px; border-radius: 4px;">Suspended</span>')
+            return mark_safe('<span style="color: #15803d; font-weight: 700; background: #dcfce7; padding: 2px 8px; border-radius: 4px;">Active</span>')
+        return '-'
+
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
             path('<path:object_id>/add-money/', self.admin_site.admin_view(self.add_money_view), name='user_add_money'),
+            path('<path:object_id>/suspend-account/', self.admin_site.admin_view(self.suspend_account_view), name='user_suspend_account'),
         ]
         return custom_urls + urls
+
+    @admin.action(description='Suspend Account / Set Suspension Reason')
+    def suspend_account_action(self, request, queryset):
+        if queryset.count() == 1:
+            user = queryset.first()
+            return redirect('admin:user_suspend_account', object_id=user.pk)
+        
+        updated = 0
+        default_reason = "Account temporarily suspended by administration. Please contact customer service."
+        for user in queryset:
+            profile, _ = UserProfile.objects.get_or_create(user=user)
+            profile.account_status = 'Suspended'
+            if not profile.suspension_reason:
+                profile.suspension_reason = default_reason
+            profile.save(update_fields=['account_status', 'suspension_reason'])
+            updated += 1
+        self.message_user(request, f"Suspended {updated} account(s) successfully.", level=messages.SUCCESS)
+
+    @admin.action(description='Reactivate Selected Accounts')
+    def reactivate_account_action(self, request, queryset):
+        updated = 0
+        for user in queryset:
+            profile, _ = UserProfile.objects.get_or_create(user=user)
+            profile.account_status = 'Active'
+            profile.suspension_reason = None
+            profile.save(update_fields=['account_status', 'suspension_reason'])
+            if not user.is_active:
+                user.is_active = True
+                user.save(update_fields=['is_active'])
+            updated += 1
+        self.message_user(request, f"Reactivated {updated} account(s) successfully.", level=messages.SUCCESS)
+
+    def suspend_account_view(self, request, object_id):
+        user = get_object_or_404(User, pk=object_id)
+        profile, _ = UserProfile.objects.get_or_create(user=user)
+        
+        if request.method == 'POST':
+            action_type = request.POST.get('action_type', 'suspend')
+            
+            if action_type == 'activate':
+                profile.account_status = 'Active'
+                profile.suspension_reason = None
+                profile.save(update_fields=['account_status', 'suspension_reason'])
+                if not user.is_active:
+                    user.is_active = True
+                    user.save(update_fields=['is_active'])
+                self.message_user(request, f"Account for {user.username} has been reactivated.", level=messages.SUCCESS)
+            else:
+                reason = request.POST.get('reason', '').strip()
+                profile.account_status = 'Suspended'
+                profile.suspension_reason = reason or "Your account has been temporarily suspended by administration. Please contact customer service."
+                profile.save(update_fields=['account_status', 'suspension_reason'])
+                self.message_user(request, f"Account for {user.username} has been suspended.", level=messages.SUCCESS)
+                
+            return redirect('admin:auth_user_changelist')
+            
+        context = dict(
+            self.admin_site.each_context(request),
+            title=f"Suspend Account - {user.username}",
+            user_obj=user,
+            profile=profile,
+        )
+        return render(request, 'admin/banking/user/suspend_account.html', context)
         
     @admin.action(description='Add Money to Selected Users')
     def add_money_action(self, request, queryset):

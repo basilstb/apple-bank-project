@@ -1,0 +1,166 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+    .suspend-card {
+        max-width: 600px;
+        margin: 20px 0;
+        padding: 24px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 6px;
+        color: #1f2937;
+        font-size: 14px;
+    }
+    .form-group textarea {
+        width: 100%;
+        min-height: 110px;
+        padding: 10px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        box-sizing: border-box;
+        font-family: inherit;
+        font-size: 14px;
+        line-height: 1.5;
+        resize: vertical;
+    }
+    .form-group textarea:focus {
+        border-color: #dc2626;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
+    }
+    .help-text {
+        font-size: 12px;
+        color: #6b7280;
+        margin-top: 6px;
+    }
+    .status-badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 9999px;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    .status-active {
+        background: #dcfce7;
+        color: #15803d;
+    }
+    .status-suspended {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
+    .btn-row {
+        margin-top: 24px;
+        padding-top: 18px;
+        border-top: 1px solid #f3f4f6;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+    }
+    .btn {
+        padding: 9px 18px;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 13px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: none;
+        transition: background 0.15s ease;
+    }
+    .btn-cancel {
+        background: #f3f4f6;
+        color: #374151;
+    }
+    .btn-cancel:hover {
+        background: #e5e7eb;
+    }
+    .btn-suspend {
+        background: #dc2626;
+        color: #ffffff;
+    }
+    .btn-suspend:hover {
+        background: #b91c1c;
+    }
+    .btn-activate {
+        background: #16a34a;
+        color: #ffffff;
+    }
+    .btn-activate:hover {
+        background: #15803d;
+    }
+</style>
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+    &rsaquo; <a href="{% url 'admin:app_list' app_label='auth' %}">Authentication and Authorization</a>
+    &rsaquo; <a href="{% url 'admin:auth_user_changelist' %}">Users</a>
+    &rsaquo; <a href="{% url 'admin:auth_user_change' user_obj.pk %}">{{ user_obj.username }}</a>
+    &rsaquo; Suspend Account
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <h1 style="margin-bottom: 8px;">Account Suspension: {{ user_obj.username }}</h1>
+    
+    <div style="margin-bottom: 20px; font-size: 14px; color: #4b5563;">
+        Account Number: <strong>{{ profile.account_number }}</strong> &bull; 
+        Current Status: 
+        {% if profile.account_status == 'Suspended' %}
+            <span class="status-badge status-suspended">Suspended</span>
+        {% else %}
+            <span class="status-badge status-active">Active</span>
+        {% endif %}
+    </div>
+
+    <div class="suspend-card">
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="reason">Suspension Reason (Displayed on User Dashboard):</label>
+                <textarea name="reason" id="reason" placeholder="e.g. Your account has been temporarily suspended due to security verification. Please contact customer service to verify your identity.">{% if profile.suspension_reason %}{{ profile.suspension_reason }}{% endif %}</textarea>
+                <div class="help-text">This explanation will be prominently displayed on the user's dashboard when they log in.</div>
+            </div>
+
+            <div class="btn-row">
+                <a href="{% url 'admin:auth_user_changelist' %}" class="btn btn-cancel">Cancel</a>
+                
+                <div style="display: flex; gap: 10px;">
+                    {% if profile.account_status == 'Suspended' %}
+                    <button type="submit" name="action_type" value="activate" class="btn btn-activate">
+                        Reactivate Account
+                    </button>
+                    <button type="submit" name="action_type" value="suspend" class="btn btn-suspend">
+                        Update Reason
+                    </button>
+                    {% else %}
+                    <button type="submit" name="action_type" value="suspend" class="btn btn-suspend">
+                        Confirm Suspension
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
