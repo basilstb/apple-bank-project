@@ -27,7 +27,8 @@ urlpatterns = [
     path('secure-admin-portal/', admin.site.urls),
     path('manifest.json', TemplateView.as_view(template_name='manifest.json', content_type='application/json')),
     path('serviceworker.js', TemplateView.as_view(template_name='serviceworker.js', content_type='application/javascript')),
-    path('', include('banking.urls')),
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+    path('', include('banking.urls')),
 ]
+
 

@@ -20,8 +20,9 @@ pip install -r requirements.txt
 echo "=== 4. Applying database migrations ==="
 python manage.py migrate
 
-echo "=== 5. Collecting static files ==="
+echo "=== 5. Collecting static files & ensuring media directory ==="
 python manage.py collectstatic --no-input
+mkdir -p media/profile_pics
 
 echo "=== 6. Reloading PythonAnywhere web app ==="
 if [ -f "/var/www/nexustrustbank_pythonanywhere_com_wsgi.py" ]; then

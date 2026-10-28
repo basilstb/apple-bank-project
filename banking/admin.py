@@ -6,11 +6,20 @@ from .models import UserProfile, Transaction, LoanApplication, ATMCardRequest
 # Remove username validators to allow spaces and any characters
 User._meta.get_field('username').validators = []
 
+from django.utils.safestring import mark_safe
+
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False
     verbose_name_plural = 'Bank Account Profile'
-    fields = ('account_number', 'balance', 'currency', 'phone_number', 'account_status', 'suspension_reason', 'profile_picture', 'transaction_pin', 'daily_limit', 'require_pending_transactions', 'allow_transfers')
+    readonly_fields = ('profile_picture_preview',)
+    fields = ('account_number', 'balance', 'currency', 'phone_number', 'account_status', 'suspension_reason', 'profile_picture', 'profile_picture_preview', 'transaction_pin', 'daily_limit', 'require_pending_transactions', 'allow_transfers')
+
+    def profile_picture_preview(self, obj):
+        if obj and obj.profile_picture:
+            return mark_safe(f'<div style="margin-top: 5px;"><img src="{obj.profile_picture.url}" style="max-height: 100px; max-width: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #2563eb; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);" /><p style="color: #64748b; font-size: 11px; margin-top: 4px;">Current image preview</p></div>')
+        return "No picture uploaded yet"
+    profile_picture_preview.short_description = "Picture Preview"
 
 class CustomUserForm(forms.ModelForm):
     username = forms.CharField(max_length=150, required=True)
@@ -49,9 +58,17 @@ from django.db import transaction
 class SinglePageUserAdmin(admin.ModelAdmin):
     form = CustomUserForm
     inlines = (UserProfileInline,)
-    list_display = ('username', 'email', 'first_name', 'last_name', 'get_account_status', 'is_staff')
+    list_display = ('user_avatar', 'username', 'email', 'first_name', 'last_name', 'get_account_status', 'is_staff')
     search_fields = ('username', 'email', 'first_name', 'last_name')
     actions = ['add_money_action', 'suspend_account_action', 'reactivate_account_action', 'disable_pending_action', 'enable_pending_action', 'disable_transfers_action', 'enable_transfers_action']
+    
+    @admin.display(description='Photo')
+    def user_avatar(self, obj):
+        profile = getattr(obj, 'userprofile', None)
+        if profile and profile.profile_picture:
+            return mark_safe(f'<img src="{profile.profile_picture.url}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid #cbd5e1;" />')
+        return mark_safe('<div style="width: 32px; height: 32px; border-radius: 50%; background: #e2e8f0; color: #64748b; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold;">-</div>')
+
     
     @admin.display(description='Account Status')
     def get_account_status(self, obj):
