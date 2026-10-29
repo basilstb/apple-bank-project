@@ -24,6 +24,9 @@ echo "=== 5. Collecting static files & ensuring media directory ==="
 python manage.py collectstatic --no-input
 mkdir -p media/profile_pics
 
+echo "=== 5b. Updating Brevo email configuration in .env ==="
+python update_env_email.py
+
 echo "=== 6. Reloading PythonAnywhere web app ==="
 if [ -f "/var/www/nexustrustbank_pythonanywhere_com_wsgi.py" ]; then
     touch /var/www/nexustrustbank_pythonanywhere_com_wsgi.py

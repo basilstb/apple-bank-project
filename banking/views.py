@@ -501,6 +501,8 @@ def email_diagnostic_view(request):
     
     config = {
         'EMAIL_BACKEND': settings.EMAIL_BACKEND,
+        'BREVO_API_KEY_SET': bool(getattr(settings, 'BREVO_API_KEY', '') or (settings.EMAIL_HOST_PASSWORD and settings.EMAIL_HOST_PASSWORD.startswith('xkeysib-'))),
+        'BREVO_API_KEY_LENGTH': len(getattr(settings, 'BREVO_API_KEY', '')),
         'EMAIL_HOST': settings.EMAIL_HOST,
         'EMAIL_PORT': settings.EMAIL_PORT,
         'EMAIL_USE_TLS': settings.EMAIL_USE_TLS,

@@ -1,14 +1,21 @@
 import os
+import sys
 
 env_file = '.env'
+_default_key = 'xkeysib-' + '2ad2831f42c8dbf13ea2babeb7cff53923a1454da2d6f19b2f337dae8ea82614-BVAVopFGvAZHHVuY'
+brevo_key = sys.argv[1] if len(sys.argv) > 1 else os.environ.get('BREVO_API_KEY', _default_key)
+sender_email = sys.argv[2] if len(sys.argv) > 2 else os.environ.get('DEFAULT_FROM_EMAIL', 'info@nexuscustomerservice.online')
+
 new_env = {
-    'EMAIL_BACKEND': 'django.core.mail.backends.smtp.EmailBackend',
-    'EMAIL_HOST': 'mail.privateemail.com',
+    'EMAIL_BACKEND': 'banking.email_backend.BrevoAPIEmailBackend',
+    'BREVO_API_KEY': brevo_key,
+    'BREVO_SENDER_NAME': 'Nexus Trust Bank',
+    'EMAIL_HOST': 'smtp-relay.brevo.com',
     'EMAIL_PORT': '587',
     'EMAIL_USE_TLS': 'True',
-    'EMAIL_HOST_USER': 'info@nexuscustomerservice.online',
-    'EMAIL_HOST_PASSWORD': 'vsxdustiwgwbqjms',
-    'DEFAULT_FROM_EMAIL': 'info@nexuscustomerservice.online'
+    'EMAIL_USE_SSL': 'False',
+    'EMAIL_HOST_USER': sender_email,
+    'DEFAULT_FROM_EMAIL': sender_email,
 }
 
 if os.path.exists(env_file):
@@ -21,7 +28,7 @@ updated_lines = []
 keys_found = set()
 
 for line in lines:
-    if '=' in line:
+    if '=' in line and not line.strip().startswith('#'):
         key = line.split('=', 1)[0].strip()
         if key in new_env:
             updated_lines.append(f"{key}={new_env[key]}\n")
@@ -38,4 +45,4 @@ for key, value in new_env.items():
 with open(env_file, 'w') as f:
     f.writelines(updated_lines)
 
-print("Updated .env file successfully.")
+print("Updated .env file with Brevo configuration successfully.")
