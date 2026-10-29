@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 def _get_site_url():
     """Return the site URL, stripping any trailing slash."""
-    return getattr(settings, 'SITE_URL', 'https://apple-bank-web.onrender.com').rstrip('/')
+    return getattr(settings, 'SITE_URL', 'https://nexustrustbank.pythonanywhere.com').rstrip('/')
 
 def send_welcome_email(user):
     if not user.email:
