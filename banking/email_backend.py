@@ -2,6 +2,7 @@ import json
 import logging
 import urllib.error
 import urllib.request
+import uuid
 from email.utils import parseaddr
 from django.conf import settings
 from django.core.mail.backends.base import BaseEmailBackend
@@ -83,6 +84,9 @@ class BrevoAPIEmailBackend(BaseEmailBackend):
             "to": [{"email": addr} for addr in message.to if addr],
             "subject": message.subject,
             "textContent": message.body or " ",
+            "headers": {
+                "X-Entity-Ref-ID": str(uuid.uuid4()),
+            },
         }
         if html_content:
             payload["htmlContent"] = html_content

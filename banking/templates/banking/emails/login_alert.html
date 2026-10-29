@@ -1,0 +1,33 @@
+{% extends "banking/emails/base_email.html" %}
+
+{% block subject %}New Login Alert - Nexus Trust Bank{% endblock %}
+
+{% block content %}
+<h2>Dear {{ user.first_name|default:user.username }},</h2>
+<p>This is an automated security notification that a new login was detected on your <span class="highlight">Nexus Trust Bank</span> account.</p>
+
+<div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #0d1b2a;">
+    <h3 style="margin-top: 0; color: #0d1b2a;">LOGIN NOTIFICATION</h3>
+    <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td style="padding: 5px 0;"><strong>Account User:</strong></td>
+            <td style="padding: 5px 0;">{{ user.get_full_name|default:user.username }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 5px 0;"><strong>Date &amp; Time:</strong></td>
+            <td style="padding: 5px 0;">{{ login_time|date:"F j, Y, g:i:s a" }} UTC</td>
+        </tr>
+        <tr>
+            <td style="padding: 5px 0;"><strong>Status:</strong></td>
+            <td style="padding: 5px 0; color: #28a745; font-weight: bold;">Successful Sign-In</td>
+        </tr>
+    </table>
+</div>
+
+<p>If this was you, no further action is required.</p>
+<p>If you did not authorize this login, please contact our support team immediately and change your password.</p>
+
+<div style="text-align: center;">
+    <a href="{{ site_url }}/dashboard/" class="button">Go to Dashboard</a>
+</div>
+{% endblock %}
